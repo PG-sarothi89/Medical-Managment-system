@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123a38">
+  <title>APS Medical Management System — Smart Alerts & Stock Intelligence</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-xl">
+      <div class="container-fluid page-shell">
+        <a class="brand" href="home.html">
+          <span class="brand-mark"><i class="bi bi-plus-lg"></i><span class="brand-leaf"></span></span>
+          <span class="brand-name"><strong>APS</strong><small>ALERTS & INTELLIGENCE</small></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav mx-auto main-nav">
+            <li class="nav-item"><a class="nav-link" href="home.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="pos.html"><i class="bi bi-cart3 text-success"></i> POS Terminal</a></li>
+            <li class="nav-item"><a class="nav-link" href="medicines.html">Medicines</a></li>
+            <li class="nav-item"><a class="nav-link" href="inventory.html">Inventory & FEFO</a></li>
+            <li class="nav-item"><a class="nav-link" href="purchases.html">Purchases</a></li>
+            <li class="nav-item"><a class="nav-link" href="prescriptions.html">Prescriptions</a></li>
+            <li class="nav-item"><a class="nav-link" href="customers.html">Customers</a></li>
+            <li class="nav-item"><a class="nav-link" href="invoices.html">Invoices</a></li>
+            <li class="nav-item"><a class="nav-link" href="reports.html">BI Reports</a></li>
+            <li class="nav-item"><a class="nav-link active" href="alerts.html">Alerts</a></li>
+            <li class="nav-item"><a class="nav-link" href="users.html">Users & Audit</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <button class="icon-action" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            <button class="icon-action position-relative" id="notificationBtn" type="button">
+              <i class="bi bi-bell"></i><span class="notification-dot">0</span>
+            </button>
+            <div class="dropdown">
+              <button class="account-chip dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                <span class="avatar">A</span>
+                <span class="account-text"><strong id="userName">Admin</strong><small id="userRole">Administrator</small></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                <li><button class="dropdown-item text-danger" type="button" data-logout><i class="bi bi-box-arrow-right me-2"></i> Sign Out</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Search Panel -->
+  <div class="search-panel" id="searchPanel" aria-hidden="true">
+    <div class="search-panel__inner">
+      <div class="search-input-wrap">
+        <i class="bi bi-search"></i>
+        <input type="search" id="globalSearch" placeholder="Search alerts...">
+        <button type="button" id="closeSearch"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <main class="py-4">
+    <div class="container-fluid page-shell">
+
+      <!-- Page Header -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+          <span class="section-kicker">EARLY WARNING & REORDER INTELLIGENCE</span>
+          <h1 class="h2 fw-bold text-teal-900 mb-0">Alerts & Reorder Center</h1>
+          <p class="text-muted small mb-0">Real-time alerts for low stock levels, batch expirations, dead-stock capital traps, and auto-procurement.</p>
+        </div>
+        <a href="purchases.html" class="btn-primary-soft">
+          <i class="bi bi-cart-plus me-1"></i> Open Purchase Orders
+        </a>
+      </div>
+
+      <!-- Alert Metrics -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--red"><i class="bi bi-exclamation-octagon-fill"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Low Stock Drugs</span>
+                <h4 class="fw-bold mb-0 text-danger" id="alertLowStockCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--yellow"><i class="bi bi-hourglass-bottom"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Near Expiry (&lt;60d)</span>
+                <h4 class="fw-bold mb-0 text-warning" id="alertNearExpiryCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--blue"><i class="bi bi-box-seam"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Dead Stock Items</span>
+                <h4 class="fw-bold mb-0 text-primary" id="alertDeadStockCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--green"><i class="bi bi-lightning-charge-fill"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Reorder Suggested</span>
+                <h4 class="fw-bold mb-0 text-success" id="alertReorderCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <ul class="nav nav-pills mb-3" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active rounded-pill px-4 fw-semibold" id="low-tab" data-bs-toggle="tab" data-bs-target="#lowPane" type="button">
+            <i class="bi bi-exclamation-triangle me-1"></i> Low Stock Alerts
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-pill px-4 fw-semibold" id="expiry-tab" data-bs-toggle="tab" data-bs-target="#expiryPane" type="button">
+            <i class="bi bi-calendar-x me-1"></i> Near-Expiry & Expired Batches
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-pill px-4 fw-semibold" id="dead-tab" data-bs-toggle="tab" data-bs-target="#deadPane" type="button">
+            <i class="bi bi-box-arrow-in-down me-1"></i> Dead Stock Detection
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-pill px-4 fw-semibold" id="reorder-tab" data-bs-toggle="tab" data-bs-target="#reorderPane" type="button">
+            <i class="bi bi-arrow-repeat me-1"></i> Automated Reorder Engine
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- ================= TAB 1: LOW STOCK ================= -->
+        <div class="tab-pane fade show active" id="lowPane">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Medicine Name</th>
+                    <th>Current Stock</th>
+                    <th>Reorder Threshold</th>
+                    <th>Recommended Order Qty</th>
+                    <th>Severity Status</th>
+                    <th class="text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="lowStockTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 2: EXPIRY ================= -->
+        <div class="tab-pane fade" id="expiryPane">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Batch Number</th>
+                    <th>Expiry Date</th>
+                    <th>Days Remaining</th>
+                    <th>Available Quantity</th>
+                    <th>Status</th>
+                    <th class="text-end">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="expiryTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 3: DEAD STOCK ================= -->
+        <div class="tab-pane fade" id="deadPane">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Medicine Product</th>
+                    <th>Batch #</th>
+                    <th>Stuck Units</th>
+                    <th>Tied-up Capital Value</th>
+                    <th>Days in Warehouse</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="deadStockTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 4: REORDER ENGINE ================= -->
+        <div class="tab-pane fade" id="reorderPane">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <h5 class="fw-bold mb-0 text-teal-900">Calculated Stock Replenishment Recommendations</h5>
+                <small class="text-muted">Calculated dynamically based on sales velocity run-rates and reorder thresholds.</small>
+              </div>
+              <a href="purchases.html" class="btn btn-sm btn-success rounded-pill px-4 fw-bold">
+                <i class="bi bi-cart-check me-1"></i> Proceed to Create PO
+              </a>
+            </div>
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Current Stock</th>
+                    <th>Reorder Level</th>
+                    <th>Daily Sales Run-rate</th>
+                    <th>Recommended Purchase Qty</th>
+                  </tr>
+                </thead>
+                <tbody id="reorderTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="aps-store.js"></script>
+  <script src="aps-common.js"></script>
+  <script src="alerts.js"></script>
+
+</body>
+</html>

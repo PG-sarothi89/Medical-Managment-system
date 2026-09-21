@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123a38">
+  <title>APS Medical Management System — Login Portal</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+
+  <main class="auth-card">
+
+    <!-- ================= LEFT VISUAL PANEL ================= -->
+    <section class="auth-visual" aria-label="Welcome branding panel">
+      <div class="auth-visual__pattern"></div>
+
+      <!-- Medical Illustration SVG -->
+      <svg class="auth-visual__art" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="210" cy="500" rx="150" ry="18" fill="#0f4c4a" opacity="0.25"/>
+        <path d="M120 520 L120 330 Q120 260 210 250 Q300 260 300 330 L300 520 Z" fill="#2f9e98"/>
+        <path d="M150 520 L150 340 Q150 290 210 285 Q270 290 270 340 L270 520 Z" fill="#268a85"/>
+        <!-- Stethoscope -->
+        <path d="M170 270 Q170 330 210 340 Q250 330 250 270" fill="none" stroke="#173f3d" stroke-width="6" stroke-linecap="round"/>
+        <path d="M210 340 L210 400" fill="none" stroke="#173f3d" stroke-width="6"/>
+        <circle cx="210" cy="415" r="16" fill="#75d0a0" stroke="#173f3d" stroke-width="4"/>
+        <!-- Cross Badge -->
+        <circle cx="210" cy="230" r="30" fill="#ffffff" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.15))"/>
+        <path d="M210 215 v30 M195 230 h30" stroke="#2f9e98" stroke-width="7" stroke-linecap="round"/>
+      </svg>
+
+      <div class="auth-visual__quote">
+        <span class="quote-mark">“</span>
+        <h1>Precision Healthcare & Pharmacy Operations.</h1>
+        <p style="margin-top: 8px; font-size: 11.5px; opacity: 0.85;">APS Enterprise Medical Management System</p>
+      </div>
+    </section>
+
+    <!-- ================= RIGHT FORM PANEL ================= -->
+    <section class="auth-form">
+      <div class="auth-form__inner">
+
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+          <img src="logo.svg" alt="APS Logo" width="38" height="38">
+          <div>
+            <strong style="font-family: var(--font-display); font-size: 20px; letter-spacing: 0.5px; color: var(--teal-900);">APS MEDICAL</strong>
+            <div style="font-size: 8px; font-weight: 700; color: var(--teal-500); letter-spacing: 1px;">AUTHENTICATION PORTAL</div>
+          </div>
+        </div>
+
+        <h2>Sign In</h2>
+        <p class="auth-form__subtitle">Select your role and enter credentials to enter the workspace.</p>
+
+        <form id="loginForm" novalidate>
+
+          <!-- ROLE SELECT -->
+          <div class="field" id="roleField">
+            <span class="field__icon"><i class="bi bi-person-badge"></i></span>
+            <select id="role" required aria-label="Select System Role">
+              <option value="" disabled selected>Choose your role...</option>
+              <option value="admin">Administrator</option>
+              <option value="pharmacist">Pharmacist</option>
+              <option value="cashier">Cashier</option>
+              <option value="inventory_manager">Inventory Manager</option>
+              <option value="doctor">Doctor / Clinical Staff</option>
+            </select>
+          </div>
+          <div class="field__error" id="roleError"></div>
+
+          <!-- EMAIL INPUT -->
+          <div class="field" id="emailField">
+            <span class="field__icon"><i class="bi bi-envelope"></i></span>
+            <input type="email" id="email" placeholder="Email address" required autocomplete="email">
+          </div>
+          <div class="field__error" id="emailError"></div>
+
+          <!-- PASSWORD INPUT -->
+          <div class="field" id="passwordField">
+            <span class="field__icon"><i class="bi bi-shield-lock"></i></span>
+            <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
+            <button type="button" class="field__toggle" id="togglePassword" aria-label="Show password">
+              <i class="bi bi-eye" id="togglePasswordIcon"></i>
+            </button>
+          </div>
+          <div class="field__error" id="passwordError"></div>
+
+          <!-- STATUS MESSAGE -->
+          <div class="form-status" id="formStatus"></div>
+
+          <!-- SUBMIT BUTTON -->
+          <button type="submit" class="btn-login" id="loginBtn">
+            <span class="btn-login__text">Sign In to Dashboard</span>
+          </button>
+
+          <!-- QUICK DEMO LOGINS -->
+          <div class="demo-box">
+            <small><i class="bi bi-lightning-charge-fill text-warning"></i> One-Click Quick Demo Login</small>
+            <div class="demo-chips">
+              <button type="button" class="demo-chip" data-role="admin" data-email="pg@gmail.com" data-pass="root">Admin</button>
+              <button type="button" class="demo-chip" data-role="pharmacist" data-email="pharmacist@aps.com" data-pass="root">Pharmacist</button>
+              <button type="button" class="demo-chip" data-role="cashier" data-email="cashier@aps.com" data-pass="root">Cashier</button>
+              <button type="button" class="demo-chip" data-role="inventory_manager" data-email="inventory@aps.com" data-pass="root">Inventory</button>
+              <button type="button" class="demo-chip" data-role="doctor" data-email="doctor@aps.com" data-pass="root">Doctor</button>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Load APS Data Store -->
+  <script src="aps-store.js"></script>
+  
+  <script>
+    (() => {
+      "use strict";
+
+      const form = document.getElementById("loginForm");
+      const roleSelect = document.getElementById("role");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const roleField = document.getElementById("roleField");
+      const emailField = document.getElementById("emailField");
+      const passwordField = document.getElementById("passwordField");
+      const roleError = document.getElementById("roleError");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+      const formStatus = document.getElementById("formStatus");
+      const loginBtn = document.getElementById("loginBtn");
+      const togglePasswordBtn = document.getElementById("togglePassword");
+      const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+
+      // Check if already authenticated
+      if (sessionStorage.getItem("apsAuthenticated") === "true") {
+        formStatus.textContent = "Already authenticated. Redirecting...";
+        formStatus.className = "form-status is-success";
+        setTimeout(() => window.location.href = "home.html", 400);
+      }
+
+      // Password toggle
+      togglePasswordBtn.addEventListener("click", () => {
+        const isHidden = passwordInput.type === "password";
+        passwordInput.type = isHidden ? "text" : "password";
+        togglePasswordIcon.className = isHidden ? "bi bi-eye-slash" : "bi bi-eye";
+      });
+
+      function setErr(field, el, msg) {
+        field.classList.add("field--error");
+        el.textContent = msg;
+        return false;
+      }
+
+      function clearErr(field, el) {
+        field.classList.remove("field--error");
+        el.textContent = "";
+        return true;
+      }
+
+      function validate() {
+        let valid = true;
+        if (!roleSelect.value) valid = setErr(roleField, roleError, "Please select a system role.") && valid;
+        else clearErr(roleField, roleError);
+
+        const email = emailInput.value.trim();
+        if (!email || !/^\S+@\S+\.\S+$/.test(email)) valid = setErr(emailField, emailError, "Enter a valid email address.") && valid;
+        else clearErr(emailField, emailError);
+
+        if (!passwordInput.value || passwordInput.value.length < 3) valid = setErr(passwordField, passwordError, "Password must be at least 3 characters.") && valid;
+        else clearErr(passwordField, passwordError);
+
+        return valid;
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (!validate()) return;
+
+        loginBtn.disabled = true;
+        loginBtn.querySelector(".btn-login__text").textContent = "Authenticating...";
+        formStatus.textContent = "";
+        formStatus.className = "form-status";
+
+        setTimeout(() => {
+          const users = APSStore.getUsers();
+          const email = emailInput.value.trim().toLowerCase();
+          const role = roleSelect.value;
+          const pass = passwordInput.value;
+
+          const matchedUser = users.find(u => u.email.toLowerCase() === email && u.role === role && u.password === pass);
+
+          if (matchedUser) {
+            formStatus.textContent = `Welcome, ${matchedUser.name}! Opening system...`;
+            formStatus.className = "form-status is-success";
+
+            sessionStorage.setItem("apsAuthenticated", "true");
+            sessionStorage.setItem("apsUserId", matchedUser.id);
+            sessionStorage.setItem("apsUserName", matchedUser.name);
+            sessionStorage.setItem("apsUserRole", matchedUser.roleTitle || matchedUser.role);
+            sessionStorage.setItem("apsUserRoleKey", matchedUser.role);
+            sessionStorage.setItem("apsUserEmail", matchedUser.email);
+
+            APSStore.logAudit("LOGIN", "users", matchedUser.id, `User logged in with role ${matchedUser.roleTitle}`);
+
+            setTimeout(() => {
+              window.location.href = "home.html";
+            }, 500);
+          } else {
+            loginBtn.disabled = false;
+            loginBtn.querySelector(".btn-login__text").textContent = "Sign In to Dashboard";
+            formStatus.textContent = "Invalid role, email or password. Use demo buttons below.";
+            formStatus.className = "form-status is-error";
+          }
+        }, 400);
+      });
+
+      // Quick Demo Switchers
+      document.querySelectorAll(".demo-chip").forEach(chip => {
+        chip.addEventListener("click", () => {
+          roleSelect.value = chip.dataset.role;
+          emailInput.value = chip.dataset.email;
+          passwordInput.value = chip.dataset.pass;
+          clearErr(roleField, roleError);
+          clearErr(emailField, emailError);
+          clearErr(passwordField, passwordError);
+          loginBtn.click();
+        });
+      });
+
+    })();
+  </script>
+
+</body>
+</html>

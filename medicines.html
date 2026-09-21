@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123a38">
+  <title>APS Medical Management System — Medicine Master</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Bootstrap 5.3 + Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Master Stylesheet -->
+  <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-xl">
+      <div class="container-fluid page-shell">
+        <a class="brand" href="home.html">
+          <span class="brand-mark"><i class="bi bi-plus-lg"></i><span class="brand-leaf"></span></span>
+          <span class="brand-name"><strong>APS</strong><small>MEDICAL MANAGEMENT</small></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav mx-auto main-nav">
+            <li class="nav-item"><a class="nav-link" href="home.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="pos.html"><i class="bi bi-cart3 text-success"></i> POS Terminal</a></li>
+            <li class="nav-item"><a class="nav-link active" href="medicines.html">Medicines</a></li>
+            <li class="nav-item"><a class="nav-link" href="inventory.html">Inventory & FEFO</a></li>
+            <li class="nav-item"><a class="nav-link" href="purchases.html">Purchases</a></li>
+            <li class="nav-item"><a class="nav-link" href="prescriptions.html">Prescriptions</a></li>
+            <li class="nav-item"><a class="nav-link" href="customers.html">Customers</a></li>
+            <li class="nav-item"><a class="nav-link" href="invoices.html">Invoices</a></li>
+            <li class="nav-item"><a class="nav-link" href="reports.html">BI Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="alerts.html">Alerts</a></li>
+            <li class="nav-item"><a class="nav-link" href="users.html">Users & Audit</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <button class="icon-action" id="searchBtn" type="button" title="Search"><i class="bi bi-search"></i></button>
+            <button class="icon-action position-relative" id="notificationBtn" type="button" title="Alerts">
+              <i class="bi bi-bell"></i><span class="notification-dot">0</span>
+            </button>
+            <div class="dropdown">
+              <button class="account-chip dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                <span class="avatar">A</span>
+                <span class="account-text"><strong id="userName">Admin</strong><small id="userRole">Administrator</small></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                <li><button class="dropdown-item text-danger" type="button" data-logout><i class="bi bi-box-arrow-right me-2"></i> Sign Out</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Global Search Overlay -->
+  <div class="search-panel" id="searchPanel" aria-hidden="true">
+    <div class="search-panel__inner">
+      <div class="search-input-wrap">
+        <i class="bi bi-search"></i>
+        <input type="search" id="globalSearch" placeholder="Search medicines, barcodes, suppliers...">
+        <button type="button" id="closeSearch"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="py-4">
+    <div class="container-fluid page-shell">
+
+      <!-- Breadcrumb & Page Header -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+          <span class="section-kicker">PHARMACEUTICAL MASTER DATA</span>
+          <h1 class="h2 fw-bold text-teal-900 mb-0">Medicine Management</h1>
+          <p class="text-muted small mb-0">Organize pharmaceutical products, categories, composition, HSN codes, and scannable barcodes.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold" id="manageCategoriesBtn">
+            <i class="bi bi-tags me-1"></i> Categories
+          </button>
+          <button class="btn btn-outline-success rounded-pill px-3 py-2 fw-semibold" id="exportMedsBtn">
+            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+          </button>
+          <button class="btn-primary-soft" id="addMedicineBtn">
+            <i class="bi bi-plus-circle me-1"></i> Add Medicine
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters & Search Toolbar -->
+      <div class="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-white">
+        <div class="row g-2 align-items-center">
+          <div class="col-lg-5 col-md-6">
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+              <input type="text" id="medSearchInput" class="form-control bg-light border-start-0" placeholder="Search by brand name, generic, composition, or barcode...">
+              <button class="btn btn-outline-secondary" type="button" id="medCameraScanBtn" title="Scan Barcode with Camera">
+                <i class="bi bi-camera-video me-1"></i> Scan
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3">
+            <select id="categoryFilter" class="form-select bg-light">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-3">
+            <select id="rxFilter" class="form-select bg-light">
+              <option value="all">All Types</option>
+              <option value="rx">Rx Required</option>
+              <option value="otc">OTC Only</option>
+            </select>
+          </div>
+          <div class="col-lg-2 col-md-12 text-end">
+            <span class="text-muted small">Showing <strong id="medicineCount">0</strong> medicines</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Medicines Data Table -->
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+        <div class="table-responsive">
+          <table class="custom-table table align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Medicine / Brand</th>
+                <th>Generic & Composition</th>
+                <th>Category</th>
+                <th>HSN & Unit</th>
+                <th>Barcode</th>
+                <th>Current Stock</th>
+                <th>Status</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="medicineTableBody">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================
+       ADD / EDIT MEDICINE MODAL
+  ========================================================== -->
+  <div class="modal fade" id="medicineModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="medicineModalTitle">Add New Medicine</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="medicineForm">
+          <div class="modal-body">
+            <input type="hidden" id="medId">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Brand / Medicine Name *</label>
+                <input type="text" id="medName" class="form-control" placeholder="e.g. Napa Extra 500mg/65mg" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Generic Name *</label>
+                <input type="text" id="medGeneric" class="form-control" placeholder="e.g. Paracetamol + Caffeine" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Category *</label>
+                <select id="medCategory" class="form-select" required></select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Manufacturer *</label>
+                <select id="medManufacturer" class="form-select" required></select>
+              </div>
+              <div class="col-12">
+                <label class="form-label small fw-bold">Active Chemical Composition</label>
+                <input type="text" id="medComposition" class="form-control" placeholder="e.g. Paracetamol 500mg, Caffeine 65mg">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Unit of Measure</label>
+                <select id="medUnit" class="form-select">
+                  <option value="Tablet">Tablet</option>
+                  <option value="Capsule">Capsule</option>
+                  <option value="Syrup">Syrup (Bottle)</option>
+                  <option value="Injection">Injection (Vial/Ampoule)</option>
+                  <option value="Inhaler">Inhaler</option>
+                  <option value="Ointment">Ointment / Gel</option>
+                  <option value="Drops">Eye/Ear Drops</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">HSN Code</label>
+                <input type="text" id="medHsn" class="form-control" placeholder="e.g. 3004.90">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Barcode (EAN-13)</label>
+                <div class="input-group">
+                  <input type="text" id="medBarcode" class="form-control" placeholder="8901234500000">
+                  <button type="button" class="btn btn-outline-secondary" id="generateBarcodeBtn" title="Auto-generate barcode"><i class="bi bi-magic"></i></button>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Reorder Alert Level</label>
+                <input type="number" id="medReorderLevel" class="form-control" value="50" min="1">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Default Reorder Qty</label>
+                <input type="number" id="medReorderQty" class="form-control" value="100" min="1">
+              </div>
+              <div class="col-md-4 d-flex align-items-center pt-3">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="medRequiresRx">
+                  <label class="form-check-label small fw-semibold" for="medRequiresRx">Requires Prescription (Rx)</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill px-4">Save Medicine Record</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       BARCODE PREVIEW MODAL
+  ========================================================== -->
+  <div class="modal fade" id="barcodeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-center p-4">
+        <h5 class="fw-bold mb-1" id="barcodeMedicineTitle">Medicine Barcode</h5>
+        <p class="text-muted small mb-3">Scannable label for Point of Sale & stock inventory</p>
+        <div class="p-3 bg-light rounded-3 d-inline-block mx-auto border mb-3">
+          <svg id="barcodeCanvas"></svg>
+        </div>
+        <div class="d-flex justify-content-center gap-2">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print Label</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CATEGORY MANAGEMENT MODAL
+  ========================================================== -->
+  <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Medicine Categories</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="newCategoryForm" class="d-flex gap-2 mb-3">
+            <input type="text" id="newCatName" class="form-control" placeholder="New category name..." required>
+            <button type="submit" class="btn btn-teal-700 btn-success text-nowrap rounded-pill px-3">Add</button>
+          </form>
+          <ul class="list-group rounded-3" id="categoryListGroup" style="max-height: 250px; overflow-y: auto;">
+            <!-- Populated via JS -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       CAMERA BARCODE SCANNER MODAL (OPTICAL SEARCH)
+  ========================================================== -->
+  <div class="modal fade" id="cameraScannerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content overflow-hidden border-0 shadow-lg">
+        <div class="modal-header bg-dark text-white border-0 py-2 px-3">
+          <h6 class="modal-title d-flex align-items-center gap-2 mb-0">
+            <i class="bi bi-camera-video text-teal-400"></i>
+            <span>Scan Medicine Barcode</span>
+            <span class="badge bg-danger ms-1">LIVE OPTICAL</span>
+          </h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-3 bg-dark text-white text-center">
+          <div class="scanner-viewfinder position-relative mx-auto">
+            <video id="cameraScannerVideo" playsinline autoplay muted></video>
+            <div class="laser-beam"></div>
+            <div class="scanner-reticle"></div>
+          </div>
+
+          <div id="cameraScannerStatus" class="alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start">
+            <i class="bi bi-info-circle-fill fs-5 text-info"></i>
+            <div>Align medicine package barcode within red laser reticle to search catalog.</div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-3 mb-1 px-1">
+            <span class="small text-white-50 fw-semibold"><i class="bi bi-upc-scan me-1"></i> Quick Test Barcodes:</span>
+            <span class="badge bg-teal-800 text-teal-200">Simulation</span>
+          </div>
+
+          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestBarcodes">
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500011">Napa Extra</button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500028">Moxacil</button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500035">Seclo</button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500042">Alatrol</button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500059">Comet</button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500066">Atova</button>
+          </div>
+        </div>
+        <div class="modal-footer bg-dark border-top border-secondary py-2 justify-content-between">
+          <small class="text-white-50"><i class="bi bi-upc me-1"></i> USB Barcode guns also active</small>
+          <button type="button" class="btn btn-sm btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close Scanner</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap & JsBarcode CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <!-- Store & Shared UI -->
+  <script src="aps-store.js"></script>
+  <script src="aps-common.js"></script>
+  <!-- Page Logic -->
+  <script src="medicines.js"></script>
+
+</body>
+</html>

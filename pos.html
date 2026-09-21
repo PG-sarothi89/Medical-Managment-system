@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123a38">
+  <title>APS Medical Management System — Point of Sale (POS) Terminal</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
+  <style>
+    .pos-item-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+    }
+    .pos-item-card:hover {
+      border-color: var(--teal-400);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(18, 58, 56, 0.08);
+    }
+    .cart-pane {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+      position: sticky;
+      top: 90px;
+    }
+    .cart-items-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+    }
+    .cart-item-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f4f3;
+    }
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #f8faf9;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-xl">
+      <div class="container-fluid page-shell">
+        <a class="brand" href="home.html">
+          <span class="brand-mark"><i class="bi bi-plus-lg"></i><span class="brand-leaf"></span></span>
+          <span class="brand-name"><strong>APS</strong><small>POS CASHIER TERMINAL</small></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav mx-auto main-nav">
+            <li class="nav-item"><a class="nav-link" href="home.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link active" href="pos.html"><i class="bi bi-cart3 text-success"></i> POS Terminal</a></li>
+            <li class="nav-item"><a class="nav-link" href="medicines.html">Medicines</a></li>
+            <li class="nav-item"><a class="nav-link" href="inventory.html">Inventory & FEFO</a></li>
+            <li class="nav-item"><a class="nav-link" href="purchases.html">Purchases</a></li>
+            <li class="nav-item"><a class="nav-link" href="prescriptions.html">Prescriptions</a></li>
+            <li class="nav-item"><a class="nav-link" href="customers.html">Customers</a></li>
+            <li class="nav-item"><a class="nav-link" href="invoices.html">Invoices</a></li>
+            <li class="nav-item"><a class="nav-link" href="reports.html">BI Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="alerts.html">Alerts</a></li>
+            <li class="nav-item"><a class="nav-link" href="users.html">Users & Audit</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <button class="account-chip border-0" type="button">
+              <span class="avatar">C</span>
+              <span class="account-text"><strong id="userName">Cashier</strong><small id="userRole">Cashier</small></span>
+            </button>
+            <button class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-2" type="button" data-logout>Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- POS Main Workspace -->
+  <main class="py-3">
+    <div class="container-fluid page-shell">
+
+      <!-- Mobile View Toggle (<992px) -->
+      <div class="pos-mobile-toggle mb-3">
+        <div class="btn-group w-100 shadow-sm" role="group">
+          <button type="button" class="btn btn-teal-700 btn-primary active py-2 fw-semibold" id="mobileShowCatalogBtn">
+            <i class="bi bi-boxes me-1"></i> Medicines
+          </button>
+          <button type="button" class="btn btn-outline-secondary py-2 fw-semibold" id="mobileShowCartBtn">
+            <i class="bi bi-cart3 me-1"></i> Cart (<span id="mobileCartCount">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-3">
+
+        <!-- ================= LEFT CATALOG & SCANNER ================= -->
+        <div class="col-xl-8 col-lg-7" id="posCatalogColumn">
+
+          <!-- Scanner & Live Search Box -->
+          <div class="card border-0 shadow-sm rounded-4 p-3 mb-3 bg-white">
+            <div class="row g-2 align-items-center">
+              <div class="col-md-8">
+                <div class="input-group input-group-lg">
+                  <span class="input-group-text bg-teal-100 border-0 text-teal-700"><i class="bi bi-upc-scan fs-4"></i></span>
+                  <input type="text" id="posBarcodeScanInput" class="form-control border-0 bg-light fs-6" placeholder="Scan barcode or type medicine name / generic..." autofocus>
+                  <button type="button" class="btn btn-outline-secondary px-3" id="openCameraScannerBtn" title="Launch Camera Barcode Scanner">
+                    <i class="bi bi-camera-video me-1"></i> Camera
+                  </button>
+                  <button type="button" class="btn btn-teal-700 btn-success text-white px-3" id="simulateScanBtn" title="Scan or enter barcode">
+                    <i class="bi bi-arrow-right-circle me-1"></i> Enter
+                  </button>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <select id="posCategorySelect" class="form-select form-select-lg border-0 bg-light fs-6">
+                  <option value="all">All Drug Classes</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medicine Product Cards Grid -->
+          <div class="row g-3" id="posProductGrid" style="max-height: calc(100vh - 220px); overflow-y: auto; padding-bottom: 20px;">
+            <!-- Rendered dynamically -->
+          </div>
+
+        </div>
+
+        <!-- ================= RIGHT CART & CHECKOUT ================= -->
+        <div class="col-xl-4 col-lg-5" id="posCartColumn">
+          <div class="cart-pane shadow-sm">
+
+            <!-- Cart Header & Customer Selection -->
+            <div class="p-3 border-bottom bg-light rounded-top-4">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="fw-bold mb-0 text-teal-900"><i class="bi bi-cart3 me-1"></i> Current Cart</h5>
+                <button class="btn btn-sm btn-link text-danger text-decoration-none p-0" id="clearCartBtn">Clear Cart</button>
+              </div>
+
+              <!-- Customer Linkage -->
+              <div class="d-flex gap-2 align-items-center mb-2">
+                <select id="posCustomerSelect" class="form-select form-select-sm bg-white border">
+                  <option value="">Walk-in Customer</option>
+                </select>
+                <button class="btn btn-sm btn-outline-secondary text-nowrap rounded-pill px-2" id="quickAddCustBtn" title="Register New Customer">
+                  <i class="bi bi-person-plus"></i>
+                </button>
+              </div>
+
+              <!-- Prescription Linkage -->
+              <div>
+                <select id="posPrescriptionSelect" class="form-select form-select-sm bg-white border text-muted">
+                  <option value="">No Prescription Attached</option>
+                </select>
+              </div>
+
+              <!-- Customer Info Preview -->
+              <div id="customerSummaryBadge" class="mt-2 small text-muted d-none">
+                <span class="badge bg-white text-teal-900 border me-1" id="custPointsBadge">0 Loyalty Pts</span>
+                <span class="badge bg-white text-danger border" id="custCreditBadge">Outstanding: ৳0</span>
+              </div>
+            </div>
+
+            <!-- Cart Items Scrollable List -->
+            <div class="cart-items-scroll" id="cartItemsList">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Cart Calculation Summary -->
+            <div class="p-3 border-top bg-light rounded-bottom-4">
+              <div class="d-flex justify-content-between mb-1 small text-muted">
+                <span>Subtotal:</span>
+                <strong class="text-dark" id="cartSubtotal">৳ 0.00</strong>
+              </div>
+              <div class="d-flex justify-content-between mb-1 small text-muted align-items-center">
+                <span>Discount:</span>
+                <div class="input-group input-group-sm w-auto">
+                  <span class="input-group-text bg-white border">৳</span>
+                  <input type="number" id="cartDiscountInput" class="form-control form-control-sm text-end" value="0" min="0" style="width: 70px;">
+                </div>
+              </div>
+              <div class="d-flex justify-content-between mb-2 small text-muted">
+                <span>GST / Tax (5%):</span>
+                <span id="cartTaxAmount">৳ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center py-2 border-top border-bottom mb-3">
+                <span class="fs-5 fw-bold text-teal-900">Total Due:</span>
+                <span class="fs-4 fw-bold text-teal-700" id="cartTotalAmount">৳ 0.00</span>
+              </div>
+
+              <!-- Checkout Button -->
+              <button class="btn btn-success w-100 py-3 rounded-pill fw-bold fs-6 shadow-sm" id="posCheckoutBtn">
+                <i class="bi bi-shield-check me-1"></i> Proceed to Payment & Invoice
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- =========================================================
+       PAYMENT & SPLIT-PAYMENT MODAL
+  ========================================================== -->
+  <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-teal-900">Checkout & Payment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="paymentForm">
+          <div class="modal-body">
+            <div class="text-center p-3 bg-light rounded-4 mb-3 border">
+              <span class="text-muted small text-uppercase">Total Payable</span>
+              <h2 class="fw-bold text-teal-900 mb-0" id="payModalTotal">৳ 0.00</h2>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Primary Payment Mode</label>
+              <select id="payPrimaryMode" class="form-select" required>
+                <option value="Cash" selected>Cash Payment</option>
+                <option value="Card">Credit / Debit Card</option>
+                <option value="Mobile Banking">Mobile Banking (bKash / Nagad / Rocket)</option>
+                <option value="Credit">Customer Credit (On Account)</option>
+                <option value="Split">Split Payment (Multi-Mode)</option>
+              </select>
+            </div>
+
+            <!-- Split Payment Box (hidden by default) -->
+            <div id="splitPaymentBox" class="p-3 border rounded-3 bg-light mb-3 d-none">
+              <label class="form-label small fw-bold">Multi-Mode Split Breakdown</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <span class="small text-muted">Cash Portion (৳):</span>
+                  <input type="number" id="splitCashAmount" class="form-control form-control-sm" placeholder="0.00">
+                </div>
+                <div class="col-6">
+                  <span class="small text-muted">Digital / Card (৳):</span>
+                  <input type="number" id="splitDigitalAmount" class="form-control form-control-sm" placeholder="0.00">
+                </div>
+              </div>
+            </div>
+
+            <!-- Cash Tendered & Change -->
+            <div class="row g-2 mb-3" id="cashTenderedBox">
+              <div class="col-6">
+                <label class="form-label small fw-bold">Cash Received (৳)</label>
+                <input type="number" id="cashReceivedInput" class="form-control" placeholder="0.00">
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-bold">Change to Return (৳)</label>
+                <input type="text" id="changeReturnOutput" class="form-control bg-light fw-bold text-success" value="৳ 0.00" readonly>
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold" id="confirmSaleBtn">
+              <i class="bi bi-check2-circle me-1"></i> Complete Sale & Generate Bill
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       PRINTABLE GST INVOICE MODAL
+  ========================================================== -->
+  <div class="modal fade" id="invoiceModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4" id="printableInvoice">
+
+          <!-- Pharmacy Brand & Invoice Header -->
+          <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+            <div>
+              <h3 class="fw-bold text-teal-900 mb-0 font-monospace">APS PHARMACEUTICALS</h3>
+              <p class="small text-muted mb-0">12/B Commercial Zone, Tejgaon, Dhaka-1208<br>Phone: +880 1711-000111 | GSTIN: BD-GST-992182</p>
+            </div>
+            <div class="text-end">
+              <h4 class="fw-bold text-teal-700 mb-0" id="invModalNumber">INV-2026-0000</h4>
+              <small class="text-muted d-block" id="invModalDate">Date: 2026-09-05</small>
+              <span class="badge bg-success" id="invModalStatus">PAID</span>
+            </div>
+          </div>
+
+          <!-- Customer & Cashier Info -->
+          <div class="row g-2 mb-3 small">
+            <div class="col-6">
+              <strong>Billed To:</strong>
+              <div id="invModalCustomer">Walk-in Customer</div>
+            </div>
+            <div class="col-6 text-end">
+              <strong>Cashier / Served By:</strong>
+              <div id="invModalCashier">Rahim Uddin</div>
+              <strong class="d-block mt-1">Payment Method:</strong>
+              <div id="invModalPayMethod">Cash</div>
+            </div>
+          </div>
+
+          <!-- Itemized Table -->
+          <div class="table-responsive mb-3">
+            <table class="table table-bordered align-middle small mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Item Description</th>
+                  <th>Batch</th>
+                  <th class="text-center">Qty</th>
+                  <th class="text-end">Unit Price</th>
+                  <th class="text-end">Total</th>
+                </tr>
+              </thead>
+              <tbody id="invModalItems">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Financial Breakdown -->
+          <div class="row justify-content-end">
+            <div class="col-md-5 small">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Subtotal:</span>
+                <span id="invModalSubtotal">৳ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>Discount:</span>
+                <span id="invModalDiscount">- ৳ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-1">
+                <span>GST (5%):</span>
+                <span id="invModalTax">৳ 0.00</span>
+              </div>
+              <div class="d-flex justify-content-between border-top pt-2 fw-bold fs-6 text-teal-900">
+                <span>Net Payable:</span>
+                <span id="invModalGrandTotal">৳ 0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center text-muted small mt-4 pt-3 border-top">
+            <p class="mb-0">Thank you for choosing APS Healthcare. Medicines sold are subject to batch return policies.</p>
+          </div>
+
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print Invoice (A4 / Thermal)</button>
+        </div>
+      </div>
+    </div>
+  <!-- =========================================================
+       CAMERA BARCODE SCANNER MODAL (LIVE VIDEO & WEBCAM)
+  ========================================================== -->
+  <div class="modal fade" id="cameraScannerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content overflow-hidden border-0 shadow-lg">
+        <div class="modal-header bg-dark text-white border-0 py-2 px-3">
+          <h6 class="modal-title d-flex align-items-center gap-2 mb-0">
+            <i class="bi bi-camera-video text-teal-400"></i>
+            <span>Live Optical Barcode Scanner</span>
+            <span class="badge bg-danger ms-1" style="animation: pulse 1.5s infinite;">LIVE SCAN</span>
+          </h6>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-3 bg-dark text-white text-center">
+          <!-- Viewfinder & Scanning Reticle -->
+          <div class="scanner-viewfinder position-relative mx-auto">
+            <video id="cameraScannerVideo" playsinline autoplay muted></video>
+            <canvas id="cameraScannerCanvas" class="d-none"></canvas>
+            <div class="laser-beam"></div>
+            <div class="scanner-reticle"></div>
+          </div>
+
+          <div id="cameraScannerStatus" class="alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start">
+            <i class="bi bi-info-circle-fill fs-5 text-info"></i>
+            <div>Align medicine package barcode within the laser reticle. Instant optical recognition active.</div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mt-3 mb-1 px-1">
+            <span class="small text-white-50 fw-semibold"><i class="bi bi-upc-scan me-1"></i> Quick Test Barcodes (1-Click Test):</span>
+            <span class="badge bg-teal-800 text-teal-200">EAN-13 Simulated</span>
+          </div>
+
+          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestBarcodes">
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500011" title="Napa Extra 500mg">
+              <i class="bi bi-plus me-1"></i>Napa Extra
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500028" title="Moxacil 500mg">
+              <i class="bi bi-plus me-1"></i>Moxacil
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500035" title="Seclo 20mg">
+              <i class="bi bi-plus me-1"></i>Seclo
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500042" title="Alatrol 10mg">
+              <i class="bi bi-plus me-1"></i>Alatrol
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500059" title="Comet 500mg">
+              <i class="bi bi-plus me-1"></i>Comet
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500066" title="Atova 10mg">
+              <i class="bi bi-plus me-1"></i>Atova
+            </button>
+          </div>
+        </div>
+        <div class="modal-footer bg-dark border-top border-secondary py-2 justify-content-between">
+          <small class="text-white-50"><i class="bi bi-keyboard me-1"></i> USB Barcode Guns & Keyboards also auto-detected</small>
+          <button type="button" class="btn btn-sm btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close Scanner</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Store & Common UI -->
+  <script src="aps-store.js"></script>
+  <script src="aps-common.js"></script>
+  <!-- POS Page Logic -->
+  <script src="pos.js"></script>
+
+</body>
+</html>

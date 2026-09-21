@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#123a38">
+  <title>APS Medical Management System — Inventory & FEFO Ledger</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="home.css">
+</head>
+
+<body>
+
+  <!-- Top Navigation Header -->
+  <header class="site-header">
+    <nav class="navbar navbar-expand-xl">
+      <div class="container-fluid page-shell">
+        <a class="brand" href="home.html">
+          <span class="brand-mark"><i class="bi bi-plus-lg"></i><span class="brand-leaf"></span></span>
+          <span class="brand-name"><strong>APS</strong><small>MEDICAL MANAGEMENT</small></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+          <i class="bi bi-list fs-2"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav mx-auto main-nav">
+            <li class="nav-item"><a class="nav-link" href="home.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="pos.html"><i class="bi bi-cart3 text-success"></i> POS Terminal</a></li>
+            <li class="nav-item"><a class="nav-link" href="medicines.html">Medicines</a></li>
+            <li class="nav-item"><a class="nav-link active" href="inventory.html">Inventory & FEFO</a></li>
+            <li class="nav-item"><a class="nav-link" href="purchases.html">Purchases</a></li>
+            <li class="nav-item"><a class="nav-link" href="prescriptions.html">Prescriptions</a></li>
+            <li class="nav-item"><a class="nav-link" href="customers.html">Customers</a></li>
+            <li class="nav-item"><a class="nav-link" href="invoices.html">Invoices</a></li>
+            <li class="nav-item"><a class="nav-link" href="reports.html">BI Reports</a></li>
+            <li class="nav-item"><a class="nav-link" href="alerts.html">Alerts</a></li>
+            <li class="nav-item"><a class="nav-link" href="users.html">Users & Audit</a></li>
+          </ul>
+
+          <div class="nav-actions">
+            <button class="icon-action" id="searchBtn" type="button"><i class="bi bi-search"></i></button>
+            <button class="icon-action position-relative" id="notificationBtn" type="button">
+              <i class="bi bi-bell"></i><span class="notification-dot">0</span>
+            </button>
+            <div class="dropdown">
+              <button class="account-chip dropdown-toggle border-0" type="button" data-bs-toggle="dropdown">
+                <span class="avatar">A</span>
+                <span class="account-text"><strong id="userName">Admin</strong><small id="userRole">Administrator</small></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-3 mt-2">
+                <li><button class="dropdown-item text-danger" type="button" data-logout><i class="bi bi-box-arrow-right me-2"></i> Sign Out</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Search Panel Overlay -->
+  <div class="search-panel" id="searchPanel" aria-hidden="true">
+    <div class="search-panel__inner">
+      <div class="search-input-wrap">
+        <i class="bi bi-search"></i>
+        <input type="search" id="globalSearch" placeholder="Search medicines, barcodes, batches...">
+        <button type="button" id="closeSearch"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+  </div>
+
+  <main class="py-4">
+    <div class="container-fluid page-shell">
+
+      <!-- Page Header -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+          <span class="section-kicker">STOCK CONTROL & MOVEMENT AUDIT</span>
+          <h1 class="h2 fw-bold text-teal-900 mb-0">Inventory & FEFO Management</h1>
+          <p class="text-muted small mb-0">Automated First-Expired First-Out allocation, batch-level costing, and immutable movement ledger.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-danger rounded-pill px-3 py-2 fw-semibold" id="stockAdjustmentBtn">
+            <i class="bi bi-sliders me-1"></i> Stock Adjustment
+          </button>
+          <button class="btn-primary-soft" id="addBatchBtn">
+            <i class="bi bi-plus-circle me-1"></i> Register New Batch
+          </button>
+        </div>
+      </div>
+
+      <!-- Inventory KPIs -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--blue"><i class="bi bi-layers-fill"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Active Batches</span>
+                <h4 class="fw-bold mb-0 text-teal-900" id="totalBatchesCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--green"><i class="bi bi-box-seam-fill"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Units in Stock</span>
+                <h4 class="fw-bold mb-0 text-teal-900" id="totalUnitsCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--yellow"><i class="bi bi-clock-history"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Near Expiry (&lt;60d)</span>
+                <h4 class="fw-bold mb-0 text-warning" id="nearExpiryCount">0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+            <div class="d-flex align-items-center gap-3">
+              <div class="stat-icon stat-icon--blue"><i class="bi bi-cash-stack"></i></div>
+              <div>
+                <span class="text-muted small text-uppercase fw-semibold">Stock Valuation (Cost)</span>
+                <h4 class="fw-bold mb-0 text-success" id="inventoryValuation">৳ 0</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <ul class="nav nav-pills mb-3" id="inventoryTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active rounded-pill px-4 fw-semibold" id="batches-tab" data-bs-toggle="tab" data-bs-target="#batchesPane" type="button">
+            <i class="bi bi-boxes me-1"></i> Batches & FEFO Order
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link rounded-pill px-4 fw-semibold" id="ledger-tab" data-bs-toggle="tab" data-bs-target="#ledgerPane" type="button">
+            <i class="bi bi-arrow-left-right me-1"></i> Stock Movement Ledger
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="inventoryTabContent">
+
+        <!-- ================= TAB 1: BATCHES ================= -->
+        <div class="tab-pane fade show active" id="batchesPane">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white p-3">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+              <div class="input-group" style="max-width: 400px;">
+                <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                <input type="text" id="batchSearchInput" class="form-control bg-light border-start-0" placeholder="Filter by medicine or batch number...">
+              </div>
+              <div class="d-flex gap-2 align-items-center">
+                <span class="text-muted small">Sort:</span>
+                <select id="batchSortSelect" class="form-select form-select-sm w-auto">
+                  <option value="fefo">FEFO: Earliest Expiry First (Recommended)</option>
+                  <option value="stock_desc">Highest Stock First</option>
+                  <option value="batch_asc">Batch Number A-Z</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Medicine</th>
+                    <th>Batch #</th>
+                    <th>Expiry Date (FEFO)</th>
+                    <th>Status</th>
+                    <th>Pricing (Cost / Sell / MRP)</th>
+                    <th>Available / Initial</th>
+                    <th>Supplier</th>
+                    <th class="text-end">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="batchTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= TAB 2: LEDGER ================= -->
+        <div class="tab-pane fade" id="ledgerPane">
+          <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white p-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+              <div class="d-flex gap-2">
+                <select id="movementTypeFilter" class="form-select form-select-sm w-auto">
+                  <option value="all">All Movements</option>
+                  <option value="SALE">Sales (POS)</option>
+                  <option value="PURCHASE">Purchases / Inward</option>
+                  <option value="ADJUSTMENT">Stock Adjustments</option>
+                  <option value="RETURN">Sales Returns</option>
+                </select>
+              </div>
+              <span class="text-muted small">Immutable stock audit trail</span>
+            </div>
+
+            <div class="table-responsive">
+              <table class="custom-table table align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Date & Time</th>
+                    <th>Medicine & Batch</th>
+                    <th>Type</th>
+                    <th>Qty Delta</th>
+                    <th>Reference</th>
+                    <th>Balance After</th>
+                    <th>Responsible User</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="ledgerTableBody">
+                  <!-- Rendered dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- =========================================================
+       ADD NEW BATCH MODAL
+  ========================================================== -->
+  <div class="modal fade" id="batchModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Register New Stock Batch</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="batchForm">
+          <div class="modal-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Medicine Product *</label>
+                <select id="newBatchMedId" class="form-select" required></select>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Batch Number *</label>
+                <input type="text" id="newBatchNumber" class="form-control" placeholder="e.g. NE-2026C" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Manufacture Date</label>
+                <input type="date" id="newBatchMfgDate" class="form-control">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Expiry Date * (FEFO Critical)</label>
+                <input type="date" id="newBatchExpDate" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Purchase / Cost Price (৳)</label>
+                <input type="number" step="0.01" id="newBatchCost" class="form-control" placeholder="0.00" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Selling Price (৳)</label>
+                <input type="number" step="0.01" id="newBatchPrice" class="form-control" placeholder="0.00" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small fw-bold">Maximum Retail Price (MRP ৳)</label>
+                <input type="number" step="0.01" id="newBatchMrp" class="form-control" placeholder="0.00" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Quantity Received *</label>
+                <input type="number" id="newBatchQty" class="form-control" min="1" placeholder="100" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small fw-bold">Supplier</label>
+                <select id="newBatchSupplier" class="form-select"></select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success rounded-pill px-4">Register Batch</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       STOCK ADJUSTMENT MODAL
+  ========================================================== -->
+  <div class="modal fade" id="adjustModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Inventory Stock Adjustment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <form id="adjustForm">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Select Target Batch *</label>
+              <select id="adjustBatchSelect" class="form-select" required></select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Adjustment Reason *</label>
+              <select id="adjustReason" class="form-select" required>
+                <option value="Damaged Goods Write-off">Damaged Goods Write-off</option>
+                <option value="Expired Stock Disposal">Expired Stock Disposal</option>
+                <option value="Inventory Physical Count Discrepancy">Inventory Physical Count Discrepancy</option>
+                <option value="Supplier Return">Supplier Return</option>
+                <option value="Stock Correction Addition">Stock Correction (Addition)</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Quantity Delta (+ or -) *</label>
+              <input type="number" id="adjustQty" class="form-control" placeholder="-5 or +10" required>
+              <small class="text-muted">Use negative numbers (e.g. -5) to write-off or dispose damaged items.</small>
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold">Mandatory Audit Notes</label>
+              <textarea id="adjustNotes" class="form-control" rows="2" placeholder="e.g. Bottle broken during handling; verified by supervisor..." required></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger rounded-pill px-4">Apply Adjustment</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Store & Common UI -->
+  <script src="aps-store.js"></script>
+  <script src="aps-common.js"></script>
+  <!-- Page Logic -->
+  <script src="inventory.js"></script>
+
+</body>
+</html>

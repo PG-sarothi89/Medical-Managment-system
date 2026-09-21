@@ -1,0 +1,22 @@
+{
+  "name": "aps-medical-management-system",
+  "version": "2.0.0",
+  "description": "APS Enterprise Healthcare & Pharmaceutical Management Platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "node server.js",
+    "test": "node --check server.js && node --check aps-store.js"
+  },
+  "keywords": [
+    "medical",
+    "pharmacy",
+    "pos",
+    "fefo",
+    "healthcare",
+    "management-system"
+  ],
+  "author": "Partho Sarothi Ghosh & Aritry Talukdar",
+  "license": "MIT"
+}
