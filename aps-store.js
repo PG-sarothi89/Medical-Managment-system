@@ -80,8 +80,8 @@ window.APSStore = (() => {
 
     // 2. Users (with distinct clinical and operational designations)
     const users = [
-      { id: "usr-1", username: "admin", email: "pg@gmail.com", password: "root", name: "Partho Ghosh", designation: "Chief Administrative Officer", role: "admin", roleTitle: "Administrator", phone: "+880 1711-000111", isActive: true },
-      { id: "usr-2", username: "pharmacist", email: "pharmacist@aps.com", password: "root", name: "Aritry Talukdar", designation: "Senior Clinical Pharmacist", role: "pharmacist", roleTitle: "Pharmacist", phone: "+880 1812-222333", isActive: true },
+      { id: "usr-1", username: "admin", email: "pg@gmail.com", password: "root", name: "Dr. Alexander Vance", designation: "Chief Administrative Officer", role: "admin", roleTitle: "Administrator", phone: "+880 1711-000111", isActive: true },
+      { id: "usr-2", username: "pharmacist", email: "pharmacist@aps.com", password: "root", name: "Sarah Jenkins", designation: "Senior Clinical Pharmacist", role: "pharmacist", roleTitle: "Pharmacist", phone: "+880 1812-222333", isActive: true },
       { id: "usr-3", username: "cashier", email: "cashier@aps.com", password: "root", name: "Rahim Uddin", designation: "Chief POS Cashier", role: "cashier", roleTitle: "Cashier", phone: "+880 1913-444555", isActive: true },
       { id: "usr-4", username: "inventory", email: "inventory@aps.com", password: "root", name: "Kamal Hossain", designation: "Lead Inventory & Logistics Manager", role: "inventory_manager", roleTitle: "Inventory Manager", phone: "+880 1614-666777", isActive: true },
       { id: "usr-5", username: "doctor", email: "doctor@aps.com", password: "root", name: "Dr. Mahfuzur Rahman", designation: "Consultant Physician & Diabetologist", role: "doctor", roleTitle: "Doctor / Staff", phone: "+880 1515-888999", isActive: true }

@@ -1,21 +1,21 @@
 /* =========================================================
-   APS MEDICAL MANAGEMENT SYSTEM — DESIGN SYSTEM
+   CURO MEDICAL MANAGEMENT SYSTEM — DESIGN SYSTEM
    Framework: Bootstrap 5.3 + Bootstrap Icons
-   Color System: Emerald / Teal Medical Palette
+   Color System: CURO Red / Dark Medical Palette
 ========================================================= */
 
 :root {
-  --teal-950: #0a2423;
-  --teal-900: #123a38;
-  --teal-800: #174a47;
-  --teal-700: #1b5f5b;
-  --teal-600: #237b76;
-  --teal-500: #2f9e98;
-  --teal-400: #45b8b3;
-  --teal-300: #8edbd6;
-  --teal-200: #c2ece9;
-  --teal-100: #e5f7f5;
-  --teal-50:  #f3fbfb;
+  --teal-950: #1a0a0a;
+  --teal-900: #3d0e0e;
+  --teal-800: #6b1212;
+  --teal-700: #8f1515;
+  --teal-600: #b01a1a;
+  --teal-500: #cc1b1b;
+  --teal-400: #e03030;
+  --teal-300: #f07070;
+  --teal-200: #f8b8b8;
+  --teal-100: #fde8e8;
+  --teal-50:  #fff5f5;
 
   --blue-soft: #d8efff;
   --green-soft: #d9f8d5;
@@ -24,9 +24,9 @@
   --purple-soft: #ebdcf9;
   --cream: #fffaf0;
 
-  --ink: #132f2d;
-  --ink-soft: #68807d;
-  --line: #e4ecea;
+  --ink: #2a1a1a;
+  --ink-soft: #7a5a5a;
+  --line: #f0e0e0;
   --white: #ffffff;
 
   --danger: #dc5b55;
@@ -43,9 +43,9 @@
   --radius-md: 14px;
   --radius-sm: 8px;
 
-  --shadow-soft: 0 16px 45px rgba(18, 58, 56, 0.08);
-  --shadow-card: 0 20px 55px rgba(18, 58, 56, 0.12);
-  --shadow-sm: 0 4px 14px rgba(18, 58, 56, 0.06);
+  --shadow-soft: 0 16px 45px rgba(204, 27, 27, 0.08);
+  --shadow-card: 0 20px 55px rgba(204, 27, 27, 0.12);
+  --shadow-sm: 0 4px 14px rgba(204, 27, 27, 0.06);
 
   --font-display: "Oswald", sans-serif;
   --font-body: "Poppins", sans-serif;
@@ -62,7 +62,7 @@ html {
 body {
   min-width: 320px;
   margin: 0;
-  background: #f7faf9;
+  background: #faf8f8;
   color: var(--ink);
   font-family: var(--font-body);
   overflow-x: hidden;
@@ -91,7 +91,7 @@ button, input, select, textarea {
   top: 0;
   z-index: 1020;
   background: rgba(255, 255, 255, 0.94);
-  border-bottom: 1px solid rgba(18, 58, 56, 0.08);
+  border-bottom: 1px solid rgba(204, 27, 27, 0.08);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
@@ -104,8 +104,9 @@ button, input, select, textarea {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   color: var(--ink);
+  text-decoration: none;
 }
 
 .brand-mark {
@@ -116,29 +117,21 @@ button, input, select, textarea {
   place-items: center;
   overflow: hidden;
   border-radius: 13px;
-  background: linear-gradient(135deg, var(--teal-800), var(--teal-600));
-  color: var(--white);
-  box-shadow: 0 6px 16px rgba(27, 95, 91, 0.25);
+  background: transparent;
+  box-shadow: none;
 }
 
-.brand-mark > i {
-  position: relative;
-  z-index: 2;
-  font-size: 22px;
-  font-weight: 700;
+.brand-mark > img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  border-radius: 13px;
 }
 
 .brand-leaf {
-  position: absolute;
-  width: 22px;
-  height: 32px;
-  right: -1px;
-  top: 2px;
-  border-radius: 100% 0 100% 0;
-  background: #75d0a0;
-  transform: rotate(28deg);
-  opacity: 0.85;
+  display: none;
 }
+
 
 .brand-name {
   display: flex;
@@ -150,7 +143,7 @@ button, input, select, textarea {
   font-family: var(--font-display);
   font-size: 24px;
   letter-spacing: 1px;
-  color: var(--teal-900);
+  color: var(--teal-500);
 }
 
 .brand-name small {
@@ -168,7 +161,7 @@ button, input, select, textarea {
 .main-nav .nav-link {
   position: relative;
   padding: 8px 12px !important;
-  color: #526a68;
+  color: #6a5050;
   font-size: 11.5px;
   font-weight: 600;
   text-transform: uppercase;
@@ -193,8 +186,8 @@ button, input, select, textarea {
 
 .main-nav .nav-link:hover,
 .main-nav .nav-link.active {
-  color: var(--teal-700);
-  background: rgba(47, 158, 152, 0.08);
+  color: var(--teal-600);
+  background: rgba(204, 27, 27, 0.06);
 }
 
 .main-nav .nav-link:hover::after,
@@ -223,7 +216,7 @@ button, input, select, textarea {
 }
 
 .icon-action:hover {
-  color: var(--teal-700);
+  color: var(--teal-600);
   border-color: var(--teal-300);
   background: var(--teal-100);
   transform: translateY(-1px);
@@ -271,7 +264,7 @@ button, input, select, textarea {
   display: grid;
   place-items: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--teal-600), var(--teal-500));
+  background: linear-gradient(135deg, var(--teal-700), var(--teal-500));
   color: var(--white);
   font-weight: 700;
   font-size: 13px;
@@ -1589,5 +1582,82 @@ button, input, select, textarea {
 
 .pos-mobile-toggle {
   display: none;
+}
+
+/* =========================================================
+   DARK THEME SYSTEM FOR HOME & MODULE PAGES
+========================================================= */
+[data-theme="dark"] body {
+  background-color: #0b0f19 !important;
+  color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .site-header {
+  background: rgba(13, 17, 28, 0.94) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .brand-title {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .nav-link {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link.active {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .pos-item-card,
+[data-theme="dark"] .cart-pane,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .filter-bar,
+[data-theme="dark"] .table-card {
+  background: #111726 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f1f5f9 !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-select {
+  background-color: #171f33 !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .form-control:focus,
+[data-theme="dark"] .form-select:focus {
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25) !important;
+}
+
+[data-theme="dark"] .table {
+  color: #cbd5e1 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .table th {
+  background-color: #151d30 !important;
+  color: #94a3b8 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .table td {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+[data-theme="dark"] .table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .site-footer {
+  background: #090d16 !important;
+  border-top-color: rgba(255, 255, 255, 0.08) !important;
+  color: #94a3b8 !important;
 }
 

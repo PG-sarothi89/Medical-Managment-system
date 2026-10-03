@@ -1,7 +1,7 @@
-# APS Medical Management System
+# CURO Medical Management System
 
 **Enterprise Healthcare & Pharmaceutical Management Platform**  
-*Developed & Designed by: Partho Sarothi Ghosh & Aritry Talukdar*
+*CURO Clinical & Healthcare Operations Platform*
 
 ---
 
@@ -86,8 +86,8 @@ The **APS Medical Management System** is a full-featured, responsive, production
 
 | Role | Email | Password | Staff Name | Clinical / Job Designation |
 | :--- | :--- | :--- | :--- | :--- |
-| **Administrator** | `pg@gmail.com` | `root` | Partho Ghosh | Chief Administrative Officer |
-| **Pharmacist** | `pharmacist@aps.com` | `root` | Aritry Talukdar | Senior Clinical Pharmacist |
+| **Administrator** | `pg@gmail.com` | `root` | Dr. Alexander Vance | Chief Administrative Officer |
+| **Pharmacist** | `pharmacist@aps.com` | `root` | Sarah Jenkins | Senior Clinical Pharmacist |
 | **Cashier** | `cashier@aps.com` | `root` | Rahim Uddin | Chief POS Cashier |
 | **Inventory Manager** | `inventory@aps.com` | `root` | Kamal Hossain | Lead Inventory & Logistics Manager |
 | **Doctor / Staff** | `doctor@aps.com` | `root` | Dr. Mahfuzur Rahman | Consultant Physician & Diabetologist |

@@ -1,212 +1,670 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" data-palette="violet">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#123a38">
-  <title>APS Medical Management System — Login Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#a855f7">
+  <title>CURO Medical Management System 4.0 — Login Portal</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- Google Fonts -->
+  <!-- Typography: Plus Jakarta Sans & Poppins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-  <!-- Stylesheet -->
+  <!-- Cinematic Stylesheet -->
   <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
 
-  <main class="auth-card">
+  <!-- Fullscreen Live Motion Video Backdrop -->
+  <div class="bg-video-container" aria-hidden="true">
+    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto">
+      <source src="video/original-37fddce98403954717d0b219deadef5c.mp4" type="video/mp4">
+    </video>
+    <div class="cinematic-scrim"></div>
+    <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
+    <div class="ambient-glow-orb"></div>
+  </div>
 
-    <!-- ================= LEFT VISUAL PANEL ================= -->
-    <section class="auth-visual" aria-label="Welcome branding panel">
-      <div class="auth-visual__pattern"></div>
-
-      <!-- Medical Illustration SVG -->
-      <svg class="auth-visual__art" viewBox="0 0 420 520" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <ellipse cx="210" cy="500" rx="150" ry="18" fill="#0f4c4a" opacity="0.25"/>
-        <path d="M120 520 L120 330 Q120 260 210 250 Q300 260 300 330 L300 520 Z" fill="#2f9e98"/>
-        <path d="M150 520 L150 340 Q150 290 210 285 Q270 290 270 340 L270 520 Z" fill="#268a85"/>
-        <!-- Stethoscope -->
-        <path d="M170 270 Q170 330 210 340 Q250 330 250 270" fill="none" stroke="#173f3d" stroke-width="6" stroke-linecap="round"/>
-        <path d="M210 340 L210 400" fill="none" stroke="#173f3d" stroke-width="6"/>
-        <circle cx="210" cy="415" r="16" fill="#75d0a0" stroke="#173f3d" stroke-width="4"/>
-        <!-- Cross Badge -->
-        <circle cx="210" cy="230" r="30" fill="#ffffff" filter="drop-shadow(0 4px 8px rgba(0,0,0,0.15))"/>
-        <path d="M210 215 v30 M195 230 h30" stroke="#2f9e98" stroke-width="7" stroke-linecap="round"/>
-      </svg>
-
-      <div class="auth-visual__quote">
-        <span class="quote-mark">“</span>
-        <h1>Precision Healthcare & Pharmacy Operations.</h1>
-        <p style="margin-top: 8px; font-size: 11.5px; opacity: 0.85;">APS Enterprise Medical Management System</p>
+  <!-- Top Utility Toolbar -->
+  <header class="top-toolbar" role="toolbar" aria-label="System View Options">
+    <!-- Theme Palette Selector -->
+    <div class="palette-picker">
+      <button type="button" class="tool-btn" id="paletteBtn" data-tip="Color Accent" aria-label="Choose Accent Palette">
+        <i class="bi bi-palette2"></i>
+      </button>
+      <div class="palette-menu" id="paletteMenu" role="menu">
+        <button type="button" class="palette-item" data-val="violet">
+          <span class="palette-dot" style="color: #a855f7; background: #a855f7;"></span>
+          <span>Cyber Violet</span>
+        </button>
+        <button type="button" class="palette-item" data-val="crimson">
+          <span class="palette-dot" style="color: #e11d48; background: #e11d48;"></span>
+          <span>CURO Crimson</span>
+        </button>
+        <button type="button" class="palette-item" data-val="emerald">
+          <span class="palette-dot" style="color: #10b981; background: #10b981;"></span>
+          <span>Oceanic Emerald</span>
+        </button>
       </div>
-    </section>
+    </div>
 
-    <!-- ================= RIGHT FORM PANEL ================= -->
-    <section class="auth-form">
-      <div class="auth-form__inner">
+    <!-- Live Motion Toggle -->
+    <button type="button" class="tool-btn" id="motionToggleBtn" data-tip="Toggle Live Motion" aria-label="Toggle Live Motion">
+      <i class="bi bi-play-circle" id="motionIcon"></i>
+    </button>
 
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-          <img src="logo.svg" alt="APS Logo" width="38" height="38">
-          <div>
-            <strong style="font-family: var(--font-display); font-size: 20px; letter-spacing: 0.5px; color: var(--teal-900);">APS MEDICAL</strong>
-            <div style="font-size: 8px; font-weight: 700; color: var(--teal-500); letter-spacing: 1px;">AUTHENTICATION PORTAL</div>
+    <!-- Sound Toggle -->
+    <button type="button" class="tool-btn" id="soundToggleBtn" data-tip="Sound Effects (On)" aria-label="Toggle Audio Feedback">
+      <i class="bi bi-volume-up" id="soundIcon"></i>
+    </button>
+
+    <!-- Dark/Light Theme Toggle -->
+    <button type="button" class="tool-btn" id="themeToggleBtn" data-tip="Switch to Light Mode" aria-label="Toggle Dark and Light Mode">
+      <i class="bi bi-sun" id="themeIcon"></i>
+    </button>
+  </header>
+
+  <!-- Centered Login Workspace -->
+  <main class="login-container">
+
+    <!-- Top Brand & System Emblem -->
+    <div class="portal-header">
+      <div class="portal-emblem-wrap">
+        <div class="portal-emblem-box">
+          <img src="curo-symbol.png" alt="CURO Medical Emblem" class="portal-emblem-img">
+        </div>
+      </div>
+      <h1 class="portal-title-text">
+        <span>CURO Medical Management System</span>
+        <span class="version-badge">4.0</span>
+      </h1>
+    </div>
+
+    <!-- Glassmorphic Login Card -->
+    <section class="login-card" aria-label="Sign In Panel">
+
+      <!-- Card Title -->
+      <div class="card-header-title">
+        <h2 class="login-heading">Login</h2>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="loginForm" autocomplete="on" novalidate>
+
+        <!-- Role Selector (Glowing Outline Container) -->
+        <div class="role-picker-container" id="rolePicker">
+          <button type="button" class="role-selector-box" id="roleSelectorBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Select System Role">
+            <div class="role-display">
+              <span class="role-badge-icon" id="roleDisplayIcon">👑</span>
+              <span class="role-selected-text" id="roleDisplayText">Administrator</span>
+            </div>
+            <i class="bi bi-chevron-down role-chevron" id="roleChevron"></i>
+          </button>
+
+          <!-- Hidden Native Input for standard forms -->
+          <input type="hidden" id="selectedRole" name="role" value="admin">
+
+          <!-- Dropdown Options List -->
+          <div class="role-dropdown-list" id="roleDropdownList" role="listbox">
+            <button type="button" class="role-option-btn is-selected" data-role="admin" data-icon="👑" role="option" aria-selected="true">
+              <div class="role-opt-left">
+                <span class="role-opt-icon">👑</span>
+                <div>
+                  <div class="role-opt-title">Administrator</div>
+                  <div class="role-opt-desc">Executive Control &amp; Full Access</div>
+                </div>
+              </div>
+              <i class="bi bi-check2 text-accent"></i>
+            </button>
+            <button type="button" class="role-option-btn" data-role="pharmacist" data-icon="💊" role="option">
+              <div class="role-opt-left">
+                <span class="role-opt-icon">💊</span>
+                <div>
+                  <div class="role-opt-title">Pharmacist</div>
+                  <div class="role-opt-desc">Dispensary &amp; Prescription Queue</div>
+                </div>
+              </div>
+            </button>
+            <button type="button" class="role-option-btn" data-role="cashier" data-icon="💳" role="option">
+              <div class="role-opt-left">
+                <span class="role-opt-icon">💳</span>
+                <div>
+                  <div class="role-opt-title">Cashier</div>
+                  <div class="role-opt-desc">POS Terminal &amp; Instant Billing</div>
+                </div>
+              </div>
+            </button>
+            <button type="button" class="role-option-btn" data-role="inventory_manager" data-icon="📦" role="option">
+              <div class="role-opt-left">
+                <span class="role-opt-icon">📦</span>
+                <div>
+                  <div class="role-opt-title">Inventory Manager</div>
+                  <div class="role-opt-desc">Warehouse, Stock &amp; FEFO Batches</div>
+                </div>
+              </div>
+            </button>
+            <button type="button" class="role-option-btn" data-role="doctor" data-icon="🩺" role="option">
+              <div class="role-opt-left">
+                <span class="role-opt-icon">🩺</span>
+                <div>
+                  <div class="role-opt-title">Doctor / Clinical Staff</div>
+                  <div class="role-opt-desc">Prescription Authoring &amp; Records</div>
+                </div>
+              </div>
+            </button>
           </div>
         </div>
 
-        <h2>Sign In</h2>
-        <p class="auth-form__subtitle">Select your role and enter credentials to enter the workspace.</p>
-
-        <form id="loginForm" novalidate>
-
-          <!-- ROLE SELECT -->
-          <div class="field" id="roleField">
-            <span class="field__icon"><i class="bi bi-person-badge"></i></span>
-            <select id="role" required aria-label="Select System Role">
-              <option value="" disabled selected>Choose your role...</option>
-              <option value="admin">Administrator</option>
-              <option value="pharmacist">Pharmacist</option>
-              <option value="cashier">Cashier</option>
-              <option value="inventory_manager">Inventory Manager</option>
-              <option value="doctor">Doctor / Clinical Staff</option>
-            </select>
+        <!-- ID / Username Input (Underline Floating Field) -->
+        <div class="form-field-group">
+          <label for="userIdInput" class="floating-label">Enter Your ID</label>
+          <div class="input-line-wrap">
+            <input 
+              type="text" 
+              id="userIdInput" 
+              class="underlined-input" 
+              placeholder="e.g. 1921207 or admin" 
+              value="1921207"
+              autocomplete="username" 
+              spellcheck="false" 
+              required
+            >
+            <span class="focus-glow-line"></span>
           </div>
-          <div class="field__error" id="roleError"></div>
+          <div class="field-error-msg" id="idErrorMsg">Please enter your Staff ID, username or email.</div>
+        </div>
 
-          <!-- EMAIL INPUT -->
-          <div class="field" id="emailField">
-            <span class="field__icon"><i class="bi bi-envelope"></i></span>
-            <input type="email" id="email" placeholder="Email address" required autocomplete="email">
-          </div>
-          <div class="field__error" id="emailError"></div>
-
-          <!-- PASSWORD INPUT -->
-          <div class="field" id="passwordField">
-            <span class="field__icon"><i class="bi bi-shield-lock"></i></span>
-            <input type="password" id="password" placeholder="Password" required autocomplete="current-password">
-            <button type="button" class="field__toggle" id="togglePassword" aria-label="Show password">
+        <!-- Password Input (Underline Floating Field with Toggle) -->
+        <div class="form-field-group">
+          <label for="passwordInput" class="floating-label">Enter Your Password</label>
+          <div class="input-line-wrap">
+            <input 
+              type="password" 
+              id="passwordInput" 
+              class="underlined-input" 
+              placeholder="••••••••" 
+              value="root"
+              autocomplete="current-password" 
+              required
+            >
+            <button type="button" class="field-suffix-btn" id="togglePasswordBtn" aria-label="Toggle password visibility">
               <i class="bi bi-eye" id="togglePasswordIcon"></i>
             </button>
+            <span class="focus-glow-line"></span>
           </div>
-          <div class="field__error" id="passwordError"></div>
+          <div class="field-error-msg" id="passErrorMsg">Please enter your password (minimum 3 characters).</div>
+        </div>
 
-          <!-- STATUS MESSAGE -->
-          <div class="form-status" id="formStatus"></div>
+        <!-- Feedback & Status Notification -->
+        <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
+          <i class="bi bi-info-circle" id="statusIcon"></i>
+          <span id="statusText"></span>
+        </div>
 
-          <!-- SUBMIT BUTTON -->
-          <button type="submit" class="btn-login" id="loginBtn">
-            <span class="btn-login__text">Sign In to Dashboard</span>
+        <!-- Submit Button -->
+        <div class="btn-submit-wrap">
+          <button type="submit" class="btn-login-action" id="loginBtn">
+            <span class="spinner-ring" id="btnSpinner" aria-hidden="true"></span>
+            <span id="btnText">Login</span>
           </button>
+        </div>
 
-          <!-- QUICK DEMO LOGINS -->
-          <div class="demo-box">
-            <small><i class="bi bi-lightning-charge-fill text-warning"></i> One-Click Quick Demo Login</small>
-            <div class="demo-chips">
-              <button type="button" class="demo-chip" data-role="admin" data-email="pg@gmail.com" data-pass="root">Admin</button>
-              <button type="button" class="demo-chip" data-role="pharmacist" data-email="pharmacist@aps.com" data-pass="root">Pharmacist</button>
-              <button type="button" class="demo-chip" data-role="cashier" data-email="cashier@aps.com" data-pass="root">Cashier</button>
-              <button type="button" class="demo-chip" data-role="inventory_manager" data-email="inventory@aps.com" data-pass="root">Inventory</button>
-              <button type="button" class="demo-chip" data-role="doctor" data-email="doctor@aps.com" data-pass="root">Doctor</button>
-            </div>
+        <!-- Minimalist Persona Switcher (Clean, Not Text Heavy) -->
+        <div class="quick-personas-section">
+          <div class="quick-personas-label">Quick Sign-In</div>
+          <div class="quick-chips-row" role="group" aria-label="Quick Demo Personas">
+            <button type="button" class="persona-chip" data-role="admin" data-id="1921207" data-pass="root" data-icon="👑" data-name="Administrator" title="Admin">
+              <span>👑</span>
+              <span>Admin</span>
+            </button>
+            <button type="button" class="persona-chip" data-role="pharmacist" data-id="pharmacist" data-pass="root" data-icon="💊" data-name="Pharmacist" title="Pharmacist">
+              <span>💊</span>
+              <span>Pharmacist</span>
+            </button>
+            <button type="button" class="persona-chip" data-role="doctor" data-id="doctor" data-pass="root" data-icon="🩺" data-name="Doctor" title="Doctor">
+              <span>🩺</span>
+              <span>Doctor</span>
+            </button>
+            <button type="button" class="persona-chip" data-role="cashier" data-id="cashier" data-pass="root" data-icon="💳" data-name="Cashier" title="Cashier">
+              <span>💳</span>
+              <span>Cashier</span>
+            </button>
+            <button type="button" class="persona-chip" data-role="inventory_manager" data-id="inventory" data-pass="root" data-icon="📦" data-name="Inventory Manager" title="Inventory">
+              <span>📦</span>
+              <span>Inventory</span>
+            </button>
           </div>
+        </div>
 
-        </form>
+      </form>
 
-      </div>
     </section>
+
+    <!-- Security & Legal Footer -->
+    <footer class="portal-footer">
+      <i class="bi bi-shield-lock-fill"></i>
+      <span>CURO Healthcare Operations &bull; 2026 Enterprise Edition</span>
+    </footer>
 
   </main>
 
   <!-- Load APS Data Store -->
   <script src="aps-store.js"></script>
-  
+
   <script>
     (() => {
       "use strict";
 
-      const form = document.getElementById("loginForm");
-      const roleSelect = document.getElementById("role");
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-      const roleField = document.getElementById("roleField");
-      const emailField = document.getElementById("emailField");
-      const passwordField = document.getElementById("passwordField");
-      const roleError = document.getElementById("roleError");
-      const emailError = document.getElementById("emailError");
-      const passwordError = document.getElementById("passwordError");
-      const formStatus = document.getElementById("formStatus");
-      const loginBtn = document.getElementById("loginBtn");
-      const togglePasswordBtn = document.getElementById("togglePassword");
+      // -------------------------------------------------------------
+      // 1. Audio Synthesizer (Web Audio API for UI sounds)
+      // -------------------------------------------------------------
+      let soundEnabled = localStorage.getItem("curoSound") !== "false";
+      let audioCtx = null;
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      function playUiBeep(freq = 880, type = "sine", duration = 0.08, gainVal = 0.1) {
+        if (!soundEnabled) return;
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+          gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + duration);
+        } catch (e) {}
+      }
+
+      function playSuccessTone() {
+        if (!soundEnabled) return;
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          playUiBeep(523.25, "triangle", 0.1, 0.12);
+          setTimeout(() => playUiBeep(659.25, "triangle", 0.12, 0.12), 80);
+          setTimeout(() => playUiBeep(783.99, "sine", 0.22, 0.15), 160);
+        } catch (e) {}
+      }
+
+      function playErrorTone() {
+        if (!soundEnabled) return;
+        try {
+          playUiBeep(260, "sawtooth", 0.15, 0.12);
+          setTimeout(() => playUiBeep(220, "sawtooth", 0.2, 0.12), 120);
+        } catch (e) {}
+      }
+
+      // -------------------------------------------------------------
+      // 2. Ambient Canvas Animation (Interactive Particles & Web)
+      // -------------------------------------------------------------
+      const canvas = document.getElementById("ambientCanvas");
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      let animId = null;
+      let isMotionActive = true;
+      let width = 0;
+      let height = 0;
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener("resize", resizeCanvas);
+      resizeCanvas();
+
+      class Particle {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * width;
+          this.y = Math.random() * height;
+          this.vx = (Math.random() - 0.5) * 0.45;
+          this.vy = (Math.random() - 0.5) * 0.45;
+          this.radius = Math.random() * 2 + 1;
+          this.alpha = Math.random() * 0.5 + 0.2;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > width) this.vx *= -1;
+          if (this.y < 0 || this.y > height) this.vy *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(168, 85, 247, ${this.alpha})`;
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        const count = Math.min(45, Math.floor((width * height) / 25000));
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push(new Particle());
+        }
+      }
+      initParticles();
+
+      function animateParticles() {
+        if (!isMotionActive) return;
+        ctx.clearRect(0, 0, width, height);
+
+        for (let i = 0; i < particles.length; i++) {
+          const p1 = particles[i];
+          p1.update();
+          p1.draw();
+
+          // Connect adjacent particles
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 120)})`;
+              ctx.lineWidth = 0.75;
+              ctx.stroke();
+            }
+          }
+        }
+        animId = requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+
+      // -------------------------------------------------------------
+      // 3. Theme, Palette & Live Motion Controls
+      // -------------------------------------------------------------
+      const bgVideo = document.getElementById("bgVideo");
+      const themeToggleBtn = document.getElementById("themeToggleBtn");
+      const themeIcon = document.getElementById("themeIcon");
+      const motionToggleBtn = document.getElementById("motionToggleBtn");
+      const motionIcon = document.getElementById("motionIcon");
+      const soundToggleBtn = document.getElementById("soundToggleBtn");
+      const soundIcon = document.getElementById("soundIcon");
+      const paletteBtn = document.getElementById("paletteBtn");
+      const paletteMenu = document.getElementById("paletteMenu");
+
+      // Apply initial theme
+      const savedTheme = localStorage.getItem("curoTheme") || "dark";
+      applyTheme(savedTheme);
+
+      function applyTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("curoTheme", theme);
+        if (theme === "light") {
+          themeIcon.className = "bi bi-moon-stars";
+          themeToggleBtn.setAttribute("data-tip", "Switch to Dark Mode");
+        } else {
+          themeIcon.className = "bi bi-sun";
+          themeToggleBtn.setAttribute("data-tip", "Switch to Light Mode");
+        }
+      }
+
+      themeToggleBtn.addEventListener("click", () => {
+        playUiBeep(700, "sine", 0.05);
+        const current = document.documentElement.getAttribute("data-theme") || "dark";
+        applyTheme(current === "dark" ? "light" : "dark");
+      });
+
+      // Apply initial palette
+      const savedPalette = localStorage.getItem("curoPalette") || "violet";
+      applyPalette(savedPalette);
+
+      function applyPalette(palette) {
+        document.documentElement.setAttribute("data-palette", palette);
+        localStorage.setItem("curoPalette", palette);
+      }
+
+      paletteBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        playUiBeep(650, "sine", 0.04);
+        paletteMenu.classList.toggle("is-open");
+      });
+
+      document.querySelectorAll(".palette-item").forEach(item => {
+        item.addEventListener("click", () => {
+          applyPalette(item.dataset.val);
+          paletteMenu.classList.remove("is-open");
+          playUiBeep(850, "triangle", 0.06);
+        });
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!paletteBtn.contains(e.target) && !paletteMenu.contains(e.target)) {
+          paletteMenu.classList.remove("is-open");
+        }
+      });
+
+      // Sound Toggle
+      soundIcon.className = soundEnabled ? "bi bi-volume-up" : "bi bi-volume-mute";
+      soundToggleBtn.setAttribute("data-tip", soundEnabled ? "Audio Effects (On)" : "Audio Effects (Muted)");
+
+      soundToggleBtn.addEventListener("click", () => {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem("curoSound", soundEnabled ? "true" : "false");
+        soundIcon.className = soundEnabled ? "bi bi-volume-up" : "bi bi-volume-mute";
+        soundToggleBtn.setAttribute("data-tip", soundEnabled ? "Audio Effects (On)" : "Audio Effects (Muted)");
+        if (soundEnabled) playUiBeep(880, "sine", 0.08);
+      });
+
+      // Motion Toggle
+      motionToggleBtn.addEventListener("click", () => {
+        isMotionActive = !isMotionActive;
+        playUiBeep(600, "sine", 0.05);
+        if (isMotionActive) {
+          bgVideo.play();
+          bgVideo.classList.remove("is-paused");
+          motionIcon.className = "bi bi-play-circle";
+          motionToggleBtn.setAttribute("data-tip", "Pause Live Motion");
+          animateParticles();
+        } else {
+          bgVideo.pause();
+          bgVideo.classList.add("is-paused");
+          motionIcon.className = "bi bi-pause-circle";
+          motionToggleBtn.setAttribute("data-tip", "Resume Live Motion");
+          cancelAnimationFrame(animId);
+          ctx.clearRect(0, 0, width, height);
+        }
+      });
+
+      // -------------------------------------------------------------
+      // 4. Role Selector Dropdown
+      // -------------------------------------------------------------
+      const rolePicker = document.getElementById("rolePicker");
+      const roleSelectorBtn = document.getElementById("roleSelectorBtn");
+      const roleDisplayText = document.getElementById("roleDisplayText");
+      const roleDisplayIcon = document.getElementById("roleDisplayIcon");
+      const selectedRoleInput = document.getElementById("selectedRole");
+      const roleOptionBtns = document.querySelectorAll(".role-option-btn");
+
+      roleSelectorBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        playUiBeep(640, "sine", 0.04);
+        const isOpen = rolePicker.classList.toggle("is-active");
+        roleSelectorBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!rolePicker.contains(e.target)) {
+          rolePicker.classList.remove("is-active");
+          roleSelectorBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      function setRole(roleVal, roleName, roleIcon) {
+        selectedRoleInput.value = roleVal;
+        roleDisplayText.textContent = roleName;
+        roleDisplayIcon.textContent = roleIcon;
+
+        roleOptionBtns.forEach(btn => {
+          const isSelected = btn.dataset.role === roleVal;
+          btn.classList.toggle("is-selected", isSelected);
+          btn.setAttribute("aria-selected", isSelected ? "true" : "false");
+          const checkIcon = btn.querySelector(".bi-check2");
+          if (isSelected) {
+            if (!checkIcon) {
+              const icon = document.createElement("i");
+              icon.className = "bi bi-check2 text-accent";
+              btn.appendChild(icon);
+            }
+          } else {
+            if (checkIcon) checkIcon.remove();
+          }
+        });
+      }
+
+      roleOptionBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          playUiBeep(720, "sine", 0.04);
+          setRole(btn.dataset.role, btn.querySelector(".role-opt-title").textContent, btn.dataset.icon);
+          rolePicker.classList.remove("is-active");
+          roleSelectorBtn.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      // -------------------------------------------------------------
+      // 5. Password Visibility Toggle
+      // -------------------------------------------------------------
+      const passwordInput = document.getElementById("passwordInput");
+      const togglePasswordBtn = document.getElementById("togglePasswordBtn");
       const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+
+      togglePasswordBtn.addEventListener("click", () => {
+        playUiBeep(580, "sine", 0.04);
+        const isSecret = passwordInput.type === "password";
+        passwordInput.type = isSecret ? "text" : "password";
+        togglePasswordIcon.className = isSecret ? "bi bi-eye-slash" : "bi bi-eye";
+      });
+
+      // -------------------------------------------------------------
+      // 6. Quick Demo Personas
+      // -------------------------------------------------------------
+      const userIdInput = document.getElementById("userIdInput");
+      const personaChips = document.querySelectorAll(".persona-chip");
+      const loginBtn = document.getElementById("loginBtn");
+
+      personaChips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          playUiBeep(820, "triangle", 0.06);
+          setRole(chip.dataset.role, chip.dataset.name, chip.dataset.icon);
+          userIdInput.value = chip.dataset.id;
+          passwordInput.value = chip.dataset.pass;
+          clearErrors();
+          loginBtn.click();
+        });
+      });
+
+      // -------------------------------------------------------------
+      // 7. Form Validation & Authentication Handler
+      // -------------------------------------------------------------
+      const loginForm = document.getElementById("loginForm");
+      const idErrorMsg = document.getElementById("idErrorMsg");
+      const passErrorMsg = document.getElementById("passErrorMsg");
+      const statusBanner = document.getElementById("statusBanner");
+      const statusIcon = document.getElementById("statusIcon");
+      const statusText = document.getElementById("statusText");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const btnText = document.getElementById("btnText");
+
+      function clearErrors() {
+        idErrorMsg.classList.remove("is-visible");
+        passErrorMsg.classList.remove("is-visible");
+        statusBanner.className = "status-banner";
+        statusText.textContent = "";
+      }
+
+      userIdInput.addEventListener("input", () => idErrorMsg.classList.remove("is-visible"));
+      passwordInput.addEventListener("input", () => passErrorMsg.classList.remove("is-visible"));
 
       // Check if already authenticated
       if (sessionStorage.getItem("apsAuthenticated") === "true") {
-        formStatus.textContent = "Already authenticated. Redirecting...";
-        formStatus.className = "form-status is-success";
-        setTimeout(() => window.location.href = "home.html", 400);
+        statusBanner.className = "status-banner is-success";
+        statusIcon.className = "bi bi-check-circle";
+        statusText.textContent = "Session active. Redirecting to workspace...";
+        setTimeout(() => window.location.href = "home.html", 500);
       }
 
-      // Password toggle
-      togglePasswordBtn.addEventListener("click", () => {
-        const isHidden = passwordInput.type === "password";
-        passwordInput.type = isHidden ? "text" : "password";
-        togglePasswordIcon.className = isHidden ? "bi bi-eye-slash" : "bi bi-eye";
-      });
-
-      function setErr(field, el, msg) {
-        field.classList.add("field--error");
-        el.textContent = msg;
-        return false;
-      }
-
-      function clearErr(field, el) {
-        field.classList.remove("field--error");
-        el.textContent = "";
-        return true;
-      }
-
-      function validate() {
-        let valid = true;
-        if (!roleSelect.value) valid = setErr(roleField, roleError, "Please select a system role.") && valid;
-        else clearErr(roleField, roleError);
-
-        const email = emailInput.value.trim();
-        if (!email || !/^\S+@\S+\.\S+$/.test(email)) valid = setErr(emailField, emailError, "Enter a valid email address.") && valid;
-        else clearErr(emailField, emailError);
-
-        if (!passwordInput.value || passwordInput.value.length < 3) valid = setErr(passwordField, passwordError, "Password must be at least 3 characters.") && valid;
-        else clearErr(passwordField, passwordError);
-
-        return valid;
-      }
-
-      form.addEventListener("submit", (e) => {
+      loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        if (!validate()) return;
+        clearErrors();
 
+        const inputId = userIdInput.value.trim();
+        const inputPass = passwordInput.value;
+        const selectedRole = selectedRoleInput.value;
+
+        let hasError = false;
+
+        if (!inputId) {
+          idErrorMsg.classList.add("is-visible");
+          hasError = true;
+        }
+
+        if (!inputPass || inputPass.length < 3) {
+          passErrorMsg.classList.add("is-visible");
+          hasError = true;
+        }
+
+        if (hasError) {
+          playErrorTone();
+          return;
+        }
+
+        // Show loading state
         loginBtn.disabled = true;
-        loginBtn.querySelector(".btn-login__text").textContent = "Authenticating...";
-        formStatus.textContent = "";
-        formStatus.className = "form-status";
+        btnSpinner.classList.add("is-active");
+        btnText.textContent = "Authenticating...";
 
         setTimeout(() => {
-          const users = APSStore.getUsers();
-          const email = emailInput.value.trim().toLowerCase();
-          const role = roleSelect.value;
-          const pass = passwordInput.value;
+          const users = (window.APSStore && window.APSStore.getUsers) ? window.APSStore.getUsers() : [];
 
-          const matchedUser = users.find(u => u.email.toLowerCase() === email && u.role === role && u.password === pass);
+          // Match logic: accepts ID (e.g. "usr-1", "1921207" alias), username, or email
+          const matchedUser = users.find(u => {
+            const matchCred = 
+              (u.id && u.id.toLowerCase() === inputId.toLowerCase()) ||
+              (u.username && u.username.toLowerCase() === inputId.toLowerCase()) ||
+              (u.email && u.email.toLowerCase() === inputId.toLowerCase()) ||
+              // Alias demo ID 1921207 from reference video to admin
+              (inputId === "1921207" && u.role === "admin");
+
+            const matchRole = !selectedRole || u.role === selectedRole;
+            const matchPass = u.password === inputPass;
+
+            return matchCred && matchRole && matchPass;
+          });
 
           if (matchedUser) {
-            formStatus.textContent = `Welcome, ${matchedUser.name}! Opening system...`;
-            formStatus.className = "form-status is-success";
+            playSuccessTone();
+            statusBanner.className = "status-banner is-success";
+            statusIcon.className = "bi bi-check-circle-fill";
+            statusText.textContent = `Access granted. Welcome, ${matchedUser.name}!`;
 
+            // Persist session
             sessionStorage.setItem("apsAuthenticated", "true");
             sessionStorage.setItem("apsUserId", matchedUser.id);
             sessionStorage.setItem("apsUserName", matchedUser.name);
@@ -214,31 +672,30 @@
             sessionStorage.setItem("apsUserRoleKey", matchedUser.role);
             sessionStorage.setItem("apsUserEmail", matchedUser.email);
 
-            APSStore.logAudit("LOGIN", "users", matchedUser.id, `User logged in with role ${matchedUser.roleTitle}`);
+            if (window.APSStore && window.APSStore.logAudit) {
+              window.APSStore.logAudit(
+                "LOGIN",
+                "users",
+                matchedUser.id,
+                `User authenticated successfully via 4.0 portal with role ${matchedUser.roleTitle || matchedUser.role}`
+              );
+            }
 
             setTimeout(() => {
               window.location.href = "home.html";
-            }, 500);
+            }, 600);
+
           } else {
+            playErrorTone();
             loginBtn.disabled = false;
-            loginBtn.querySelector(".btn-login__text").textContent = "Sign In to Dashboard";
-            formStatus.textContent = "Invalid role, email or password. Use demo buttons below.";
-            formStatus.className = "form-status is-error";
+            btnSpinner.classList.remove("is-active");
+            btnText.textContent = "Login";
+
+            statusBanner.className = "status-banner is-error";
+            statusIcon.className = "bi bi-exclamation-triangle-fill";
+            statusText.textContent = "Invalid ID or password. Use quick persona chips below.";
           }
         }, 400);
-      });
-
-      // Quick Demo Switchers
-      document.querySelectorAll(".demo-chip").forEach(chip => {
-        chip.addEventListener("click", () => {
-          roleSelect.value = chip.dataset.role;
-          emailInput.value = chip.dataset.email;
-          passwordInput.value = chip.dataset.pass;
-          clearErr(roleField, roleError);
-          clearErr(emailField, emailError);
-          clearErr(passwordField, passwordError);
-          loginBtn.click();
-        });
       });
 
     })();

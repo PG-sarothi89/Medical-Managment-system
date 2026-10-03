@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Testing and temporary logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+
+# OS Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDE and Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

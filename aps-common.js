@@ -18,6 +18,10 @@ window.APS = (() => {
                       window.location.pathname.endsWith("/") ||
                       window.location.pathname === "";
 
+  // Apply system theme (dark/light)
+  const savedTheme = localStorage.getItem("curoTheme") || "dark";
+  document.documentElement.setAttribute("data-theme", savedTheme);
+
   const isAuthenticated = sessionStorage.getItem("apsAuthenticated") === "true";
 
   if (!isAuthenticated && !isLoginPage) {
@@ -36,7 +40,7 @@ window.APS = (() => {
   }
 
   // Populate User Display
-  const userName = sessionStorage.getItem("apsUserName") || "Partho Ghosh";
+  const userName = sessionStorage.getItem("apsUserName") || "Dr. Alexander Vance";
   const userRole = sessionStorage.getItem("apsUserRole") || "Administrator";
   const userEmail = sessionStorage.getItem("apsUserEmail") || "pg@gmail.com";
 
@@ -62,7 +66,7 @@ window.APS = (() => {
   function getCurrentUser() {
     return {
       id: sessionStorage.getItem("apsUserId") || "usr-1",
-      name: sessionStorage.getItem("apsUserName") || "Partho Ghosh",
+      name: sessionStorage.getItem("apsUserName") || "Dr. Alexander Vance",
       role: sessionStorage.getItem("apsUserRoleKey") || "admin",
       roleTitle: sessionStorage.getItem("apsUserRole") || "Administrator",
       email: sessionStorage.getItem("apsUserEmail") || "pg@gmail.com"
@@ -87,6 +91,28 @@ window.APS = (() => {
     // Update notification badge count from live alerts
     updateAlertBadge();
     initInactivityTimer();
+
+    // Global Theme Toggle Injection for Static Pages
+    const actionsWrap = $(".header-actions") || $(".navbar-nav") || $(".d-flex.align-items-center.gap-3");
+    if (actionsWrap && !$("#globalThemeToggle")) {
+      const toggleBtn = document.createElement("button");
+      toggleBtn.type = "button";
+      toggleBtn.id = "globalThemeToggle";
+      toggleBtn.className = "btn btn-outline-secondary btn-sm rounded-circle d-inline-flex align-items-center justify-content-center";
+      toggleBtn.style.width = "34px";
+      toggleBtn.style.height = "34px";
+      toggleBtn.title = savedTheme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode";
+      toggleBtn.innerHTML = `<i class="bi ${savedTheme === "dark" ? "bi-sun" : "bi-moon-stars"}"></i>`;
+      toggleBtn.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme") || "dark";
+        const next = cur === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("curoTheme", next);
+        toggleBtn.title = next === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode";
+        toggleBtn.innerHTML = `<i class="bi ${next === "dark" ? "bi-sun" : "bi-moon-stars"}"></i>`;
+      });
+      actionsWrap.prepend(toggleBtn);
+    }
   });
 
   /* =========================================================
