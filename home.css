@@ -458,13 +458,16 @@ button, input, select, textarea {
 }
 
 .btn-primary-soft {
-  min-height: 48px;
-  padding: 0 24px;
+  min-height: 44px;
+  padding: 0 22px;
   border: 0;
-  background: var(--teal-900);
-  color: var(--white);
-  font-size: 12.5px;
-  box-shadow: 0 12px 28px rgba(18, 58, 56, 0.2);
+  background: linear-gradient(135deg, #0098ea, #0077d7);
+  color: #ffffff !important;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 6px 18px rgba(0, 152, 234, 0.28);
+  border-radius: 999px;
+  text-decoration: none;
 }
 
 .btn-primary-soft:hover {
@@ -1587,82 +1590,6 @@ button, input, select, textarea {
 /* =========================================================
    DARK THEME SYSTEM FOR HOME & MODULE PAGES
 ========================================================= */
-[data-theme="dark"] body {
-  background-color: #0b0f19 !important;
-  color: #f1f5f9 !important;
-}
-
-[data-theme="dark"] .site-header {
-  background: rgba(13, 17, 28, 0.94) !important;
-  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-theme="dark"] .brand-title {
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .nav-link {
-  color: #94a3b8 !important;
-}
-
-[data-theme="dark"] .nav-link:hover,
-[data-theme="dark"] .nav-link.active {
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .card,
-[data-theme="dark"] .stat-card,
-[data-theme="dark"] .pos-item-card,
-[data-theme="dark"] .cart-pane,
-[data-theme="dark"] .modal-content,
-[data-theme="dark"] .filter-bar,
-[data-theme="dark"] .table-card {
-  background: #111726 !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  color: #f1f5f9 !important;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35) !important;
-}
-
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .form-select {
-  background-color: #171f33 !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  color: #ffffff !important;
-}
-
-[data-theme="dark"] .form-control:focus,
-[data-theme="dark"] .form-select:focus {
-  border-color: #a855f7 !important;
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25) !important;
-}
-
-[data-theme="dark"] .table {
-  color: #cbd5e1 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-theme="dark"] .table th {
-  background-color: #151d30 !important;
-  color: #94a3b8 !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-}
-
-[data-theme="dark"] .table td {
-  border-color: rgba(255, 255, 255, 0.06) !important;
-}
-
-[data-theme="dark"] .table tr:hover td {
-  background-color: rgba(255, 255, 255, 0.04) !important;
-}
-
-[data-theme="dark"] .site-footer {
-  background: #090d16 !important;
-  border-top-color: rgba(255, 255, 255, 0.08) !important;
-  color: #94a3b8 !important;
-}
-
-
-
 /* =========================================================
    NEW DASHBOARD UI STYLES (Faithful to Dashboard UI.webp)
 ========================================================= */
@@ -2628,4 +2555,93 @@ button, input, select, textarea {
   background: #f1f5f9 !important;
   color: #0f172a !important;
   border-color: #94a3b8 !important;
+}
+
+/* =========================================================
+   SMOOTH TRANSITIONS & MICRO-INTERACTIONS
+========================================================= */
+
+*, *::before, *::after {
+  transition: background-color 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.15s ease,
+              box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-content-area {
+  animation: pageFadeIn 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar-nav-item {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.sidebar-nav-item:hover {
+  transform: translateX(4px);
+}
+
+.sidebar-nav-item.is-active:hover {
+  transform: none;
+}
+
+.btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.btn:active {
+  transform: scale(0.98) !important;
+}
+
+.product-card, .metric-card, .dashboard-panel-card, .card {
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* =========================================================
+   CURO THEME UTILITY COLOR CLASSES & KICKERS
+========================================================= */
+.text-teal-950 { color: #081a36 !important; }
+.text-teal-900 { color: #0f172a !important; }
+.text-teal-800 { color: #145da0 !important; }
+.text-teal-700 { color: #0077d7 !important; }
+.text-teal-600 { color: #008be3 !important; }
+.text-teal-500 { color: #0098ea !important; }
+.text-teal-400 { color: #38bdf8 !important; }
+.text-teal-300 { color: #7dd3fc !important; }
+.text-teal-200 { color: #bae6fd !important; }
+.text-teal-100 { color: #e0f2fe !important; }
+.text-teal-50  { color: #f0f9ff !important; }
+
+.bg-teal-950 { background-color: #081a36 !important; }
+.bg-teal-900 { background-color: #0f172a !important; }
+.bg-teal-800 { background-color: #145da0 !important; }
+.bg-teal-700 { background-color: #0077d7 !important; }
+.bg-teal-600 { background-color: #008be3 !important; }
+.bg-teal-500 { background-color: #0098ea !important; }
+.bg-teal-400 { background-color: #38bdf8 !important; }
+.bg-teal-300 { background-color: #7dd3fc !important; }
+.bg-teal-200 { background-color: #bae6fd !important; }
+.bg-teal-100 { background-color: #e0f2fe !important; }
+.bg-teal-50  { background-color: #f0f9ff !important; }
+
+.section-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #0098ea !important;
+  display: block;
+  margin-bottom: 4px;
 }

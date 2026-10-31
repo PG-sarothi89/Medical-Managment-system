@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#008be3">
-  <title>CURO Health &amp; Wellness — Clinical Dashboard</title>
+  <title>CURO Health &amp; Wellness — Clinical Overview &amp; Analytics</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Frameworks & Typography: Plus Jakarta Sans & Poppins -->
@@ -27,9 +27,7 @@
     <!-- Mobile Sidebar Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- =========================================================
-         LEFT SIDEBAR (Faithful to Dashboard UI.webp)
-    ========================================================== -->
+    <!-- LEFT SIDEBAR -->
     <aside class="dashboard-sidebar" id="appSidebar">
 
       <!-- Brand Header -->
@@ -51,37 +49,37 @@
             <i class="bi bi-grid sidebar-icon"></i>
             <span>Overview</span>
           </a>
-          <a href="reports.html" class="sidebar-nav-item">
-            <i class="bi bi-bar-chart-line sidebar-icon"></i>
-            <span>Financial Reports</span>
-          </a>
-          <a href="inventory.html" class="sidebar-nav-item">
-            <i class="bi bi-pie-chart sidebar-icon"></i>
-            <span>Stock Tracking</span>
-          </a>
           <a href="pos.html" class="sidebar-nav-item">
             <i class="bi bi-cart3 sidebar-icon"></i>
-            <span>Order (POS)</span>
+            <span>POS Terminal</span>
           </a>
           <a href="medicines.html" class="sidebar-nav-item">
             <i class="bi bi-capsule sidebar-icon"></i>
             <span>Medicines</span>
           </a>
-          <a href="prescriptions.html" class="sidebar-nav-item">
-            <i class="bi bi-file-earmark-medical sidebar-icon"></i>
-            <span>Prescriptions</span>
+          <a href="inventory.html" class="sidebar-nav-item">
+            <i class="bi bi-boxes sidebar-icon"></i>
+            <span>Inventory & FEFO</span>
           </a>
           <a href="purchases.html" class="sidebar-nav-item">
             <i class="bi bi-truck sidebar-icon"></i>
             <span>Purchases</span>
           </a>
-          <a href="invoices.html" class="sidebar-nav-item">
-            <i class="bi bi-receipt sidebar-icon"></i>
-            <span>Invoices</span>
+          <a href="prescriptions.html" class="sidebar-nav-item">
+            <i class="bi bi-file-earmark-medical sidebar-icon"></i>
+            <span>Prescriptions</span>
           </a>
           <a href="customers.html" class="sidebar-nav-item">
             <i class="bi bi-people sidebar-icon"></i>
             <span>Customers</span>
+          </a>
+          <a href="invoices.html" class="sidebar-nav-item">
+            <i class="bi bi-receipt sidebar-icon"></i>
+            <span>Invoices</span>
+          </a>
+          <a href="reports.html" class="sidebar-nav-item">
+            <i class="bi bi-bar-chart-line sidebar-icon"></i>
+            <span>Financial Reports</span>
           </a>
         </nav>
       </div>
@@ -90,68 +88,54 @@
       <div class="sidebar-nav-section mt-auto">
         <div class="sidebar-section-heading">SUPPORT</div>
         <nav class="sidebar-nav" aria-label="Support Navigation">
-          <a href="users.html" class="sidebar-nav-item">
-            <i class="bi bi-gear sidebar-icon"></i>
-            <span>Settings</span>
-          </a>
           <a href="alerts.html" class="sidebar-nav-item">
-            <i class="bi bi-chat-dots sidebar-icon"></i>
-            <span>Customer Support</span>
-          </a>
-          <a href="alerts.html" class="sidebar-nav-item">
-            <i class="bi bi-question-circle sidebar-icon"></i>
-            <span>Help Centre</span>
+            <i class="bi bi-bell sidebar-icon"></i>
+            <span>Alerts</span>
           </a>
           <a href="users.html" class="sidebar-nav-item">
             <i class="bi bi-shield-lock sidebar-icon"></i>
-            <span>RBAC &amp; Audit</span>
+            <span>Users & Audit</span>
           </a>
         </nav>
       </div>
 
     </aside>
 
-    <!-- =========================================================
-         MAIN APPLICATION AREA
-    ========================================================== -->
+    <!-- MAIN APPLICATION WRAPPER -->
     <div class="dashboard-main-wrapper">
 
-      <!-- TOP HEADER (Search, Notifications, Profile) -->
+      <!-- TOPBAR -->
       <header class="dashboard-topbar">
         <div class="topbar-left">
           <button type="button" class="sidebar-toggle-btn d-lg-none" id="sidebarToggleBtn" aria-label="Toggle navigation menu">
             <i class="bi bi-list fs-3"></i>
           </button>
-
-          <!-- Top Search Input -->
           <div class="topbar-search-box">
-            <input type="search" id="topSearchInput" placeholder="Serach..." aria-label="Global search">
+            <input type="search" id="topSearchInput" placeholder="Search..." aria-label="Global search">
             <i class="bi bi-search topbar-search-icon"></i>
           </div>
         </div>
 
         <div class="topbar-right">
-          <!-- Notification Bell with Red Badge ("2") -->
-          <button type="button" class="topbar-notification-btn" onclick="window.location.href='alerts.html'" title="Clinical & Stock Alerts" aria-label="Notifications">
+          <button type="button" class="topbar-notification-btn" onclick="window.location.href='alerts.html'" title="Clinical &amp; Stock Alerts" aria-label="Notifications">
             <i class="bi bi-bell"></i>
-            <span class="notification-badge-dot" id="headerAlertCount">2</span>
+            <span class="notification-badge-dot" id="headerAlertCount">0</span>
           </button>
 
-          <!-- User Profile Chip with Logout -->
           <div class="user-chip-container">
             <div class="user-avatar-circle" id="userAvatarLetter">A</div>
             <div class="user-info-text d-none d-md-flex">
               <strong id="navUserName">Dr. Alexander Vance</strong>
               <small id="navUserRole">Administrator</small>
             </div>
-            <button type="button" class="btn-logout-icon" id="logoutBtn" title="Sign Out of Session" aria-label="Sign Out">
+            <button type="button" class="btn-logout-icon" id="logoutBtn" title="Sign Out of Session" aria-label="Sign Out" data-logout>
               <i class="bi bi-box-arrow-right"></i>
             </button>
           </div>
         </div>
       </header>
 
-      <!-- MAIN SCROLLABLE CONTENT -->
+      <!-- MAIN CONTENT -->
       <main class="dashboard-content-area">
 
         <!-- Page Header & Category Search Row -->

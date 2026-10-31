@@ -18,9 +18,9 @@ window.APS = (() => {
                       window.location.pathname.endsWith("/") ||
                       window.location.pathname === "";
 
-  // Apply system theme (dark/light)
-  const savedTheme = localStorage.getItem("curoTheme") || "dark";
-  document.documentElement.setAttribute("data-theme", savedTheme);
+  // Lock to clean light theme
+  document.documentElement.setAttribute("data-theme", "light");
+  localStorage.setItem("curoTheme", "light");
 
   const isAuthenticated = sessionStorage.getItem("apsAuthenticated") === "true";
 
@@ -45,9 +45,9 @@ window.APS = (() => {
   const userEmail = sessionStorage.getItem("apsUserEmail") || "pg@gmail.com";
 
   function applyUserDisplay(name, role) {
-    const nameEl = $("#userName");
-    const roleEl = $("#userRole");
-    const avatarEl = $(".avatar");
+    const nameEl = $("#userName") || $("#navUserName");
+    const roleEl = $("#userRole") || $("#navUserRole");
+    const avatarEl = $(".avatar") || $("#userAvatarLetter");
     if (nameEl) nameEl.textContent = name;
     if (roleEl) roleEl.textContent = role;
     if (avatarEl) avatarEl.textContent = name.charAt(0).toUpperCase();
@@ -78,41 +78,63 @@ window.APS = (() => {
     const yearEl = $("#currentYear");
     if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-    // Highlight active nav link based on current filename
-    $$(".main-nav .nav-link").forEach(link => {
+    // Highlight active sidebar navigation link based on current filename
+    $$(".sidebar-nav-item").forEach(link => {
       const href = link.getAttribute("href");
       if (href && (href === currentFilename || href.startsWith(currentFilename))) {
-        link.classList.add("active");
+        link.classList.add("is-active");
       } else if (href && !href.startsWith("#")) {
-        link.classList.remove("active");
+        link.classList.remove("is-active");
       }
+    });
+
+    // Mobile sidebar drawer toggler
+    const sidebarToggleBtn = $("#sidebarToggleBtn");
+    const appSidebar = $("#appSidebar");
+    const sidebarOverlay = $("#sidebarOverlay");
+
+    if (sidebarToggleBtn && appSidebar) {
+      sidebarToggleBtn.addEventListener("click", () => {
+        appSidebar.classList.toggle("is-open");
+        if (sidebarOverlay) sidebarOverlay.classList.toggle("is-visible");
+      });
+    }
+
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", () => {
+        if (appSidebar) appSidebar.classList.remove("is-open");
+        sidebarOverlay.classList.remove("is-visible");
+      });
+    }
+
+    // Role-Based UI Guard: Hide Admin-only modules for non-admin staff
+    if (userRoleKey !== "admin") {
+      $$('a[href="users.html"]').forEach(el => {
+        el.style.display = "none";
+      });
+    }
+
+    // Topbar global search across pages
+    const topSearch = $("#topSearchInput");
+    if (topSearch && currentFilename !== "home.html") {
+      topSearch.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && topSearch.value.trim()) {
+          window.location.href = `medicines.html?search=${encodeURIComponent(topSearch.value.trim())}`;
+        }
+      });
+    }
+
+    // Bind logout handlers
+    $$("[data-logout], #logoutBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        sessionStorage.clear();
+        window.location.href = "index.html";
+      });
     });
 
     // Update notification badge count from live alerts
     updateAlertBadge();
     initInactivityTimer();
-
-    // Global Theme Toggle Injection for Static Pages
-    const actionsWrap = $(".header-actions") || $(".navbar-nav") || $(".d-flex.align-items-center.gap-3");
-    if (actionsWrap && !$("#globalThemeToggle")) {
-      const toggleBtn = document.createElement("button");
-      toggleBtn.type = "button";
-      toggleBtn.id = "globalThemeToggle";
-      toggleBtn.className = "btn btn-outline-secondary btn-sm rounded-circle d-inline-flex align-items-center justify-content-center";
-      toggleBtn.style.width = "34px";
-      toggleBtn.style.height = "34px";
-      toggleBtn.title = savedTheme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode";
-      toggleBtn.innerHTML = `<i class="bi ${savedTheme === "dark" ? "bi-sun" : "bi-moon-stars"}"></i>`;
-      toggleBtn.addEventListener("click", () => {
-        const cur = document.documentElement.getAttribute("data-theme") || "dark";
-        const next = cur === "dark" ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("curoTheme", next);
-        toggleBtn.title = next === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode";
-        toggleBtn.innerHTML = `<i class="bi ${next === "dark" ? "bi-sun" : "bi-moon-stars"}"></i>`;
-      });
-      actionsWrap.prepend(toggleBtn);
-    }
   });
 
   /* =========================================================
@@ -221,17 +243,17 @@ window.APS = (() => {
 
   function updateAlertBadge() {
     if (!window.APSStore) return;
-    const alerts = APSStore.getAlerts();
-    const dot = $(".notification-dot");
-    if (dot) {
+    const alerts = APSStore.getAlerts() || { totalCount: 0 };
+    const dots = $$(".notification-dot, .notification-badge-dot, #headerAlertCount");
+    dots.forEach(dot => {
       dot.textContent = alerts.totalCount;
-      dot.style.display = alerts.totalCount > 0 ? "grid" : "none";
-    }
+      dot.style.display = alerts.totalCount > 0 ? "inline-flex" : "none";
+    });
   }
 
   // Bind notification button
   document.addEventListener("click", (e) => {
-    const notifBtn = e.target.closest("#notificationBtn");
+    const notifBtn = e.target.closest("#notificationBtn, .topbar-notification-btn");
     if (notifBtn) {
       e.preventDefault();
       window.location.href = "alerts.html";
