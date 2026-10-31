@@ -4,10 +4,10 @@
 ========================================================= */
 
 :root {
-  --primary: #c42127;
-  --primary-hover: #b01b20;
+  --primary: #008be3;
+  --primary-hover: #0077d7;
   --primary-light: #fef2f2;
-  --primary-glow: rgba(196, 33, 39, 0.12);
+  --primary-glow: rgba(0, 152, 234, 0.12);
 
   --slate-950: #020617;
   --slate-900: #0f172a;
@@ -30,7 +30,7 @@
   --blue-light: #eff6ff;
   --indigo: #6366f1;
   --indigo-light: #eef2ff;
-  --crimson: #c42127;
+  --crimson: #008be3;
   --crimson-light: #fef2f2;
 
   --radius-xl: 18px;
@@ -273,7 +273,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #c42127, #8f1515);
+  background: linear-gradient(135deg, #008be3, #0066cc);
   color: var(--white);
   font-size: 12px;
   font-weight: 700;
@@ -465,7 +465,7 @@
 .btn-action-primary {
   background: var(--primary);
   color: var(--white);
-  box-shadow: 0 3px 10px rgba(196, 33, 39, 0.25);
+  box-shadow: 0 3px 10px rgba(0, 152, 234, 0.25);
 }
 
 .btn-action-primary:hover {

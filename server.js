@@ -53,7 +53,7 @@ const server = http.createServer((req, res) => {
         <body style="font-family:sans-serif; text-align:center; padding:50px;">
           <h2>404 - File Not Found</h2>
           <p>The requested URL <code>${reqUrl}</code> was not found.</p>
-          <a href="/index.html" style="color:#c42127; font-weight:bold;">Return to Login Portal</a>
+          <a href="/index.html" style="color:#008be3; font-weight:bold;">Return to Login Portal</a>
         </body>
         </html>
       `);

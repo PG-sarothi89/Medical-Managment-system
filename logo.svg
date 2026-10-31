@@ -1,15 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
   <defs>
-    <linearGradient id="curoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#cc1b1b"/>
-      <stop offset="100%" stop-color="#8f1515"/>
+    <linearGradient id="curoBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00a8ff"/>
+      <stop offset="50%" stop-color="#008be3"/>
+      <stop offset="100%" stop-color="#1b3c73"/>
+    </linearGradient>
+    <linearGradient id="curoCyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
     </linearGradient>
   </defs>
-  <!-- Shopping bag body -->
-  <path d="M8 16 L6 40 Q6 42 8 42 L40 42 Q42 42 42 40 L40 16 Z" fill="url(#curoGrad)"/>
-  <!-- Bag handle -->
-  <path d="M16 16 Q16 8 24 8 Q32 8 32 16" fill="none" stroke="#cc1b1b" stroke-width="3.5" stroke-linecap="round"/>
-  <!-- Medical cross (white) -->
-  <rect x="19" y="22" width="10" height="3.5" rx="1.5" fill="#ffffff"/>
-  <rect x="22.25" y="19" width="3.5" height="10" rx="1.5" fill="#ffffff"/>
+  <!-- Background circular glow -->
+  <circle cx="24" cy="24" r="23" fill="#ffffff" stroke="url(#curoBlueGrad)" stroke-width="1.5"/>
+  <!-- Circular outer swoosh -->
+  <path d="M 24 3 A 21 21 0 1 1 5 30 A 18 18 0 0 0 24 45 A 21 21 0 0 0 45 24 A 21 21 0 0 0 24 3 Z" fill="url(#curoBlueGrad)"/>
+  <!-- Top 3 Leaves -->
+  <path d="M 24 4 C 22 7 22 10 24 12 C 26 10 26 7 24 4 Z" fill="#00a8ff"/>
+  <path d="M 19 6 C 18 8 19 11 22 12 C 21 10 20 7 19 6 Z" fill="#38bdf8"/>
+  <path d="M 29 6 C 30 8 29 11 26 12 C 27 10 28 7 29 6 Z" fill="#38bdf8"/>
+  <!-- Medical Cross -->
+  <path d="M 21 14 L 27 14 Q 28 14 28 15 L 28 20 L 33 20 Q 34 20 34 21 L 34 27 Q 34 28 33 28 L 28 28 L 28 33 Q 28 34 27 34 L 21 34 Q 20 34 20 33 L 20 28 L 15 28 Q 14 28 14 27 L 14 21 Q 14 20 15 20 L 20 20 L 20 15 Q 20 14 21 14 Z" fill="url(#curoCyanGrad)"/>
+  <!-- Heartbeat pulse wave line -->
+  <path d="M 20 18 L 23 18 L 24.5 15 L 26 21 L 27.5 17 L 29 18 L 33 18" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Smiling face arc inside bottom of cross -->
+  <path d="M 21.5 25.5 Q 24 28.5 26.5 25.5" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
 </svg>

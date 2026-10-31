@@ -1,258 +1,252 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark" data-palette="violet">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="theme-color" content="#a855f7">
-  <title>CURO Medical Management System 4.0 — Login Portal</title>
+  <meta name="theme-color" content="#008be3">
+  <title>Welcome to CURO Health & Wellness — Login Portal</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- Typography: Plus Jakarta Sans & Poppins -->
+  <!-- Typography: Plus Jakarta Sans & Great Vibes / Caveat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 
-  <!-- Cinematic Stylesheet -->
+  <!-- New Login Stylesheet matching reference UI -->
   <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
 
-  <!-- Fullscreen Live Motion Video Backdrop -->
-  <div class="bg-video-container" aria-hidden="true">
-    <video id="bgVideo" class="bg-video" autoplay muted loop playsinline preload="auto">
-      <source src="video/original-37fddce98403954717d0b219deadef5c.mp4" type="video/mp4">
-    </video>
-    <div class="cinematic-scrim"></div>
-    <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
-    <div class="ambient-glow-orb"></div>
-  </div>
+  <!-- Fullscreen Geometric Pattern Backdrop -->
+  <div class="login-page-bg">
 
-  <!-- Top Utility Toolbar -->
-  <header class="top-toolbar" role="toolbar" aria-label="System View Options">
-    <!-- Theme Palette Selector -->
-    <div class="palette-picker">
-      <button type="button" class="tool-btn" id="paletteBtn" data-tip="Color Accent" aria-label="Choose Accent Palette">
-        <i class="bi bi-palette2"></i>
-      </button>
-      <div class="palette-menu" id="paletteMenu" role="menu">
-        <button type="button" class="palette-item" data-val="violet">
-          <span class="palette-dot" style="color: #a855f7; background: #a855f7;"></span>
-          <span>Cyber Violet</span>
-        </button>
-        <button type="button" class="palette-item" data-val="crimson">
-          <span class="palette-dot" style="color: #e11d48; background: #e11d48;"></span>
-          <span>CURO Crimson</span>
-        </button>
-        <button type="button" class="palette-item" data-val="emerald">
-          <span class="palette-dot" style="color: #10b981; background: #10b981;"></span>
-          <span>Oceanic Emerald</span>
-        </button>
-      </div>
-    </div>
+    <!-- Top-Left Corner Geometric 4-Petal Patterns -->
+    <svg class="corner-petals corner-petals-tl" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <pattern id="quatrefoilPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+          <circle cx="50" cy="0" r="50" fill="rgba(255,255,255,0.22)"/>
+          <circle cx="50" cy="100" r="50" fill="rgba(255,255,255,0.22)"/>
+          <circle cx="0" cy="50" r="50" fill="rgba(255,255,255,0.22)"/>
+          <circle cx="100" cy="50" r="50" fill="rgba(255,255,255,0.22)"/>
+        </pattern>
+      </defs>
+      <!-- Overlapping circular arcs creating the exact geometric flower motif -->
+      <g fill="rgba(255, 255, 255, 0.28)">
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(60, 60)" fill="rgba(255,255,255,0.35)"/>
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(180, 60)" fill="rgba(255,255,255,0.3)"/>
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(60, 180)" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="120" cy="120" r="42" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="8"/>
+        <circle cx="0" cy="0" r="90" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="120" cy="0" r="90" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="0" cy="120" r="90" fill="rgba(255,255,255,0.25)"/>
+      </g>
+    </svg>
 
-    <!-- Live Motion Toggle -->
-    <button type="button" class="tool-btn" id="motionToggleBtn" data-tip="Toggle Live Motion" aria-label="Toggle Live Motion">
-      <i class="bi bi-play-circle" id="motionIcon"></i>
-    </button>
+    <!-- Bottom-Right Corner Geometric 4-Petal Patterns -->
+    <svg class="corner-petals corner-petals-br" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="rgba(255, 255, 255, 0.28)">
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(180, 180)" fill="rgba(255,255,255,0.35)"/>
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(60, 180)" fill="rgba(255,255,255,0.3)"/>
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z" transform="translate(180, 60)" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="120" cy="120" r="42" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="8"/>
+        <circle cx="240" cy="240" r="90" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="120" cy="240" r="90" fill="rgba(255,255,255,0.25)"/>
+        <circle cx="240" cy="120" r="90" fill="rgba(255,255,255,0.25)"/>
+      </g>
+    </svg>
 
-    <!-- Sound Toggle -->
-    <button type="button" class="tool-btn" id="soundToggleBtn" data-tip="Sound Effects (On)" aria-label="Toggle Audio Feedback">
-      <i class="bi bi-volume-up" id="soundIcon"></i>
-    </button>
+    <!-- Main Centered Floating Card -->
+    <main class="login-card-container">
+      <div class="login-card">
 
-    <!-- Dark/Light Theme Toggle -->
-    <button type="button" class="tool-btn" id="themeToggleBtn" data-tip="Switch to Light Mode" aria-label="Toggle Dark and Light Mode">
-      <i class="bi bi-sun" id="themeIcon"></i>
-    </button>
-  </header>
+        <!-- Left Column: Nature & Mountain Hero with Health Motto -->
+        <section class="login-left-banner" aria-label="Brand Inspiration">
+          <div class="banner-overlay"></div>
+          <div class="banner-content">
+            <h1 class="brand-cursive-title">Curo Health &amp; Wellness</h1>
+            <p class="brand-health-motto">
+              Good health is the only wealth that enriches your life in ways beyond material bounds
+            </p>
+          </div>
+        </section>
 
-  <!-- Centered Login Workspace -->
-  <main class="login-container">
+        <!-- Right Column: Login Form & Credentials -->
+        <section class="login-right-panel" aria-label="Sign In">
 
-    <!-- Top Brand & System Emblem -->
-    <div class="portal-header">
-      <div class="portal-emblem-wrap">
-        <div class="portal-emblem-box">
-          <img src="curo-symbol.png" alt="CURO Medical Emblem" class="portal-emblem-img">
-        </div>
-      </div>
-      <h1 class="portal-title-text">
-        <span>CURO Medical Management System</span>
-        <span class="version-badge">4.0</span>
-      </h1>
-    </div>
+          <!-- Top-Right Accent Vector Trail -->
+          <div class="top-accent-trail" aria-hidden="true">
+            <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10 35 Q 60 5, 95 15" stroke="#0098ea" stroke-width="2" stroke-dasharray="3 3"/>
+              <!-- Heartbeat / Health glider motif -->
+              <path d="M 95 15 L 100 12 L 105 18 L 110 14" stroke="#0098ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
 
-    <!-- Glassmorphic Login Card -->
-    <section class="login-card" aria-label="Sign In Panel">
+          <!-- Perfectly Placed CURO Logo -->
+          <div class="login-logo-container">
+            <img src="curo-logo.png" alt="CURO Health & Wellness Logo" class="login-brand-logo">
+          </div>
 
-      <!-- Card Title -->
-      <div class="card-header-title">
-        <h2 class="login-heading">Login</h2>
-      </div>
+          <!-- Headings -->
+          <h2 class="welcome-heading">Welcome</h2>
+          <p class="welcome-subheading">Login with Email</p>
 
-      <!-- Sign In Form -->
-      <form id="loginForm" autocomplete="on" novalidate>
+          <!-- Form -->
+          <form id="loginForm" autocomplete="on" novalidate>
 
-        <!-- Role Selector (Glowing Outline Container) -->
-        <div class="role-picker-container" id="rolePicker">
-          <button type="button" class="role-selector-box" id="roleSelectorBtn" aria-haspopup="listbox" aria-expanded="false" aria-label="Select System Role">
-            <div class="role-display">
-              <span class="role-badge-icon" id="roleDisplayIcon">👑</span>
-              <span class="role-selected-text" id="roleDisplayText">Administrator</span>
+            <!-- Email / ID Input with Perched Border Label -->
+            <div class="outline-form-group">
+              <label for="userIdInput" class="perched-label">Email Id</label>
+              <div class="input-inner-wrap">
+                <i class="bi bi-envelope input-icon"></i>
+                <input
+                  type="text"
+                  id="userIdInput"
+                  class="outline-input"
+                  placeholder="thisuix@mail.com"
+                  value="pg@gmail.com"
+                  autocomplete="username"
+                  required
+                >
+              </div>
+              <div class="field-error-text" id="idErrorMsg">Please enter your Staff ID or Email.</div>
             </div>
-            <i class="bi bi-chevron-down role-chevron" id="roleChevron"></i>
-          </button>
 
-          <!-- Hidden Native Input for standard forms -->
-          <input type="hidden" id="selectedRole" name="role" value="admin">
+            <!-- Password Input with Perched Border Label -->
+            <div class="outline-form-group">
+              <label for="passwordInput" class="perched-label">Password</label>
+              <div class="input-inner-wrap">
+                <i class="bi bi-lock input-icon"></i>
+                <input
+                  type="password"
+                  id="passwordInput"
+                  class="outline-input"
+                  placeholder="••••••••••••••"
+                  value="root"
+                  autocomplete="current-password"
+                  required
+                >
+                <button type="button" class="password-toggle-btn" id="togglePasswordBtn" aria-label="Toggle password visibility">
+                  <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+              <div class="field-error-text" id="passErrorMsg">Please enter your password (minimum 3 characters).</div>
+            </div>
 
-          <!-- Dropdown Options List -->
-          <div class="role-dropdown-list" id="roleDropdownList" role="listbox">
-            <button type="button" class="role-option-btn is-selected" data-role="admin" data-icon="👑" role="option" aria-selected="true">
-              <div class="role-opt-left">
-                <span class="role-opt-icon">👑</span>
-                <div>
-                  <div class="role-opt-title">Administrator</div>
-                  <div class="role-opt-desc">Executive Control &amp; Full Access</div>
-                </div>
-              </div>
-              <i class="bi bi-check2 text-accent"></i>
+            <!-- Forgot Password Link -->
+            <div class="forgot-pass-wrap">
+              <a href="#" id="forgotPassLink" class="forgot-pass-link">Forgot your password?</a>
+            </div>
+
+            <!-- Feedback Banner -->
+            <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
+              <i class="bi bi-info-circle" id="statusIcon"></i>
+              <span id="statusText"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-login" id="loginBtn">
+              <span class="btn-spinner" id="btnSpinner" aria-hidden="true"></span>
+              <span id="btnText">LOGIN</span>
             </button>
-            <button type="button" class="role-option-btn" data-role="pharmacist" data-icon="💊" role="option">
-              <div class="role-opt-left">
-                <span class="role-opt-icon">💊</span>
-                <div>
-                  <div class="role-opt-title">Pharmacist</div>
-                  <div class="role-opt-desc">Dispensary &amp; Prescription Queue</div>
-                </div>
+
+            <!-- OR Divider -->
+            <div class="or-divider">
+              <span class="or-line"></span>
+              <span class="or-text">OR</span>
+              <span class="or-line"></span>
+            </div>
+
+            <!-- Social / Quick Sign-In Buttons -->
+            <div class="social-login-row">
+              <!-- Google Button -->
+              <button type="button" class="social-btn" id="socialGoogle" title="Sign in with Google (Admin: Dr. Vance)">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                  <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                  <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                  <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                  <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+              </button>
+
+              <!-- Facebook Button -->
+              <button type="button" class="social-btn" id="socialFacebook" title="Sign in with Facebook (Pharmacist: Sarah)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </button>
+
+              <!-- Apple Button -->
+              <button type="button" class="social-btn" id="socialApple" title="Sign in with Apple (Doctor: Dr. Rahman)">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#000000">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.84c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.6.69-1.12 1.83-.98 2.93 1.07.08 2.13-.53 2.79-1.33z"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Quick Demo Persona Switcher (Previous Project Credentials) -->
+            <div class="persona-chips-bar">
+              <span class="persona-bar-label">Quick Sign-In:</span>
+              <div class="persona-chips-list">
+                <button type="button" class="persona-chip active" data-id="pg@gmail.com" data-pass="root" data-role="admin" title="Admin (Dr. Vance)">
+                  👑 Admin
+                </button>
+                <button type="button" class="persona-chip" data-id="pharmacist@aps.com" data-pass="root" data-role="pharmacist" title="Pharmacist (Sarah)">
+                  💊 Pharmacist
+                </button>
+                <button type="button" class="persona-chip" data-id="doctor@aps.com" data-pass="root" data-role="doctor" title="Doctor (Dr. Rahman)">
+                  🩺 Doctor
+                </button>
+                <button type="button" class="persona-chip" data-id="cashier@aps.com" data-pass="root" data-role="cashier" title="Cashier (Rahim)">
+                  💳 Cashier
+                </button>
+                <button type="button" class="persona-chip" data-id="inventory@aps.com" data-pass="root" data-role="inventory_manager" title="Inventory (Kamal)">
+                  📦 Inventory
+                </button>
               </div>
-            </button>
-            <button type="button" class="role-option-btn" data-role="cashier" data-icon="💳" role="option">
-              <div class="role-opt-left">
-                <span class="role-opt-icon">💳</span>
-                <div>
-                  <div class="role-opt-title">Cashier</div>
-                  <div class="role-opt-desc">POS Terminal &amp; Instant Billing</div>
-                </div>
-              </div>
-            </button>
-            <button type="button" class="role-option-btn" data-role="inventory_manager" data-icon="📦" role="option">
-              <div class="role-opt-left">
-                <span class="role-opt-icon">📦</span>
-                <div>
-                  <div class="role-opt-title">Inventory Manager</div>
-                  <div class="role-opt-desc">Warehouse, Stock &amp; FEFO Batches</div>
-                </div>
-              </div>
-            </button>
-            <button type="button" class="role-option-btn" data-role="doctor" data-icon="🩺" role="option">
-              <div class="role-opt-left">
-                <span class="role-opt-icon">🩺</span>
-                <div>
-                  <div class="role-opt-title">Doctor / Clinical Staff</div>
-                  <div class="role-opt-desc">Prescription Authoring &amp; Records</div>
-                </div>
-              </div>
-            </button>
+            </div>
+
+            <!-- Bottom Register Prompt -->
+            <p class="register-prompt">
+              Don't have account? <a href="#" id="registerLink" class="register-link"><strong>Register Now</strong></a>
+            </p>
+
+          </form>
+
+          <!-- Bottom Skyline / Healthcare Vector Silhouette -->
+          <div class="bottom-skyline-wrap" aria-hidden="true">
+            <svg class="bottom-skyline-svg" viewBox="0 0 500 80" preserveAspectRatio="none" fill="#0098ea" xmlns="http://www.w3.org/2000/svg">
+              <!-- Left medical clinic silhouette -->
+              <path d="M 0 80 L 0 50 L 15 50 L 15 40 L 30 40 L 30 30 L 45 30 L 45 20 Q 55 10 65 20 L 65 30 L 80 30 L 80 40 L 95 40 L 95 50 L 110 50 L 110 80 Z"/>
+              <rect x="52" y="35" width="6" height="20" rx="1" fill="#ffffff" opacity="0.4"/>
+              <rect x="45" y="42" width="20" height="6" rx="1" fill="#ffffff" opacity="0.4"/>
+              <!-- Center subtle pulse curve -->
+              <path d="M 110 80 L 110 75 Q 160 70 200 75 L 200 80 Z" fill="#0098ea"/>
+              <!-- Right healthcare campus and modern tower silhouette -->
+              <path d="M 360 80 L 360 45 L 375 45 L 375 25 L 395 25 L 395 10 L 410 10 L 410 25 L 430 25 L 430 35 L 445 35 L 445 18 L 460 18 L 460 35 L 485 35 L 485 55 L 500 55 L 500 80 Z"/>
+              <!-- Hospital cross on tower -->
+              <rect x="400" y="32" width="5" height="15" rx="1" fill="#ffffff" opacity="0.4"/>
+              <rect x="395" y="37" width="15" height="5" rx="1" fill="#ffffff" opacity="0.4"/>
+              <!-- Windows grid -->
+              <rect x="378" y="52" width="6" height="6" fill="#ffffff" opacity="0.4"/>
+              <rect x="388" y="52" width="6" height="6" fill="#ffffff" opacity="0.4"/>
+              <rect x="415" y="52" width="6" height="6" fill="#ffffff" opacity="0.4"/>
+              <rect x="425" y="52" width="6" height="6" fill="#ffffff" opacity="0.4"/>
+              <rect x="465" y="45" width="6" height="8" fill="#ffffff" opacity="0.4"/>
+              <rect x="474" y="45" width="6" height="8" fill="#ffffff" opacity="0.4"/>
+            </svg>
           </div>
-        </div>
 
-        <!-- ID / Username Input (Underline Floating Field) -->
-        <div class="form-field-group">
-          <label for="userIdInput" class="floating-label">Enter Your ID</label>
-          <div class="input-line-wrap">
-            <input 
-              type="text" 
-              id="userIdInput" 
-              class="underlined-input" 
-              placeholder="e.g. 1921207 or admin" 
-              value="1921207"
-              autocomplete="username" 
-              spellcheck="false" 
-              required
-            >
-            <span class="focus-glow-line"></span>
-          </div>
-          <div class="field-error-msg" id="idErrorMsg">Please enter your Staff ID, username or email.</div>
-        </div>
+        </section>
 
-        <!-- Password Input (Underline Floating Field with Toggle) -->
-        <div class="form-field-group">
-          <label for="passwordInput" class="floating-label">Enter Your Password</label>
-          <div class="input-line-wrap">
-            <input 
-              type="password" 
-              id="passwordInput" 
-              class="underlined-input" 
-              placeholder="••••••••" 
-              value="root"
-              autocomplete="current-password" 
-              required
-            >
-            <button type="button" class="field-suffix-btn" id="togglePasswordBtn" aria-label="Toggle password visibility">
-              <i class="bi bi-eye" id="togglePasswordIcon"></i>
-            </button>
-            <span class="focus-glow-line"></span>
-          </div>
-          <div class="field-error-msg" id="passErrorMsg">Please enter your password (minimum 3 characters).</div>
-        </div>
+      </div>
+    </main>
 
-        <!-- Feedback & Status Notification -->
-        <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
-          <i class="bi bi-info-circle" id="statusIcon"></i>
-          <span id="statusText"></span>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="btn-submit-wrap">
-          <button type="submit" class="btn-login-action" id="loginBtn">
-            <span class="spinner-ring" id="btnSpinner" aria-hidden="true"></span>
-            <span id="btnText">Login</span>
-          </button>
-        </div>
-
-        <!-- Minimalist Persona Switcher (Clean, Not Text Heavy) -->
-        <div class="quick-personas-section">
-          <div class="quick-personas-label">Quick Sign-In</div>
-          <div class="quick-chips-row" role="group" aria-label="Quick Demo Personas">
-            <button type="button" class="persona-chip" data-role="admin" data-id="1921207" data-pass="root" data-icon="👑" data-name="Administrator" title="Admin">
-              <span>👑</span>
-              <span>Admin</span>
-            </button>
-            <button type="button" class="persona-chip" data-role="pharmacist" data-id="pharmacist" data-pass="root" data-icon="💊" data-name="Pharmacist" title="Pharmacist">
-              <span>💊</span>
-              <span>Pharmacist</span>
-            </button>
-            <button type="button" class="persona-chip" data-role="doctor" data-id="doctor" data-pass="root" data-icon="🩺" data-name="Doctor" title="Doctor">
-              <span>🩺</span>
-              <span>Doctor</span>
-            </button>
-            <button type="button" class="persona-chip" data-role="cashier" data-id="cashier" data-pass="root" data-icon="💳" data-name="Cashier" title="Cashier">
-              <span>💳</span>
-              <span>Cashier</span>
-            </button>
-            <button type="button" class="persona-chip" data-role="inventory_manager" data-id="inventory" data-pass="root" data-icon="📦" data-name="Inventory Manager" title="Inventory">
-              <span>📦</span>
-              <span>Inventory</span>
-            </button>
-          </div>
-        </div>
-
-      </form>
-
-    </section>
-
-    <!-- Security & Legal Footer -->
-    <footer class="portal-footer">
-      <i class="bi bi-shield-lock-fill"></i>
-      <span>CURO Healthcare Operations &bull; 2026 Enterprise Edition</span>
-    </footer>
-
-  </main>
+  </div>
 
   <!-- Load APS Data Store -->
   <script src="aps-store.js"></script>
@@ -264,9 +258,7 @@
       // -------------------------------------------------------------
       // 1. Audio Synthesizer (Web Audio API for UI sounds)
       // -------------------------------------------------------------
-      let soundEnabled = localStorage.getItem("curoSound") !== "false";
       let audioCtx = null;
-
       function getAudioContext() {
         if (!audioCtx) {
           const AudioContextClass = window.AudioContext || window.webkitAudioContext;
@@ -279,7 +271,6 @@
       }
 
       function playUiBeep(freq = 880, type = "sine", duration = 0.08, gainVal = 0.1) {
-        if (!soundEnabled) return;
         try {
           const ctx = getAudioContext();
           if (!ctx) return;
@@ -297,7 +288,6 @@
       }
 
       function playSuccessTone() {
-        if (!soundEnabled) return;
         try {
           const ctx = getAudioContext();
           if (!ctx) return;
@@ -308,7 +298,6 @@
       }
 
       function playErrorTone() {
-        if (!soundEnabled) return;
         try {
           playUiBeep(260, "sawtooth", 0.15, 0.12);
           setTimeout(() => playUiBeep(220, "sawtooth", 0.2, 0.12), 120);
@@ -316,281 +305,87 @@
       }
 
       // -------------------------------------------------------------
-      // 2. Ambient Canvas Animation (Interactive Particles & Web)
+      // 2. Elements & Controls
       // -------------------------------------------------------------
-      const canvas = document.getElementById("ambientCanvas");
-      const ctx = canvas.getContext("2d");
-      let particles = [];
-      let animId = null;
-      let isMotionActive = true;
-      let width = 0;
-      let height = 0;
-
-      function resizeCanvas() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      }
-      window.addEventListener("resize", resizeCanvas);
-      resizeCanvas();
-
-      class Particle {
-        constructor() {
-          this.reset();
-        }
-        reset() {
-          this.x = Math.random() * width;
-          this.y = Math.random() * height;
-          this.vx = (Math.random() - 0.5) * 0.45;
-          this.vy = (Math.random() - 0.5) * 0.45;
-          this.radius = Math.random() * 2 + 1;
-          this.alpha = Math.random() * 0.5 + 0.2;
-        }
-        update() {
-          this.x += this.vx;
-          this.y += this.vy;
-          if (this.x < 0 || this.x > width) this.vx *= -1;
-          if (this.y < 0 || this.y > height) this.vy *= -1;
-        }
-        draw() {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(168, 85, 247, ${this.alpha})`;
-          ctx.fill();
-        }
-      }
-
-      function initParticles() {
-        const count = Math.min(45, Math.floor((width * height) / 25000));
-        particles = [];
-        for (let i = 0; i < count; i++) {
-          particles.push(new Particle());
-        }
-      }
-      initParticles();
-
-      function animateParticles() {
-        if (!isMotionActive) return;
-        ctx.clearRect(0, 0, width, height);
-
-        for (let i = 0; i < particles.length; i++) {
-          const p1 = particles[i];
-          p1.update();
-          p1.draw();
-
-          // Connect adjacent particles
-          for (let j = i + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const dx = p1.x - p2.x;
-            const dy = p1.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 120) {
-              ctx.beginPath();
-              ctx.moveTo(p1.x, p1.y);
-              ctx.lineTo(p2.x, p2.y);
-              ctx.strokeStyle = `rgba(168, 85, 247, ${0.15 * (1 - dist / 120)})`;
-              ctx.lineWidth = 0.75;
-              ctx.stroke();
-            }
-          }
-        }
-        animId = requestAnimationFrame(animateParticles);
-      }
-      animateParticles();
-
-      // -------------------------------------------------------------
-      // 3. Theme, Palette & Live Motion Controls
-      // -------------------------------------------------------------
-      const bgVideo = document.getElementById("bgVideo");
-      const themeToggleBtn = document.getElementById("themeToggleBtn");
-      const themeIcon = document.getElementById("themeIcon");
-      const motionToggleBtn = document.getElementById("motionToggleBtn");
-      const motionIcon = document.getElementById("motionIcon");
-      const soundToggleBtn = document.getElementById("soundToggleBtn");
-      const soundIcon = document.getElementById("soundIcon");
-      const paletteBtn = document.getElementById("paletteBtn");
-      const paletteMenu = document.getElementById("paletteMenu");
-
-      // Apply initial theme
-      const savedTheme = localStorage.getItem("curoTheme") || "dark";
-      applyTheme(savedTheme);
-
-      function applyTheme(theme) {
-        document.documentElement.setAttribute("data-theme", theme);
-        localStorage.setItem("curoTheme", theme);
-        if (theme === "light") {
-          themeIcon.className = "bi bi-moon-stars";
-          themeToggleBtn.setAttribute("data-tip", "Switch to Dark Mode");
-        } else {
-          themeIcon.className = "bi bi-sun";
-          themeToggleBtn.setAttribute("data-tip", "Switch to Light Mode");
-        }
-      }
-
-      themeToggleBtn.addEventListener("click", () => {
-        playUiBeep(700, "sine", 0.05);
-        const current = document.documentElement.getAttribute("data-theme") || "dark";
-        applyTheme(current === "dark" ? "light" : "dark");
-      });
-
-      // Apply initial palette
-      const savedPalette = localStorage.getItem("curoPalette") || "violet";
-      applyPalette(savedPalette);
-
-      function applyPalette(palette) {
-        document.documentElement.setAttribute("data-palette", palette);
-        localStorage.setItem("curoPalette", palette);
-      }
-
-      paletteBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        playUiBeep(650, "sine", 0.04);
-        paletteMenu.classList.toggle("is-open");
-      });
-
-      document.querySelectorAll(".palette-item").forEach(item => {
-        item.addEventListener("click", () => {
-          applyPalette(item.dataset.val);
-          paletteMenu.classList.remove("is-open");
-          playUiBeep(850, "triangle", 0.06);
-        });
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!paletteBtn.contains(e.target) && !paletteMenu.contains(e.target)) {
-          paletteMenu.classList.remove("is-open");
-        }
-      });
-
-      // Sound Toggle
-      soundIcon.className = soundEnabled ? "bi bi-volume-up" : "bi bi-volume-mute";
-      soundToggleBtn.setAttribute("data-tip", soundEnabled ? "Audio Effects (On)" : "Audio Effects (Muted)");
-
-      soundToggleBtn.addEventListener("click", () => {
-        soundEnabled = !soundEnabled;
-        localStorage.setItem("curoSound", soundEnabled ? "true" : "false");
-        soundIcon.className = soundEnabled ? "bi bi-volume-up" : "bi bi-volume-mute";
-        soundToggleBtn.setAttribute("data-tip", soundEnabled ? "Audio Effects (On)" : "Audio Effects (Muted)");
-        if (soundEnabled) playUiBeep(880, "sine", 0.08);
-      });
-
-      // Motion Toggle
-      motionToggleBtn.addEventListener("click", () => {
-        isMotionActive = !isMotionActive;
-        playUiBeep(600, "sine", 0.05);
-        if (isMotionActive) {
-          bgVideo.play();
-          bgVideo.classList.remove("is-paused");
-          motionIcon.className = "bi bi-play-circle";
-          motionToggleBtn.setAttribute("data-tip", "Pause Live Motion");
-          animateParticles();
-        } else {
-          bgVideo.pause();
-          bgVideo.classList.add("is-paused");
-          motionIcon.className = "bi bi-pause-circle";
-          motionToggleBtn.setAttribute("data-tip", "Resume Live Motion");
-          cancelAnimationFrame(animId);
-          ctx.clearRect(0, 0, width, height);
-        }
-      });
-
-      // -------------------------------------------------------------
-      // 4. Role Selector Dropdown
-      // -------------------------------------------------------------
-      const rolePicker = document.getElementById("rolePicker");
-      const roleSelectorBtn = document.getElementById("roleSelectorBtn");
-      const roleDisplayText = document.getElementById("roleDisplayText");
-      const roleDisplayIcon = document.getElementById("roleDisplayIcon");
-      const selectedRoleInput = document.getElementById("selectedRole");
-      const roleOptionBtns = document.querySelectorAll(".role-option-btn");
-
-      roleSelectorBtn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        playUiBeep(640, "sine", 0.04);
-        const isOpen = rolePicker.classList.toggle("is-active");
-        roleSelectorBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
-      });
-
-      document.addEventListener("click", (e) => {
-        if (!rolePicker.contains(e.target)) {
-          rolePicker.classList.remove("is-active");
-          roleSelectorBtn.setAttribute("aria-expanded", "false");
-        }
-      });
-
-      function setRole(roleVal, roleName, roleIcon) {
-        selectedRoleInput.value = roleVal;
-        roleDisplayText.textContent = roleName;
-        roleDisplayIcon.textContent = roleIcon;
-
-        roleOptionBtns.forEach(btn => {
-          const isSelected = btn.dataset.role === roleVal;
-          btn.classList.toggle("is-selected", isSelected);
-          btn.setAttribute("aria-selected", isSelected ? "true" : "false");
-          const checkIcon = btn.querySelector(".bi-check2");
-          if (isSelected) {
-            if (!checkIcon) {
-              const icon = document.createElement("i");
-              icon.className = "bi bi-check2 text-accent";
-              btn.appendChild(icon);
-            }
-          } else {
-            if (checkIcon) checkIcon.remove();
-          }
-        });
-      }
-
-      roleOptionBtns.forEach(btn => {
-        btn.addEventListener("click", () => {
-          playUiBeep(720, "sine", 0.04);
-          setRole(btn.dataset.role, btn.querySelector(".role-opt-title").textContent, btn.dataset.icon);
-          rolePicker.classList.remove("is-active");
-          roleSelectorBtn.setAttribute("aria-expanded", "false");
-        });
-      });
-
-      // -------------------------------------------------------------
-      // 5. Password Visibility Toggle
-      // -------------------------------------------------------------
+      const loginForm = document.getElementById("loginForm");
+      const userIdInput = document.getElementById("userIdInput");
       const passwordInput = document.getElementById("passwordInput");
       const togglePasswordBtn = document.getElementById("togglePasswordBtn");
       const togglePasswordIcon = document.getElementById("togglePasswordIcon");
-
-      togglePasswordBtn.addEventListener("click", () => {
-        playUiBeep(580, "sine", 0.04);
-        const isSecret = passwordInput.type === "password";
-        passwordInput.type = isSecret ? "text" : "password";
-        togglePasswordIcon.className = isSecret ? "bi bi-eye-slash" : "bi bi-eye";
-      });
-
-      // -------------------------------------------------------------
-      // 6. Quick Demo Personas
-      // -------------------------------------------------------------
-      const userIdInput = document.getElementById("userIdInput");
-      const personaChips = document.querySelectorAll(".persona-chip");
-      const loginBtn = document.getElementById("loginBtn");
-
-      personaChips.forEach(chip => {
-        chip.addEventListener("click", () => {
-          playUiBeep(820, "triangle", 0.06);
-          setRole(chip.dataset.role, chip.dataset.name, chip.dataset.icon);
-          userIdInput.value = chip.dataset.id;
-          passwordInput.value = chip.dataset.pass;
-          clearErrors();
-          loginBtn.click();
-        });
-      });
-
-      // -------------------------------------------------------------
-      // 7. Form Validation & Authentication Handler
-      // -------------------------------------------------------------
-      const loginForm = document.getElementById("loginForm");
       const idErrorMsg = document.getElementById("idErrorMsg");
       const passErrorMsg = document.getElementById("passErrorMsg");
       const statusBanner = document.getElementById("statusBanner");
       const statusIcon = document.getElementById("statusIcon");
       const statusText = document.getElementById("statusText");
+      const loginBtn = document.getElementById("loginBtn");
       const btnSpinner = document.getElementById("btnSpinner");
       const btnText = document.getElementById("btnText");
+      const personaChips = document.querySelectorAll(".persona-chip");
+
+      // Password visibility toggle
+      togglePasswordBtn.addEventListener("click", () => {
+        playUiBeep(600, "sine", 0.04);
+        const isSecret = passwordInput.type === "password";
+        passwordInput.type = isSecret ? "text" : "password";
+        togglePasswordIcon.className = isSecret ? "bi bi-eye-slash" : "bi bi-eye";
+      });
+
+      // Quick Persona Switching
+      personaChips.forEach(chip => {
+        chip.addEventListener("click", () => {
+          playUiBeep(750, "triangle", 0.05);
+          personaChips.forEach(c => c.classList.remove("active"));
+          chip.classList.add("active");
+          userIdInput.value = chip.dataset.id;
+          passwordInput.value = chip.dataset.pass;
+          clearErrors();
+        });
+      });
+
+      // Social Quick Logins
+      document.getElementById("socialGoogle")?.addEventListener("click", () => {
+        playUiBeep(800, "sine", 0.05);
+        userIdInput.value = "pg@gmail.com";
+        passwordInput.value = "root";
+        personaChips.forEach(c => c.classList.remove("active"));
+        document.querySelector(".persona-chip[data-role='admin']")?.classList.add("active");
+        loginBtn.click();
+      });
+
+      document.getElementById("socialFacebook")?.addEventListener("click", () => {
+        playUiBeep(800, "sine", 0.05);
+        userIdInput.value = "pharmacist@aps.com";
+        passwordInput.value = "root";
+        personaChips.forEach(c => c.classList.remove("active"));
+        document.querySelector(".persona-chip[data-role='pharmacist']")?.classList.add("active");
+        loginBtn.click();
+      });
+
+      document.getElementById("socialApple")?.addEventListener("click", () => {
+        playUiBeep(800, "sine", 0.05);
+        userIdInput.value = "doctor@aps.com";
+        passwordInput.value = "root";
+        personaChips.forEach(c => c.classList.remove("active"));
+        document.querySelector(".persona-chip[data-role='doctor']")?.classList.add("active");
+        loginBtn.click();
+      });
+
+      // Forgot Password & Register helpers
+      document.getElementById("forgotPassLink")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        playUiBeep(650, "sine", 0.05);
+        statusBanner.className = "status-banner is-info";
+        statusIcon.className = "bi bi-key-fill";
+        statusText.textContent = "Demo Password is 'root' for all system accounts.";
+      });
+
+      document.getElementById("registerLink")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        playUiBeep(650, "sine", 0.05);
+        statusBanner.className = "status-banner is-info";
+        statusIcon.className = "bi bi-person-plus-fill";
+        statusText.textContent = "Please contact clinical administration to provision new staff credentials.";
+      });
 
       function clearErrors() {
         idErrorMsg.classList.remove("is-visible");
@@ -606,17 +401,17 @@
       if (sessionStorage.getItem("apsAuthenticated") === "true") {
         statusBanner.className = "status-banner is-success";
         statusIcon.className = "bi bi-check-circle";
-        statusText.textContent = "Session active. Redirecting to workspace...";
-        setTimeout(() => window.location.href = "home.html", 500);
+        statusText.textContent = "Session active. Redirecting to dashboard...";
+        setTimeout(() => window.location.href = "home.html", 450);
       }
 
+      // Submit Form
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         clearErrors();
 
         const inputId = userIdInput.value.trim();
         const inputPass = passwordInput.value;
-        const selectedRole = selectedRoleInput.value;
 
         let hasError = false;
 
@@ -638,24 +433,21 @@
         // Show loading state
         loginBtn.disabled = true;
         btnSpinner.classList.add("is-active");
-        btnText.textContent = "Authenticating...";
+        btnText.textContent = "AUTHENTICATING...";
 
         setTimeout(() => {
           const users = (window.APSStore && window.APSStore.getUsers) ? window.APSStore.getUsers() : [];
 
-          // Match logic: accepts ID (e.g. "usr-1", "1921207" alias), username, or email
+          // Match logic: accepts ID (e.g. "usr-1", "1921207" alias), username ("admin"), or email ("pg@gmail.com")
           const matchedUser = users.find(u => {
             const matchCred = 
               (u.id && u.id.toLowerCase() === inputId.toLowerCase()) ||
               (u.username && u.username.toLowerCase() === inputId.toLowerCase()) ||
               (u.email && u.email.toLowerCase() === inputId.toLowerCase()) ||
-              // Alias demo ID 1921207 from reference video to admin
               (inputId === "1921207" && u.role === "admin");
 
-            const matchRole = !selectedRole || u.role === selectedRole;
             const matchPass = u.password === inputPass;
-
-            return matchCred && matchRole && matchPass;
+            return matchCred && matchPass;
           });
 
           if (matchedUser) {
@@ -677,25 +469,25 @@
                 "LOGIN",
                 "users",
                 matchedUser.id,
-                `User authenticated successfully via 4.0 portal with role ${matchedUser.roleTitle || matchedUser.role}`
+                `User authenticated successfully with role ${matchedUser.roleTitle || matchedUser.role}`
               );
             }
 
             setTimeout(() => {
               window.location.href = "home.html";
-            }, 600);
+            }, 550);
 
           } else {
             playErrorTone();
             loginBtn.disabled = false;
             btnSpinner.classList.remove("is-active");
-            btnText.textContent = "Login";
+            btnText.textContent = "LOGIN";
 
             statusBanner.className = "status-banner is-error";
             statusIcon.className = "bi bi-exclamation-triangle-fill";
-            statusText.textContent = "Invalid ID or password. Use quick persona chips below.";
+            statusText.textContent = "Invalid ID or password. Use quick demo accounts below.";
           }
-        }, 400);
+        }, 350);
       });
 
     })();
