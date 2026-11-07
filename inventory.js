@@ -33,6 +33,14 @@
     initEventListeners();
   });
 
+  // Re-render when fresh data arrives from PostgreSQL
+  window.addEventListener("aps:sync", () => {
+    refreshKPIs();
+    populateDropdowns();
+    renderBatches();
+    renderLedger();
+  });
+
   /* =========================================================
      1. KPIS REFRESH
   ========================================================== */

@@ -91,6 +91,12 @@
     `).join("");
   }
 
+  // Re-render when fresh data arrives from PostgreSQL
+  window.addEventListener("aps:sync", () => {
+    populateDropdowns();
+    renderPrescriptions();
+  });
+
   function populateDropdowns() {
     const custs = APSStore.getCustomers();
     const docs = APSStore.getDoctors();

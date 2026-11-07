@@ -47,6 +47,12 @@
   /* =========================================================
      1. LIVE DASHBOARD STATS CALCULATION
   ========================================================== */
+  // Re-render when fresh data arrives from PostgreSQL
+  window.addEventListener("aps:sync", () => {
+    refreshDashboardStats();
+    if (typeof initMedicineCards === "function") initMedicineCards();
+  });
+
   function refreshDashboardStats() {
     if (!window.APSStore) return;
 

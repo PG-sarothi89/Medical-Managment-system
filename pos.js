@@ -44,6 +44,14 @@
      1. DROPDOWNS & CATALOG
   ========================================================== */
 
+  // Re-render when fresh data arrives from PostgreSQL
+  window.addEventListener("aps:sync", () => {
+    populateCustomers();
+    populatePrescriptions();
+    populateCategories();
+    renderProductGrid();
+  });
+
   function populateCustomers() {
     const custs = APSStore.getCustomers();
     const select = $("#posCustomerSelect");

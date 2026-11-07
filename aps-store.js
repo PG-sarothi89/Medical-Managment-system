@@ -400,6 +400,169 @@ window.APSStore = (() => {
   initDatabase(false);
 
   /* =========================================================
+     POSTGRESQL 18 BACKEND SYNCHRONIZATION
+  ========================================================== */
+
+  async function syncFromBackend() {
+    try {
+      const res = await fetch("/api/sync");
+      if (!res.ok) return;
+      const json = await res.json();
+      if (!json.ok || !json.data) return;
+
+      const {
+        categories,
+        manufacturers,
+        suppliers,
+        medicines,
+        batches,
+        customers,
+        doctors,
+        prescriptions
+      } = json.data;
+
+      // 1. Categories
+      if (categories && categories.length) {
+        save(KEYS.CATEGORIES, categories.map(c => ({
+          id: c.id,
+          name: c.name,
+          parentId: c.parent_id,
+          description: c.description
+        })));
+      }
+
+      // 2. Manufacturers
+      if (manufacturers && manufacturers.length) {
+        save(KEYS.MANUFACTURERS, manufacturers.map(m => ({
+          id: m.id,
+          name: m.name,
+          contact: m.contact_info
+        })));
+      }
+
+      // 3. Suppliers
+      if (suppliers && suppliers.length) {
+        save(KEYS.SUPPLIERS, suppliers.map(s => ({
+          id: s.id,
+          name: s.name,
+          contactPerson: s.contact_person,
+          phone: s.phone,
+          email: s.email,
+          address: s.address,
+          gstin: s.tax_number,
+          creditPeriodDays: Number(s.credit_period_days || 30),
+          outstandingBalance: Number(s.outstanding_balance || 0)
+        })));
+      }
+
+      // 4. Customers
+      if (customers && customers.length) {
+        save(KEYS.CUSTOMERS, customers.map(c => ({
+          id: c.id,
+          name: c.name,
+          phone: c.phone,
+          email: c.email || "",
+          address: c.address || "",
+          dateOfBirth: c.date_of_birth ? String(c.date_of_birth).split("T")[0] : "",
+          creditLimit: Number(c.credit_limit || 5000),
+          outstandingBalance: Number(c.outstanding_balance || 0),
+          loyaltyPoints: Number(c.loyalty_points || 0),
+          createdAt: c.created_at || todayStr(0)
+        })));
+      }
+
+      // 5. Medicines
+      if (medicines && medicines.length) {
+        save(KEYS.MEDICINES, medicines.map(m => ({
+          id: m.id,
+          name: m.name,
+          genericName: m.generic_name,
+          categoryId: m.category_id,
+          categoryName: m.category_name,
+          manufacturerId: m.manufacturer_id,
+          manufacturerName: m.manufacturer_name,
+          composition: m.composition || "",
+          dosageForm: m.dosage_form,
+          strength: m.strength || "",
+          barcode: m.barcode || "",
+          hsnCode: m.hsn_code || "",
+          requiresPrescription: Boolean(m.requires_prescription),
+          reorderLevel: Number(m.reorder_level || 50),
+          reorderQuantity: Number(m.reorder_quantity || 100),
+          rackLocation: m.rack_location || "",
+          totalStock: Number(m.total_stock || 0),
+          isActive: Boolean(m.is_active !== false)
+        })));
+      }
+
+      // 6. Batches
+      if (batches && batches.length) {
+        save(KEYS.BATCHES, batches.map(b => ({
+          id: b.id,
+          medicineId: b.medicine_id,
+          medicineName: b.medicine_name,
+          genericName: b.generic_name,
+          supplierId: b.supplier_id,
+          batchNumber: b.batch_number,
+          manufactureDate: b.manufacture_date ? String(b.manufacture_date).split("T")[0] : "",
+          expiryDate: b.expiry_date ? String(b.expiry_date).split("T")[0] : "",
+          purchasePrice: Number(b.cost_price || 0),
+          sellingPrice: Number(b.selling_price || 0),
+          mrp: Number(b.mrp || b.selling_price || 0),
+          quantityReceived: Number(b.quantity_received || 0),
+          quantityAvailable: Number(b.quantity_available || 0),
+          rackLocation: b.rack_location || ""
+        })));
+      }
+
+      // 7. Doctors
+      if (doctors && doctors.length) {
+        save(KEYS.DOCTORS, doctors.map(d => ({
+          id: d.id,
+          name: d.name,
+          specialization: d.specialization,
+          licenseNumber: d.license_number,
+          phone: d.phone,
+          chamber: d.chamber
+        })));
+      }
+
+      // 8. Prescriptions
+      if (prescriptions && prescriptions.length) {
+        save(KEYS.PRESCRIPTIONS, prescriptions.map(p => ({
+          id: p.id,
+          customerId: p.customer_id,
+          customerName: p.customer_name,
+          doctorId: p.doctor_id,
+          doctorName: p.doctor_name,
+          prescriptionDate: p.prescription_date ? String(p.prescription_date).split("T")[0] : todayStr(0),
+          notes: p.notes,
+          status: p.status,
+          items: p.items || []
+        })));
+      }
+
+      localStorage.setItem(KEYS.INITIALIZED, "true");
+      console.log("APSStore: Live synchronization from PostgreSQL completed.");
+      window.dispatchEvent(new CustomEvent("aps:sync", { detail: json.data }));
+    } catch (e) {
+      console.warn("APSStore: Could not sync from PostgreSQL, using local store:", e);
+    }
+  }
+
+  // Trigger sync on startup
+  syncFromBackend();
+
+  // Re-sync whenever user returns to the tab/app
+  if (typeof document !== "undefined") {
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        syncFromBackend();
+      }
+    });
+  }
+
+  /* =========================================================
      AUDIT LOG HELPER
   ========================================================== */
 
@@ -482,6 +645,14 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.MEDICINES, meds);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/medicines", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(medicineData)
+    }).catch(err => console.error("Postgres medicine save error:", err));
+
     return savedRecord;
   }
 
@@ -574,6 +745,14 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.BATCHES, batches);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/batches", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(batchData)
+    }).catch(err => console.error("Postgres batch save error:", err));
+
     return saved;
   }
 
@@ -789,6 +968,28 @@ window.APSStore = (() => {
 
     logAudit("POS_CHECKOUT", "sales", saleId, `Generated ${invNumber} for ৳${totalAmount} (${paymentMode})`);
 
+    // Sync to PostgreSQL backend
+    fetch("/api/pos/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        customerId,
+        prescriptionId,
+        subtotal,
+        discountAmount: discount,
+        taxAmount,
+        totalAmount,
+        paymentMode,
+        servedBy: "usr-3",
+        items: (items || []).map(it => ({
+          medicineId: it.medicineId,
+          batchId: it.batchId,
+          quantity: it.quantity,
+          unitPrice: it.price || it.unitPrice || 0
+        }))
+      })
+    }).catch(err => console.error("Postgres POS checkout error:", err));
+
     return { sale: saleRecord, invoice: invoiceRecord };
   }
 
@@ -951,6 +1152,14 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.SUPPLIERS, list);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/suppliers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Postgres supplier save error:", err));
+
     return data;
   }
 
@@ -1007,6 +1216,23 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.CUSTOMERS, list);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/customers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then(r => r.json()).then(res => {
+      if (res && res.data && res.data.id && res.data.id !== data.id) {
+        const cur = load(KEYS.CUSTOMERS, []);
+        const item = cur.find(c => c.phone === data.phone);
+        if (item) {
+          item.id = res.data.id;
+          save(KEYS.CUSTOMERS, cur);
+        }
+      }
+    }).catch(err => console.error("Postgres customer save error:", err));
+
     return data;
   }
 
@@ -1018,6 +1244,13 @@ window.APSStore = (() => {
     const payAmount = Number(amount);
     cust.outstandingBalance = Math.max(0, Number((cust.outstandingBalance - payAmount).toFixed(2)));
     save(KEYS.CUSTOMERS, custs);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/customers/settle", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ customerId, amount: payAmount, paymentMode, referenceNumber })
+    }).catch(err => console.error("Postgres settle error:", err));
 
     logAudit("CREDIT_SETTLEMENT", "customers", customerId, `Collected ৳${payAmount} credit from ${cust.name}`);
     return cust;
@@ -1042,6 +1275,14 @@ window.APSStore = (() => {
       if (idx !== -1) list[idx] = { ...list[idx], ...data };
     }
     save(KEYS.DOCTORS, list);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/doctors", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Postgres doctor save error:", err));
+
     return data;
   }
 
@@ -1062,6 +1303,14 @@ window.APSStore = (() => {
       if (idx !== -1) list[idx] = { ...list[idx], ...data };
     }
     save(KEYS.PRESCRIPTIONS, list);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/prescriptions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).catch(err => console.error("Postgres prescription save error:", err));
+
     return data;
   }
 
@@ -1367,6 +1616,10 @@ window.APSStore = (() => {
     getCategories,
     saveCategory,
     getManufacturers,
+
+    // Backend Synchronization
+    sync: syncFromBackend,
+    syncFromBackend,
 
     // Admin & Audit
     getAuditLogs,

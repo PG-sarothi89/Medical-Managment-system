@@ -41,6 +41,12 @@
     initEventListeners();
   });
 
+  // Re-render when fresh data arrives from PostgreSQL
+  window.addEventListener("aps:sync", () => {
+    populateDropdowns();
+    renderMedicineTable();
+  });
+
   /* =========================================================
      1. POPULATE DROPDOWNS
   ========================================================== */
