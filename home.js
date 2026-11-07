@@ -17,7 +17,6 @@
     initMedicineCards();
     initCategoryPills();
     initGlobalSearch();
-    initSidebarToggle();
   });
 
   /* =========================================================
@@ -426,29 +425,6 @@
           // Scroll down to cards
           $("#medicineCardsSection")?.scrollIntoView({ behavior: "smooth" });
         }
-      });
-    }
-  }
-
-  /* =========================================================
-     6. MOBILE SIDEBAR TOGGLE
-  ========================================================== */
-  function initSidebarToggle() {
-    const toggleBtn = $("#sidebarToggleBtn");
-    const sidebar = $("#appSidebar");
-    const overlay = $("#sidebarOverlay");
-
-    if (toggleBtn && sidebar) {
-      toggleBtn.addEventListener("click", () => {
-        sidebar.classList.toggle("is-open");
-        if (overlay) overlay.classList.toggle("is-visible");
-      });
-    }
-
-    if (overlay) {
-      overlay.addEventListener("click", () => {
-        if (sidebar) sidebar.classList.remove("is-open");
-        overlay.classList.remove("is-visible");
       });
     }
   }

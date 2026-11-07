@@ -88,24 +88,72 @@ window.APS = (() => {
       }
     });
 
-    // Mobile sidebar drawer toggler
+    // Mobile sidebar drawer toggler & responsive controls
     const sidebarToggleBtn = $("#sidebarToggleBtn");
     const appSidebar = $("#appSidebar");
     const sidebarOverlay = $("#sidebarOverlay");
 
+    function closeSidebar() {
+      if (appSidebar) appSidebar.classList.remove("is-open");
+      if (sidebarOverlay) sidebarOverlay.classList.remove("is-visible");
+    }
+
+    function openSidebar() {
+      if (appSidebar) appSidebar.classList.add("is-open");
+      if (sidebarOverlay) sidebarOverlay.classList.add("is-visible");
+    }
+
     if (sidebarToggleBtn && appSidebar) {
-      sidebarToggleBtn.addEventListener("click", () => {
-        appSidebar.classList.toggle("is-open");
-        if (sidebarOverlay) sidebarOverlay.classList.toggle("is-visible");
+      sidebarToggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (appSidebar.classList.contains("is-open")) {
+          closeSidebar();
+        } else {
+          openSidebar();
+        }
       });
     }
 
-    if (sidebarOverlay) {
-      sidebarOverlay.addEventListener("click", () => {
-        if (appSidebar) appSidebar.classList.remove("is-open");
-        sidebarOverlay.classList.remove("is-visible");
+    if (appSidebar && !$("#sidebarCloseBtn", appSidebar)) {
+      const closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.id = "sidebarCloseBtn";
+      closeBtn.className = "sidebar-close-btn d-lg-none";
+      closeBtn.setAttribute("aria-label", "Close navigation drawer");
+      closeBtn.innerHTML = '<i class="bi bi-x-lg"></i>';
+      closeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        closeSidebar();
       });
+      appSidebar.appendChild(closeBtn);
     }
+
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    // Close sidebar on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && appSidebar && appSidebar.classList.contains("is-open")) {
+        closeSidebar();
+      }
+    });
+
+    // Auto-close sidebar on mobile when a nav item is clicked
+    $$(".sidebar-nav-item", appSidebar || document).forEach(navItem => {
+      navItem.addEventListener("click", () => {
+        if (window.innerWidth < 992) {
+          closeSidebar();
+        }
+      });
+    });
+
+    // Reset mobile drawer state when resizing to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 992) {
+        closeSidebar();
+      }
+    });
 
     // Role-Based UI Guard: Hide Admin-only modules for non-admin staff
     if (userRoleKey !== "admin") {

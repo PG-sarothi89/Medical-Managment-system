@@ -6,6 +6,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const { handleApiRequest } = require("./api");
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
@@ -34,7 +35,11 @@ const MIME_TYPES = {
   ".map": "application/json"
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
+  if (req.url.startsWith("/api/")) {
+    return handleApiRequest(req, res);
+  }
+
   let reqUrl = req.url.split("?")[0];
   if (reqUrl === "/" || reqUrl === "") {
     reqUrl = "/index.html";
@@ -103,10 +108,11 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log("\n=======================================================");
-  console.log(" 🏥 APS Medical Management System Server Running");
-  console.log(` 🌐 Local URL: http://localhost:${PORT}`);
-  console.log(" 🔑 Demo Accounts Available on Login Page");
+  console.log(" [INFO] CURO Medical Management System Server Running");
+  console.log(` [INFO] Local Web App: http://localhost:${PORT}`);
+  console.log(` [INFO] PostgreSQL 18: localhost:${process.env.PGPORT || 8000} (DB: ${process.env.PGDATABASE || "curo_db"})`);
+  console.log(` [INFO] REST API:      http://localhost:${PORT}/api/status`);
   console.log("=======================================================\n");
 });

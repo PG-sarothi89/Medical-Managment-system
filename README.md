@@ -5,6 +5,16 @@
 
 ---
 
+## 🎬 SaaS Explainer Demo Video Studio (`explainer-video.html`)
+An interactive, 60 FPS motion graphics demo video player is built directly into the platform:
+- **7 Master Scenes:** The Challenge, Meet CURO, POS Barcode Cashier, FEFO Batch Intelligence, Digital Prescriptions, BI Analytics & AI Demand Forecasting, Call to Action.
+- **Narrated Voiceover:** Synchronized speech synthesis with real-time subtitles.
+- **Synthesized Audio SFX:** Real-time Web Audio API soundscape (laser scan beeps, success chimes, transition swooshes).
+- **Direct Video Export:** 1-Click "Export Video (WebM)" button using `MediaRecorder` API to record and download the demo video.
+- **Launch anytime:** Open `explainer-video.html` directly in your browser.
+
+---
+
 ## 🌟 Executive Overview
 The **APS Medical Management System** is a full-featured, responsive, production-grade web application built to streamline operations across modern pharmacies, medical clinics, and healthcare distribution hubs. It connects master medicine data, First-Expired First-Out (FEFO) batch tracking, point-of-sale cashiering with simulated barcode scanner audio, supplier procurement, digital prescription management, patient credit ledgers, GST invoicing, early warning intelligence, and executive business analytics.
 

@@ -631,6 +631,14 @@
       $("#mobileShowCatalogBtn")?.classList.add("btn-outline-secondary");
     });
 
+    // Restore 2-column layout when resizing to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 992) {
+        $("#posCatalogColumn")?.classList.remove("d-none");
+        $("#posCartColumn")?.classList.remove("d-none");
+      }
+    });
+
     // Global Hardware USB Barcode Scanner Wedge Listener
     APS.initUSBBarcodeListener((scannedCode) => {
       handleScannedBarcode(scannedCode);

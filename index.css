@@ -88,13 +88,13 @@ html, body {
 }
 
 /* -------------------------------------------------------------
-   LEFT COLUMN: Nature & Mountain Hero with Health Motto
+   LEFT COLUMN: Pharmacist Hero Card with Health Motto
 -------------------------------------------------------------- */
 .login-left-banner {
   position: relative;
-  background-image: url("login_hero_clean.png");
+  background-image: url("login_card_photo.jpg");
   background-size: cover;
-  background-position: center top;
+  background-position: center center;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -106,7 +106,7 @@ html, body {
 .banner-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(2, 60, 120, 0.55) 0%, rgba(2, 60, 120, 0.2) 40%, rgba(0, 0, 0, 0) 70%);
+  background: linear-gradient(180deg, rgba(2, 60, 120, 0.65) 0%, rgba(2, 60, 120, 0.25) 45%, rgba(0, 25, 65, 0.5) 100%);
   pointer-events: none;
 }
 
@@ -493,7 +493,7 @@ html, body {
 /* Register Prompt */
 .register-prompt {
   font-size: 12.5px;
-  color: #475569;
+  color: greenyellow;
   text-align: center;
   margin-top: 4px;
   margin-bottom: 24px;
@@ -545,5 +545,37 @@ html, body {
   }
   .login-right-panel {
     padding: 32px 24px 24px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-card-container {
+    padding: 12px;
+  }
+  .login-card {
+    border-radius: 18px;
+  }
+  .login-left-banner {
+    min-height: 180px;
+    padding: 24px 16px;
+  }
+  .brand-cursive-title {
+    font-size: 28px;
+  }
+  .brand-health-motto {
+    font-size: 12px;
+  }
+  .login-right-panel {
+    padding: 24px 16px 20px 16px;
+  }
+  .welcome-heading {
+    font-size: 28px;
+  }
+  .quick-roles-chips {
+    gap: 6px;
+  }
+  .persona-chip {
+    padding: 4px 10px;
+    font-size: 11px;
   }
 }

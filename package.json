@@ -23,8 +23,10 @@
   "license": "MIT",
   "dependencies": {
     "clsx": "^2.1.1",
+    "dotenv": "^18.0.9",
     "framer-motion": "^14.0.0",
     "lucide-react": "^1.51.0",
+    "pg": "^8.23.1",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

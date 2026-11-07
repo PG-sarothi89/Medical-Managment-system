@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.git
+.github
+.env
+*.zip
+*.mp4
+*.log
+dist
+.system_generated
+scratch
