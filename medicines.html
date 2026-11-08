@@ -147,6 +147,9 @@
           <p class="text-muted small mb-0">Organize pharmaceutical products, categories, composition, HSN codes, and scannable barcodes.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
+          <button class="btn btn-teal-700 btn-success rounded-pill px-3 py-2 fw-semibold" id="topScanBarcodeBtn" title="Scan medicine barcode">
+            <i class="bi bi-upc-scan me-1"></i> Scan Barcode
+          </button>
           <button class="btn btn-outline-secondary rounded-pill px-3 py-2 fw-semibold" id="manageCategoriesBtn">
             <i class="bi bi-tags me-1"></i> Categories
           </button>
@@ -230,6 +233,7 @@
         <form id="medicineForm">
           <div class="modal-body">
             <input type="hidden" id="medId">
+            <div id="medModalScanNotice" class="d-none mb-3"></div>
             <div class="row g-3">
               <div class="col-md-6">
                 <label class="form-label small fw-bold">Brand / Medicine Name *</label>
@@ -357,7 +361,8 @@
         </div>
         <div class="modal-body p-3 bg-dark text-white text-center">
           <div class="scanner-viewfinder position-relative mx-auto">
-            <video id="cameraScannerVideo" playsinline autoplay muted></video>
+            <div id="cameraScannerVideoContainer" style="width:100%; min-height:240px;"></div>
+            <video id="cameraScannerVideo" playsinline autoplay muted style="display:none;"></video>
             <div class="laser-beam"></div>
             <div class="scanner-reticle"></div>
           </div>
@@ -366,19 +371,38 @@
             <i class="bi bi-info-circle-fill fs-5 text-info"></i>
             <div>Align medicine package barcode within red laser reticle to search catalog.</div>
           </div>
+          <!-- Mobile Optical Action Bar (Macro Photo + Torch) -->
+          <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-2 mb-3">
+            <input type="file" class="camera-photo-file-input" accept="image/*" capture="environment" style="display:none;">
+            <button type="button" class="btn btn-warning rounded-pill px-3 py-1 fw-bold text-dark btn-take-photo shadow-sm" title="Snap crystal-clear high-res macro photo with phone camera">
+              <i class="bi bi-camera-fill me-1"></i> Snap Photo / Upload
+            </button>
+            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-1 scanner-torch-btn" style="display:none;" title="Toggle phone flashlight">
+              <i class="bi bi-flashlight me-1"></i> Flash
+            </button>
+          </div>
 
           <div class="d-flex justify-content-between align-items-center mt-3 mb-1 px-1">
             <span class="small text-white-50 fw-semibold"><i class="bi bi-upc-scan me-1"></i> Quick Test Barcodes:</span>
             <span class="badge bg-teal-800 text-teal-200">Simulation</span>
           </div>
 
-          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestBarcodes">
+          <div class="mb-2"><span class="badge bg-secondary text-light small"><i class="bi bi-check-circle me-1"></i>In Database:</span></div>
+          <div class="d-flex flex-wrap gap-1 justify-content-center mb-3" id="quickTestBarcodes">
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500011">Napa Extra</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500028">Moxacil</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500035">Seclo</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500042">Alatrol</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500059">Comet</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500066">Atova</button>
+          </div>
+          <div class="mb-2"><span class="badge bg-success text-white small"><i class="bi bi-plus-circle me-1"></i>Not in Database (Auto-Adds!):</span></div>
+          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestNewBarcodes">
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500202" title="Test Ace Plus auto-add">+ Ace Plus</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500219" title="Test Ciprocin auto-add">+ Ciprocin 500</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500226" title="Test Sergel auto-add">+ Sergel 20</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500233" title="Test Pantonix auto-add">+ Pantonix 20</button>
+            <button type="button" class="btn btn-sm btn-warning py-1 px-2 test-barcode-btn" data-random="true" title="Test random new barcode"><i class="bi bi-shuffle me-1"></i>Random Barcode</button>
           </div>
         </div>
         <div class="modal-footer bg-dark border-top border-secondary py-2 justify-content-between">
@@ -394,6 +418,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
   <!-- Store & Shared UI -->
+  <script src="html5-qrcode.min.js"></script>
   <script src="aps-store.js"></script>
   <script src="aps-common.js"></script>
   <!-- Page Logic -->

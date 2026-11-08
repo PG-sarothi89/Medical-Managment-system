@@ -445,37 +445,70 @@ window.APS = (() => {
 
   /**
    * Global USB Barcode Scanner Wedge Listener
-   * Detects rapid keystroke bursts (<50ms intervals) ending in 'Enter'.
+   * Detects rapid keystroke bursts (<60ms intervals) ending in 'Enter'.
+   * Gracefully handles both global background scanning and focused inputs.
    */
   function initUSBBarcodeListener(onBarcodeScanned) {
     let barcodeBuffer = "";
     let lastKeyTime = Date.now();
+    let lastProcessedScan = "";
+    let lastProcessedTime = 0;
 
     document.addEventListener("keydown", (e) => {
-      // Ignore if user is inside a textarea or normal form input
-      const targetTag = e.target.tagName.toLowerCase();
+      const activeEl = document.activeElement;
+      const targetTag = activeEl ? activeEl.tagName.toLowerCase() : "";
       const isInput = targetTag === "input" || targetTag === "textarea" || targetTag === "select";
+      const isDedicatedBarcodeInput = activeEl && (
+        activeEl.hasAttribute("data-barcode-input") ||
+        activeEl.id === "medSearchInput" ||
+        activeEl.id === "batchBarcodeScanInput" ||
+        activeEl.id === "posBarcodeScanInput" ||
+        activeEl.id === "medBarcode"
+      );
 
       const currentTime = Date.now();
       const timeDiff = currentTime - lastKeyTime;
       lastKeyTime = currentTime;
 
-      // Reset buffer if delay is too long (normal typing is >80ms)
-      if (timeDiff > 65) {
-        barcodeBuffer = "";
-      }
-
+      // Handle Enter keypress
       if (e.key === "Enter") {
-        if (barcodeBuffer.length >= 6) {
-          e.preventDefault();
-          const code = barcodeBuffer;
-          barcodeBuffer = "";
-          playScanSound();
-          if (typeof onBarcodeScanned === "function") {
-            onBarcodeScanned(code);
+        // If Enter pressed inside a dedicated barcode input, grab input value
+        if (isDedicatedBarcodeInput && activeEl.value.trim().length >= 3) {
+          const code = activeEl.value.trim();
+          if (Date.now() - lastProcessedTime > 600 || code !== lastProcessedScan) {
+            lastProcessedScan = code;
+            lastProcessedTime = Date.now();
+            e.preventDefault();
+            playScanSound();
+            if (typeof onBarcodeScanned === "function") {
+              onBarcodeScanned(code);
+            }
           }
+          barcodeBuffer = "";
+          return;
+        }
+
+        // Global burst from USB barcode gun (buffer accumulated quickly)
+        if (barcodeBuffer.length >= 4) {
+          const code = barcodeBuffer.trim();
+          barcodeBuffer = "";
+          if (Date.now() - lastProcessedTime > 600 || code !== lastProcessedScan) {
+            lastProcessedScan = code;
+            lastProcessedTime = Date.now();
+            e.preventDefault();
+            playScanSound();
+            if (typeof onBarcodeScanned === "function") {
+              onBarcodeScanned(code);
+            }
+          }
+          return;
         }
         return;
+      }
+
+      // Reset buffer if delay is too long (human typing is >80ms, barcode guns are <50ms)
+      if (timeDiff > 70) {
+        barcodeBuffer = "";
       }
 
       // Printable single characters
@@ -483,6 +516,247 @@ window.APS = (() => {
         barcodeBuffer += e.key;
       }
     });
+  }
+
+  /**
+   * Enterprise Multi-Format Optical Camera Barcode Scanner Engine
+   * Optimized for mobile devices: explicit 1D retail barcode formats,
+   * continuous autofocus, flashlight/torch toggle, native GPU BarcodeDetector,
+   * and high-resolution photo snap/upload for 100% mobile detection.
+   */
+  function createCameraBarcodeScanner({ containerId, statusId, onScan, modalId }) {
+    let html5QrCode = null;
+    let isRunning = false;
+    let isStopping = false;
+    let detectorLoopId = null;
+    let torchState = false;
+
+    const formats = window.Html5QrcodeSupportedFormats ? [
+      Html5QrcodeSupportedFormats.EAN_13,
+      Html5QrcodeSupportedFormats.EAN_8,
+      Html5QrcodeSupportedFormats.CODE_128,
+      Html5QrcodeSupportedFormats.CODE_39,
+      Html5QrcodeSupportedFormats.UPC_A,
+      Html5QrcodeSupportedFormats.UPC_E,
+      Html5QrcodeSupportedFormats.UPC_EAN_EXTENSION,
+      Html5QrcodeSupportedFormats.ITF,
+      Html5QrcodeSupportedFormats.QR_CODE
+    ] : undefined;
+
+    function handleSuccess(decodedText) {
+      if (isStopping) return;
+      isStopping = true;
+      playScanSound();
+      const statusEl = document.getElementById(statusId);
+      if (statusEl) {
+        statusEl.className = "alert alert-success py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `<i class="bi bi-check-circle-fill text-success fs-5"></i><div>Scanned Barcode: <strong>${escapeHtml(decodedText)}</strong></div>`;
+      }
+      stop();
+      if (modalId) {
+        const modalEl = document.getElementById(modalId);
+        if (modalEl) {
+          const inst = bootstrap.Modal.getInstance(modalEl);
+          if (inst) inst.hide();
+        }
+      }
+      if (typeof onScan === "function") {
+        onScan(decodedText);
+      }
+    }
+
+    async function start() {
+      const container = document.getElementById(containerId);
+      const statusEl = document.getElementById(statusId);
+      if (!container) return;
+
+      isRunning = true;
+      isStopping = false;
+
+      if (statusEl) {
+        statusEl.className = "alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `<div class="spinner-border spinner-border-sm text-info"></div><div>Activating optical camera stream... Align barcode in frame.</div>`;
+      }
+
+      // 1. Try Html5Qrcode library with explicit 1D formats and mobile-tuned config
+      if (window.Html5Qrcode) {
+        try {
+          html5QrCode = new Html5Qrcode(containerId, {
+            formatsToSupport: formats,
+            experimentalFeatures: {
+              useBarCodeDetectorIfSupported: true
+            },
+            verbose: false
+          });
+
+          const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
+            const w = Math.floor(viewfinderWidth * 0.94);
+            const h = Math.floor(Math.min(viewfinderHeight * 0.75, 260));
+            return { width: Math.max(w, 200), height: Math.max(h, 140) };
+          };
+
+          const config = {
+            fps: 22,
+            qrbox: qrboxFunction,
+            aspectRatio: 1.333334,
+            disableFlip: true
+          };
+
+          await html5QrCode.start(
+            { facingMode: { ideal: "environment" } },
+            config,
+            (decodedText) => {
+              handleSuccess(decodedText);
+            },
+            () => {}
+          );
+
+          if (statusEl) {
+            statusEl.className = "alert alert-success py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+            statusEl.innerHTML = `<i class="bi bi-camera-video-fill text-success fs-5"></i><div>Camera active! Point at the barcode, or tap <strong>Take Photo</strong> below.</div>`;
+          }
+
+          // Check if torch/flashlight is supported on phone
+          try {
+            const capabilities = html5QrCode.getRunningTrackCameraCapabilities();
+            const torchBtn = document.getElementById("cameraTorchBtn") || document.querySelector(".scanner-torch-btn");
+            if (torchBtn && capabilities.torchFeature && capabilities.torchFeature.isSupported()) {
+              torchBtn.style.display = "inline-flex";
+            }
+          } catch (e) {}
+
+          // Concurrent native BarcodeDetector on video element (super fast on Android Chrome!)
+          if ("BarcodeDetector" in window) {
+            try {
+              const video = container.querySelector("video");
+              if (video) {
+                const supportedFormats = await BarcodeDetector.getSupportedFormats();
+                const nativeFormats = ["ean_13", "ean_8", "code_128", "code_39", "upc_a", "upc_e", "qr_code"].filter(f => supportedFormats.includes(f));
+                const detector = new BarcodeDetector({ formats: nativeFormats });
+
+                const runNativeDetection = async () => {
+                  if (!isRunning || isStopping) return;
+                  try {
+                    if (video.readyState >= 2) {
+                      const barcodes = await detector.detect(video);
+                      if (barcodes && barcodes.length > 0) {
+                        handleSuccess(barcodes[0].rawValue);
+                        return;
+                      }
+                    }
+                  } catch (e) {}
+                  if (isRunning && !isStopping) {
+                    detectorLoopId = requestAnimationFrame(runNativeDetection);
+                  }
+                };
+                detectorLoopId = requestAnimationFrame(runNativeDetection);
+              }
+            } catch (e) {}
+          }
+
+          return;
+        } catch (err) {
+          console.warn("Html5Qrcode initialization:", err.message || err);
+        }
+      }
+
+      // 2. Fallback note if camera denied, non-HTTPS, or unavailable
+      if (statusEl) {
+        statusEl.className = "alert alert-warning py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `
+          <i class="bi bi-camera-fill text-warning fs-5"></i>
+          <div>
+            <strong>Camera direct feed unavailable.</strong>
+            <div>Tap <strong>Take Photo / Snap Barcode</strong> below to scan with your phone's camera!</div>
+          </div>
+        `;
+      }
+    }
+
+    async function toggleTorch() {
+      if (!html5QrCode) return false;
+      try {
+        torchState = !torchState;
+        await html5QrCode.applyVideoConstraints({
+          advanced: [{ torch: torchState }]
+        });
+        return torchState;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function scanImageFile(file) {
+      if (!file) return;
+      const statusEl = document.getElementById(statusId);
+      if (statusEl) {
+        statusEl.className = "alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `<div class="spinner-border spinner-border-sm text-info"></div><div>Analyzing high-resolution photo with macro optics...</div>`;
+      }
+
+      // Try native BarcodeDetector on image
+      if ("BarcodeDetector" in window) {
+        try {
+          const supportedFormats = await BarcodeDetector.getSupportedFormats();
+          const nativeFormats = ["ean_13", "ean_8", "code_128", "code_39", "upc_a", "upc_e", "qr_code"].filter(f => supportedFormats.includes(f));
+          const detector = new BarcodeDetector({ formats: nativeFormats });
+          const bitmap = await createImageBitmap(file);
+          const barcodes = await detector.detect(bitmap);
+          if (barcodes && barcodes.length > 0) {
+            handleSuccess(barcodes[0].rawValue);
+            return;
+          }
+        } catch (e) {}
+      }
+
+      // Try Html5Qrcode.scanFile
+      if (window.Html5Qrcode) {
+        try {
+          let scanner = html5QrCode;
+          if (!scanner) {
+            scanner = new Html5Qrcode(containerId, { formatsToSupport: formats, verbose: false });
+          }
+          const decoded = await scanner.scanFile(file, true);
+          if (decoded) {
+            handleSuccess(decoded);
+            return;
+          }
+        } catch (e) {
+          console.warn("scanFile error:", e);
+        }
+      }
+
+      if (statusEl) {
+        statusEl.className = "alert alert-danger py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `<i class="bi bi-x-circle-fill text-danger fs-5"></i><div>No clear barcode detected in photo. Ensure barcode is well-lit, in focus, and try again.</div>`;
+      }
+    }
+
+    async function stop() {
+      isRunning = false;
+      if (detectorLoopId) {
+        cancelAnimationFrame(detectorLoopId);
+        detectorLoopId = null;
+      }
+      if (html5QrCode) {
+        try {
+          if (html5QrCode.isScanning) {
+            await html5QrCode.stop();
+          }
+          html5QrCode.clear();
+        } catch (e) {}
+        html5QrCode = null;
+      }
+      isStopping = false;
+    }
+
+    return {
+      start,
+      stop,
+      toggleTorch,
+      scanImageFile,
+      getIsRunning: () => isRunning
+    };
   }
 
   // Public Interface
@@ -497,6 +771,7 @@ window.APS = (() => {
     updateAlertBadge,
     getCurrentUser,
     syncSessionUser,
-    initUSBBarcodeListener
+    initUSBBarcodeListener,
+    createCameraBarcodeScanner
   };
 })();

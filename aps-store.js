@@ -623,6 +623,476 @@ window.APSStore = (() => {
     return getMedicines().find(m => m.id === id) || null;
   }
 
+  function getMedicineByBarcode(barcode) {
+    if (!barcode) return null;
+    const clean = String(barcode).trim();
+    if (!clean) return null;
+    const meds = getMedicines();
+    return meds.find(m => m.barcode && String(m.barcode).trim().toLowerCase() === clean.toLowerCase()) || null;
+  }
+
+  /**
+   * Comprehensive Pharmaceutical Barcode Master Reference Catalog
+   * Used for auto-filling complete drug details when scanning standard medicine packages.
+   */
+  const PHARMA_BARCODE_CATALOG = {
+    // 1. Core catalog references
+    "8901234500011": {
+      name: "Napa Extra 500mg/65mg",
+      generic: "Paracetamol + Caffeine",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-2",
+      composition: "Paracetamol 500mg, Caffeine 65mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 100,
+      reorderQuantity: 300,
+      costPrice: 2.10,
+      sellingPrice: 3.00,
+      mrp: 3.00,
+      supplierId: "sup-2"
+    },
+    "8901234500028": {
+      name: "Moxacil 500mg Capsule",
+      generic: "Amoxicillin Trihydrate",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-1",
+      composition: "Amoxicillin 500mg",
+      unit: "Capsule",
+      hsn: "3004.10",
+      requiresPrescription: true,
+      reorderLevel: 60,
+      reorderQuantity: 150,
+      costPrice: 6.80,
+      sellingPrice: 8.50,
+      mrp: 8.50,
+      supplierId: "sup-1"
+    },
+    "8901234500035": {
+      name: "Seclo 20mg Capsule",
+      generic: "Omeprazole",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-1",
+      composition: "Omeprazole 20mg pellet",
+      unit: "Capsule",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 80,
+      reorderQuantity: 200,
+      costPrice: 4.80,
+      sellingPrice: 6.00,
+      mrp: 6.00,
+      supplierId: "sup-1"
+    },
+    "8901234500042": {
+      name: "Alatrol 10mg Tablet",
+      generic: "Cetirizine Dihydrochloride",
+      categoryId: "cat-5",
+      manufacturerId: "mfr-1",
+      composition: "Cetirizine 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 2.80,
+      sellingPrice: 3.50,
+      mrp: 3.50,
+      supplierId: "sup-1"
+    },
+    "8901234500059": {
+      name: "Comet 500mg Tablet",
+      generic: "Metformin Hydrochloride",
+      categoryId: "cat-6",
+      manufacturerId: "mfr-1",
+      composition: "Metformin HCl 500mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 90,
+      reorderQuantity: 250,
+      costPrice: 3.80,
+      sellingPrice: 5.00,
+      mrp: 5.00,
+      supplierId: "sup-1"
+    },
+    "8901234500066": {
+      name: "Atova 10mg Tablet",
+      generic: "Atorvastatin Calcium",
+      categoryId: "cat-7",
+      manufacturerId: "mfr-2",
+      composition: "Atorvastatin 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 8.50,
+      sellingPrice: 12.00,
+      mrp: 12.00,
+      supplierId: "sup-2"
+    },
+    "8901234500073": {
+      name: "D-Rise 20000 IU Capsule",
+      generic: "Cholecalciferol (Vitamin D3)",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-3",
+      composition: "Cholecalciferol 20,000 IU",
+      unit: "Capsule",
+      hsn: "2936.29",
+      requiresPrescription: false,
+      reorderLevel: 30,
+      reorderQuantity: 100,
+      costPrice: 22.00,
+      sellingPrice: 30.00,
+      mrp: 30.00,
+      supplierId: "sup-3"
+    },
+    "8901234500080": {
+      name: "Zimax 500mg Tablet",
+      generic: "Azithromycin Dihydrate",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-2",
+      composition: "Azithromycin 500mg",
+      unit: "Tablet",
+      hsn: "3004.20",
+      requiresPrescription: true,
+      reorderLevel: 45,
+      reorderQuantity: 120,
+      costPrice: 26.00,
+      sellingPrice: 35.00,
+      mrp: 35.00,
+      supplierId: "sup-2"
+    },
+    "8901234500097": {
+      name: "Flamyd 400mg Tablet",
+      generic: "Metronidazole",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-5",
+      composition: "Metronidazole 400mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 40,
+      reorderQuantity: 100,
+      costPrice: 1.40,
+      sellingPrice: 2.00,
+      mrp: 2.00,
+      supplierId: "sup-1"
+    },
+    "8901234500103": {
+      name: "Ventolin Evohaler 100mcg",
+      generic: "Salbutamol Sulphate",
+      categoryId: "cat-8",
+      manufacturerId: "mfr-6",
+      composition: "Salbutamol 100mcg/actuation",
+      unit: "Inhaler",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 15,
+      reorderQuantity: 40,
+      costPrice: 195.00,
+      sellingPrice: 245.00,
+      mrp: 250.00,
+      supplierId: "sup-2"
+    },
+    "8901234500110": {
+      name: "Entacyd Plus Suspension 200ml",
+      generic: "Aluminium Hydroxide + Magnesium",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-1",
+      composition: "Al(OH)3 200mg + Mg(OH)2 200mg/5ml",
+      unit: "Bottle",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 25,
+      reorderQuantity: 60,
+      costPrice: 72.00,
+      sellingPrice: 95.00,
+      mrp: 95.00,
+      supplierId: "sup-1"
+    },
+    "8901234500127": {
+      name: "Mixtard 30 HM 100 IU/ml",
+      generic: "Biphasic Isophane Insulin",
+      categoryId: "cat-6",
+      manufacturerId: "mfr-6",
+      composition: "Soluble Insulin 30% + Isophane 70%",
+      unit: "Vial",
+      hsn: "3004.31",
+      requiresPrescription: true,
+      reorderLevel: 20,
+      reorderQuantity: 50,
+      costPrice: 380.00,
+      sellingPrice: 460.00,
+      mrp: 480.00,
+      supplierId: "sup-2"
+    },
+    "8901234500134": {
+      name: "Rivotril 0.5mg Tablet",
+      generic: "Clonazepam",
+      categoryId: "cat-7",
+      manufacturerId: "mfr-4",
+      composition: "Clonazepam 0.5mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 35,
+      reorderQuantity: 100,
+      costPrice: 5.00,
+      sellingPrice: 7.00,
+      mrp: 7.00,
+      supplierId: "sup-4"
+    },
+    "8901234500141": {
+      name: "Tofen 100ml Syrup",
+      generic: "Ketotifen Fumarate",
+      categoryId: "cat-8",
+      manufacturerId: "mfr-2",
+      composition: "Ketotifen 1mg/5ml",
+      unit: "Bottle",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 20,
+      reorderQuantity: 50,
+      costPrice: 48.00,
+      sellingPrice: 65.00,
+      mrp: 70.00,
+      supplierId: "sup-2"
+    },
+    // 2. High-volume unseeded drugs (testable for auto-adding!)
+    "8901234500202": {
+      name: "Ace Plus 500mg/65mg",
+      generic: "Paracetamol + Caffeine",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-1",
+      composition: "Paracetamol 500mg, Caffeine 65mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 100,
+      reorderQuantity: 300,
+      costPrice: 2.15,
+      sellingPrice: 3.00,
+      mrp: 3.00,
+      supplierId: "sup-1"
+    },
+    "8901234500219": {
+      name: "Ciprocin 500mg Tablet",
+      generic: "Ciprofloxacin Hydrochloride",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-1",
+      composition: "Ciprofloxacin 500mg",
+      unit: "Tablet",
+      hsn: "3004.20",
+      requiresPrescription: true,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 12.00,
+      sellingPrice: 16.00,
+      mrp: 16.00,
+      supplierId: "sup-1"
+    },
+    "8901234500226": {
+      name: "Sergel 20mg Capsule",
+      generic: "Esomeprazole Magnesium",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-3",
+      composition: "Esomeprazole 20mg delayed-release pellets",
+      unit: "Capsule",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 80,
+      reorderQuantity: 200,
+      costPrice: 5.40,
+      sellingPrice: 7.00,
+      mrp: 7.00,
+      supplierId: "sup-3"
+    },
+    "8901234500233": {
+      name: "Pantonix 20mg Tablet",
+      generic: "Pantoprazole Sodium",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-3",
+      composition: "Pantoprazole 20mg enteric coated",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 70,
+      reorderQuantity: 180,
+      costPrice: 5.20,
+      sellingPrice: 7.00,
+      mrp: 7.00,
+      supplierId: "sup-3"
+    },
+    "8901234500240": {
+      name: "Ceevit 250mg Chewable",
+      generic: "Ascorbic Acid (Vitamin C)",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-1",
+      composition: "Ascorbic Acid 250mg",
+      unit: "Tablet",
+      hsn: "2936.27",
+      requiresPrescription: false,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 1.80,
+      sellingPrice: 2.50,
+      mrp: 2.50,
+      supplierId: "sup-1"
+    },
+    "8901234500257": {
+      name: "Bextram Gold Multivitamin",
+      generic: "32 Essential Vitamins & Minerals",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-2",
+      composition: "Complete A-Zinc Multivitamin Formula",
+      unit: "Tablet",
+      hsn: "2106.90",
+      requiresPrescription: false,
+      reorderLevel: 40,
+      reorderQuantity: 100,
+      costPrice: 8.50,
+      sellingPrice: 12.00,
+      mrp: 12.00,
+      supplierId: "sup-2"
+    },
+    "8901234500264": {
+      name: "Renova 500mg Tablet",
+      generic: "Paracetamol BP",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-5",
+      composition: "Paracetamol 500mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 80,
+      reorderQuantity: 250,
+      costPrice: 0.90,
+      sellingPrice: 1.20,
+      mrp: 1.20,
+      supplierId: "sup-1"
+    },
+    "8901234500271": {
+      name: "Fenofex 120mg Tablet",
+      generic: "Fexofenadine Hydrochloride",
+      categoryId: "cat-5",
+      manufacturerId: "mfr-1",
+      composition: "Fexofenadine HCl 120mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 30,
+      reorderQuantity: 100,
+      costPrice: 6.80,
+      sellingPrice: 9.00,
+      mrp: 9.00,
+      supplierId: "sup-1"
+    },
+    "8901234500288": {
+      name: "Montene 10mg Tablet",
+      generic: "Montelukast Sodium",
+      categoryId: "cat-8",
+      manufacturerId: "mfr-3",
+      composition: "Montelukast 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 30,
+      reorderQuantity: 80,
+      costPrice: 12.50,
+      sellingPrice: 16.00,
+      mrp: 16.00,
+      supplierId: "sup-3"
+    },
+    "8901234500295": {
+      name: "Amodis 400mg Tablet",
+      generic: "Metronidazole BP",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-1",
+      composition: "Metronidazole 400mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 1.50,
+      sellingPrice: 2.20,
+      mrp: 2.20,
+      supplierId: "sup-1"
+    }
+  };
+
+  /**
+   * Looks up complete pharmaceutical master information for any scanned barcode.
+   * If recognized, returns exact pre-configured brand data.
+   * If unknown, returns sensible pharmaceutical defaults ready for one-click cataloging.
+   */
+  function lookupBarcodeDrugCatalog(barcode) {
+    if (!barcode) return null;
+    const clean = String(barcode).trim();
+    if (!clean) return null;
+
+    // Check exact catalog match
+    if (PHARMA_BARCODE_CATALOG[clean]) {
+      return { barcode: clean, ...PHARMA_BARCODE_CATALOG[clean], isCatalogMatch: true };
+    }
+
+    // Check existing medicine in database
+    const existing = getMedicineByBarcode(clean);
+    if (existing) {
+      return {
+        barcode: clean,
+        name: existing.name,
+        generic: existing.generic,
+        categoryId: existing.categoryId,
+        manufacturerId: existing.manufacturerId,
+        composition: existing.composition,
+        unit: existing.unit,
+        hsn: existing.hsn,
+        requiresPrescription: existing.requiresPrescription,
+        reorderLevel: existing.reorderLevel,
+        reorderQuantity: existing.reorderQuantity,
+        isExisting: true,
+        existingId: existing.id
+      };
+    }
+
+    // Smart default generation for arbitrary barcodes
+    const cats = getCategories();
+    const mfrs = getManufacturers();
+    return {
+      barcode: clean,
+      name: "",
+      generic: "",
+      categoryId: cats[0]?.id || "cat-1",
+      manufacturerId: mfrs[0]?.id || "mfr-1",
+      composition: "",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 50,
+      reorderQuantity: 100,
+      costPrice: 10.00,
+      sellingPrice: 12.50,
+      mrp: 12.50,
+      supplierId: "sup-1",
+      isUnknown: true
+    };
+  }
+
+  /**
+   * Retrieves the latest/most recent registered batch for a given medicine.
+   * Used to auto-fill pricing and supplier details when adding stock.
+   */
+  function getLatestBatchForMedicine(medicineId) {
+    if (!medicineId) return null;
+    const batches = getBatches(medicineId);
+    if (!batches.length) return null;
+    return batches[batches.length - 1];
+  }
+
   function saveMedicine(medicineData) {
     const meds = load(KEYS.MEDICINES, []);
     const isNew = !medicineData.id;
@@ -1572,6 +2042,9 @@ window.APSStore = (() => {
     // Medicines & Batches
     getMedicines,
     getMedicineById,
+    getMedicineByBarcode,
+    lookupBarcodeDrugCatalog,
+    getLatestBatchForMedicine,
     saveMedicine,
     deleteMedicine,
     getBatches,

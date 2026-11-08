@@ -3312,3 +3312,74 @@ body.sidebar-open {
   display: block;
   margin-bottom: 4px;
 }
+
+/* =========================================================
+   BARCODE SYSTEM VISUAL HIGHLIGHTS & SCANNER VIEW
+========================================================== */
+@keyframes rowPulseGlow {
+  0% {
+    background-color: rgba(0, 152, 234, 0.28) !important;
+    transform: scale(1.01);
+  }
+  30% {
+    background-color: rgba(25, 135, 84, 0.22) !important;
+  }
+  70% {
+    background-color: rgba(0, 152, 234, 0.12) !important;
+  }
+  100% {
+    background-color: transparent !important;
+    transform: scale(1);
+  }
+}
+
+.row-highlight-pulse {
+  animation: rowPulseGlow 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+}
+
+.border-teal-light {
+  border-color: rgba(0, 152, 234, 0.25) !important;
+}
+
+.scanner-viewfinder {
+  width: 100%;
+  max-width: 420px;
+  height: 260px;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: #0b1517;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.scanner-viewfinder #cameraScannerVideoContainer,
+.scanner-viewfinder #inventoryCameraVideoContainer {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.scanner-viewfinder video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+/* Mobile camera viewfinder responsive optimization */
+.scanner-viewfinder {
+  width: 100% !important;
+  max-width: 440px !important;
+  min-height: 250px !important;
+  height: auto !important;
+  background: #000000 !important;
+}
+
+.scanner-viewfinder #cameraScannerVideoContainer {
+  width: 100% !important;
+  min-height: 250px !important;
+}
+
+.scanner-viewfinder #cameraScannerVideoContainer video {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 12px !important;
+}

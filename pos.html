@@ -501,7 +501,8 @@
         <div class="modal-body p-3 bg-dark text-white text-center">
           <!-- Viewfinder & Scanning Reticle -->
           <div class="scanner-viewfinder position-relative mx-auto">
-            <video id="cameraScannerVideo" playsinline autoplay muted></video>
+            <div id="cameraScannerVideoContainer" style="width:100%; min-height:240px;"></div>
+            <video id="cameraScannerVideo" playsinline autoplay muted style="display:none;"></video>
             <canvas id="cameraScannerCanvas" class="d-none"></canvas>
             <div class="laser-beam"></div>
             <div class="scanner-reticle"></div>
@@ -510,6 +511,16 @@
           <div id="cameraScannerStatus" class="alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start">
             <i class="bi bi-info-circle-fill fs-5 text-info"></i>
             <div>Align medicine package barcode within the laser reticle. Instant optical recognition active.</div>
+          </div>
+          <!-- Mobile Optical Action Bar (Macro Photo + Torch) -->
+          <div class="d-flex flex-wrap justify-content-center align-items-center gap-2 mt-2 mb-3">
+            <input type="file" class="camera-photo-file-input" accept="image/*" capture="environment" style="display:none;">
+            <button type="button" class="btn btn-warning rounded-pill px-3 py-1 fw-bold text-dark btn-take-photo shadow-sm" title="Snap crystal-clear high-res macro photo with phone camera">
+              <i class="bi bi-camera-fill me-1"></i> Snap Photo / Upload
+            </button>
+            <button type="button" class="btn btn-outline-light rounded-pill px-3 py-1 scanner-torch-btn" style="display:none;" title="Toggle phone flashlight">
+              <i class="bi bi-flashlight me-1"></i> Flash
+            </button>
           </div>
 
           <div class="d-flex justify-content-between align-items-center mt-3 mb-1 px-1">
@@ -570,6 +581,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Store & Common UI -->
+  <script src="html5-qrcode.min.js"></script>
   <script src="aps-store.js"></script>
   <script src="aps-common.js"></script>
   <!-- POS Page Logic -->

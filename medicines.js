@@ -1,6 +1,7 @@
 /**
  * APS Medical Management System — Medicine Management Module
- * Connects directly to APSStore with full CRUD, barcode rendering, category management, and CSV export.
+ * Comprehensive Barcode System: live optical decoding, USB gun listening,
+ * auto-fill from pharmaceutical master catalog, and instant auto-add for unscanned drugs.
  */
 
 (() => {
@@ -18,7 +19,7 @@
   let barcodeModalInstance = null;
   let categoryModalInstance = null;
   let cameraModalInstance = null;
-  let cameraStream = null;
+  let cameraScannerEngine = null;
 
   document.addEventListener("DOMContentLoaded", () => {
     medModalInstance = new bootstrap.Modal($("#medicineModal"));
@@ -28,17 +29,24 @@
       cameraModalInstance = new bootstrap.Modal($("#cameraScannerModal"));
     }
 
-    // Check URL params for search
-    const urlParams = new URLSearchParams(window.location.search);
-    const initialSearch = urlParams.get("search");
-    if (initialSearch) {
-      currentSearch = initialSearch.toLowerCase();
-      $("#medSearchInput").value = initialSearch;
-    }
-
     populateDropdowns();
     renderMedicineTable();
     initEventListeners();
+
+    // Check URL parameters for search or direct scan
+    const urlParams = new URLSearchParams(window.location.search);
+    const scanCode = urlParams.get("scan");
+    const initialSearch = urlParams.get("search");
+
+    if (scanCode) {
+      setTimeout(() => {
+        handleScannedBarcode(scanCode);
+      }, 350);
+    } else if (initialSearch) {
+      currentSearch = initialSearch.toLowerCase();
+      $("#medSearchInput").value = initialSearch;
+      renderMedicineTable();
+    }
   });
 
   // Re-render when fresh data arrives from PostgreSQL
@@ -57,15 +65,22 @@
 
     // Category Filter
     const catFilter = $("#categoryFilter");
-    catFilter.innerHTML = `<option value="all">All Categories</option>` +
-      cats.map(c => `<option value="${c.id}">${APS.escapeHtml(c.name)}</option>`).join("");
+    if (catFilter) {
+      catFilter.innerHTML = `<option value="all">All Categories</option>` +
+        cats.map(c => `<option value="${c.id}">${APS.escapeHtml(c.name)}</option>`).join("");
+      catFilter.value = currentCategory;
+    }
 
     // Modal Category & Manufacturer selects
     const medCatSelect = $("#medCategory");
-    medCatSelect.innerHTML = cats.map(c => `<option value="${c.id}">${APS.escapeHtml(c.name)}</option>`).join("");
+    if (medCatSelect) {
+      medCatSelect.innerHTML = cats.map(c => `<option value="${c.id}">${APS.escapeHtml(c.name)}</option>`).join("");
+    }
 
     const medMfrSelect = $("#medManufacturer");
-    medMfrSelect.innerHTML = mfrs.map(m => `<option value="${m.id}">${APS.escapeHtml(m.name)}</option>`).join("");
+    if (medMfrSelect) {
+      medMfrSelect.innerHTML = mfrs.map(m => `<option value="${m.id}">${APS.escapeHtml(m.name)}</option>`).join("");
+    }
   }
 
   /* =========================================================
@@ -84,7 +99,7 @@
         m.name.toLowerCase().includes(currentSearch) ||
         m.generic.toLowerCase().includes(currentSearch) ||
         (m.composition && m.composition.toLowerCase().includes(currentSearch)) ||
-        (m.barcode && m.barcode.includes(currentSearch))
+        (m.barcode && m.barcode.toLowerCase().includes(currentSearch))
       );
     }
 
@@ -110,9 +125,15 @@
           <td colspan="8" class="text-center py-5 text-muted">
             <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary opacity-50"></i>
             <strong>No medicines found matching criteria.</strong>
+            ${currentSearch ? `<div class="mt-2"><button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3" id="clearSearchBtn">Clear Search</button></div>` : ""}
           </td>
         </tr>
       `;
+      $("#clearSearchBtn")?.addEventListener("click", () => {
+        $("#medSearchInput").value = "";
+        currentSearch = "";
+        renderMedicineTable();
+      });
       return;
     }
 
@@ -132,7 +153,7 @@
         : `<span class="badge-otc">OTC</span>`;
 
       return `
-        <tr>
+        <tr id="med-row-${m.id}" data-barcode="${m.barcode || ''}">
           <td>
             <div class="fw-bold text-teal-900">${APS.escapeHtml(m.name)}</div>
             <small class="text-muted">${APS.escapeHtml(m.manufacturerName)}</small>
@@ -144,16 +165,19 @@
           <td><span class="badge bg-light text-dark border">${APS.escapeHtml(m.categoryName)}</span></td>
           <td>
             <div>${APS.escapeHtml(m.unit)}</div>
-            <small class="text-muted">HSN: ${APS.escapeHtml(m.hsn || "3004")}</small>
+            <small class="text-muted">HSN: ${APS.escapeHtml(m.hsn || "3004.90")}</small>
           </td>
           <td>
-            <button class="btn btn-sm btn-light border rounded-pill px-2 py-0 text-muted" data-view-barcode="${m.barcode}" data-med-name="${APS.escapeHtml(m.name)}" title="View & print barcode">
-              <i class="bi bi-upc me-1"></i>${m.barcode || "No Barcode"}
+            <button class="btn btn-sm btn-light border rounded-pill px-2 py-0 font-monospace text-dark" data-view-barcode="${m.barcode}" data-med-name="${APS.escapeHtml(m.name)}" title="View & print barcode label">
+              <i class="bi bi-upc me-1 text-primary"></i>${m.barcode || "No Barcode"}
             </button>
           </td>
           <td>${stockBadge}</td>
           <td>${rxBadge}</td>
           <td class="text-end">
+            <button class="btn btn-sm btn-light text-success border-0 me-1" onclick="window.location.href='inventory.html?scan=${m.barcode || ''}'" title="Add stock for this medicine">
+              <i class="bi bi-plus-circle"></i> Stock
+            </button>
             <button class="btn btn-sm btn-light text-primary border-0 me-1" data-edit-med="${m.id}" title="Edit Medicine">
               <i class="bi bi-pencil-square"></i>
             </button>
@@ -166,8 +190,113 @@
     }).join("");
   }
 
+  function highlightMedicineRow(medId) {
+    setTimeout(() => {
+      const row = document.getElementById(`med-row-${medId}`);
+      if (row) {
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+        row.classList.remove("row-highlight-pulse");
+        void row.offsetWidth; // trigger reflow
+        row.classList.add("row-highlight-pulse");
+      }
+    }, 150);
+  }
+
   /* =========================================================
-     3. EVENT LISTENERS
+     3. INTELLIGENT BARCODE PROCESSING ENGINE
+     - If medicine is in database: highlights and displays details.
+     - If medicine is NOT in database: automatically opens Add Medicine
+       modal with ALL details pre-filled from the master pharmaceutical
+       catalog, ready to add directly to the database!
+  ========================================================== */
+
+  function handleScannedBarcode(code) {
+    if (!code) return;
+    const clean = String(code).trim();
+    if (!clean) return;
+
+    // Check if the medicine already exists in the active database
+    const existing = APSStore.getMedicineByBarcode(clean);
+
+    if (existing) {
+      // 1. Medicine IS in database
+      $("#medSearchInput").value = existing.name;
+      currentSearch = existing.name.toLowerCase();
+      renderMedicineTable();
+      highlightMedicineRow(existing.id);
+
+      APS.playSuccessSound();
+      APS.showToast(`Found: ${existing.name} (Barcode: ${clean}) | Current Stock: ${existing.totalStock} ${existing.unit}s`, "success");
+    } else {
+      // 2. Medicine is NOT in database
+      // User requirement: "when it is scaned , if The medicine is not in the database then it will be added to the medicine list"
+      openAddMedicineModalWithBarcode(clean);
+    }
+  }
+
+  function openAddMedicineModalWithBarcode(barcode) {
+    APS.playScanSound();
+
+    // Look up in comprehensive master pharmaceutical database
+    const lookup = APSStore.lookupBarcodeDrugCatalog(barcode);
+
+    // Reset and prepare form
+    $("#medicineForm").reset();
+    $("#medId").value = "";
+    $("#medicineModalTitle").textContent = "Add Scanned Medicine to Catalog";
+
+    // Pre-populate fields automatically
+    $("#medBarcode").value = barcode;
+    if (lookup.name) $("#medName").value = lookup.name;
+    if (lookup.generic) $("#medGeneric").value = lookup.generic;
+    if (lookup.categoryId) $("#medCategory").value = lookup.categoryId;
+    if (lookup.manufacturerId) $("#medManufacturer").value = lookup.manufacturerId;
+    if (lookup.composition) $("#medComposition").value = lookup.composition;
+    if (lookup.unit) $("#medUnit").value = lookup.unit;
+    if (lookup.hsn) $("#medHsn").value = lookup.hsn;
+    if (lookup.reorderLevel) $("#medReorderLevel").value = lookup.reorderLevel;
+    if (lookup.reorderQuantity) $("#medReorderQty").value = lookup.reorderQuantity;
+    $("#medRequiresRx").checked = Boolean(lookup.requiresPrescription);
+
+    // Show informational notice inside modal
+    const noticeEl = $("#medModalScanNotice");
+    if (noticeEl) {
+      noticeEl.className = "alert alert-success d-flex align-items-center gap-2 py-2 px-3 small border-0 shadow-sm";
+      if (lookup.isCatalogMatch) {
+        noticeEl.innerHTML = `
+          <i class="bi bi-magic fs-4 text-success"></i>
+          <div>
+            <strong>Barcode ${APS.escapeHtml(barcode)} recognized!</strong>
+            <div>Details auto-filled from master pharmaceutical database. Review and click <strong>Save Medicine Record</strong> to add to catalog.</div>
+          </div>
+        `;
+      } else {
+        noticeEl.innerHTML = `
+          <i class="bi bi-upc-scan fs-4 text-primary"></i>
+          <div>
+            <strong>New Barcode Scanned: ${APS.escapeHtml(barcode)}</strong>
+            <div>Barcode not found in catalog. Enter medicine name and click <strong>Save Medicine Record</strong> to add to database.</div>
+          </div>
+        `;
+      }
+    }
+
+    medModalInstance.show();
+
+    // Focus input for fastest possible interaction
+    setTimeout(() => {
+      if (!lookup.name) {
+        $("#medName")?.focus();
+      } else {
+        $("#medName")?.select();
+      }
+    }, 400);
+
+    APS.showToast(`New barcode ${barcode} scanned! Auto-filled details ready to add.`, "info");
+  }
+
+  /* =========================================================
+     4. EVENT LISTENERS
   ========================================================== */
 
   function initEventListeners() {
@@ -175,6 +304,14 @@
     $("#medSearchInput")?.addEventListener("input", (e) => {
       currentSearch = e.target.value.trim().toLowerCase();
       renderMedicineTable();
+    });
+
+    $("#medSearchInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const val = e.target.value.trim();
+        if (val) handleScannedBarcode(val);
+      }
     });
 
     // Category filter
@@ -189,10 +326,38 @@
       renderMedicineTable();
     });
 
+    // Top Scan Barcode button
+    $("#topScanBarcodeBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner();
+    });
+
+    // Search input Scan button
+    $("#medCameraScanBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner();
+    });
+
+    // Scan Barcode into Add/Edit Modal button
+    $("#scanBarcodeIntoModalBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner((scannedCode) => {
+        const lookup = APSStore.lookupBarcodeDrugCatalog(scannedCode);
+        $("#medBarcode").value = scannedCode;
+        if (lookup.name && !$("#medName").value) $("#medName").value = lookup.name;
+        if (lookup.generic && !$("#medGeneric").value) $("#medGeneric").value = lookup.generic;
+        if (lookup.categoryId) $("#medCategory").value = lookup.categoryId;
+        if (lookup.manufacturerId) $("#medManufacturer").value = lookup.manufacturerId;
+        if (lookup.composition && !$("#medComposition").value) $("#medComposition").value = lookup.composition;
+        APS.showToast(`Scanned and auto-filled details for ${scannedCode}`);
+      });
+    });
+
     // Add Medicine button
     $("#addMedicineBtn")?.addEventListener("click", () => {
       $("#medicineForm").reset();
       $("#medId").value = "";
+      $("#medModalScanNotice").className = "d-none";
       $("#medicineModalTitle").textContent = "Add New Medicine";
       $("#generateBarcodeBtn").click(); // auto assign scannable barcode
       medModalInstance.show();
@@ -202,6 +367,26 @@
     $("#generateBarcodeBtn")?.addEventListener("click", () => {
       const randomCode = "890" + Math.floor(1000000000 + Math.random() * 9000000000);
       $("#medBarcode").value = randomCode;
+    });
+
+    // When barcode is manually entered into the modal, check catalog for auto-fill
+    $("#medBarcode")?.addEventListener("blur", (e) => {
+      const code = e.target.value.trim();
+      if (!code || $("#medId").value) return; // only for new additions
+      const lookup = APSStore.lookupBarcodeDrugCatalog(code);
+      if (lookup && lookup.isCatalogMatch && !$("#medName").value) {
+        $("#medName").value = lookup.name;
+        $("#medGeneric").value = lookup.generic;
+        $("#medCategory").value = lookup.categoryId;
+        $("#medManufacturer").value = lookup.manufacturerId;
+        $("#medComposition").value = lookup.composition;
+        $("#medUnit").value = lookup.unit;
+        $("#medHsn").value = lookup.hsn;
+        $("#medReorderLevel").value = lookup.reorderLevel;
+        $("#medReorderQty").value = lookup.reorderQuantity;
+        $("#medRequiresRx").checked = Boolean(lookup.requiresPrescription);
+        APS.showToast(`Auto-filled details for ${lookup.name}`);
+      }
     });
 
     // Medicine Form Submit
@@ -222,10 +407,14 @@
         requiresPrescription: $("#medRequiresRx").checked
       };
 
-      APSStore.saveMedicine(medData);
+      const saved = APSStore.saveMedicine(medData);
       medModalInstance.hide();
+      $("#medSearchInput").value = saved.name;
+      currentSearch = saved.name.toLowerCase();
       renderMedicineTable();
-      APS.showToast(`Saved medicine ${medData.name} successfully.`);
+      highlightMedicineRow(saved.id);
+
+      APS.showToast(`Saved medicine ${saved.name} to catalog successfully!`, "success");
       APS.playSuccessSound();
     });
 
@@ -277,103 +466,92 @@
     // Export CSV
     $("#exportMedsBtn")?.addEventListener("click", exportToCSV);
 
-    // Camera Barcode Scanner
-    $("#medCameraScanBtn")?.addEventListener("click", () => {
-      cameraModalInstance?.show();
-      startCameraScanner();
-    });
-
+    // Camera Scanner Modal events
     $("#cameraScannerModal")?.addEventListener("hidden.bs.modal", () => {
       stopCameraScanner();
     });
-
-    $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
+    // Mobile Snap Photo & Torch Controls
+    $(".btn-take-photo", $("#cameraScannerModal"))?.forEach(btn => {
       btn.addEventListener("click", () => {
-        const code = btn.dataset.code;
-        handleScannedBarcode(code);
-        stopCameraScanner();
-        cameraModalInstance?.hide();
+        $("#cameraScannerModal .camera-photo-file-input")?.click();
       });
     });
 
-    // Hardware USB Barcode Gun Wedge Listener
+    $("#cameraScannerModal .camera-photo-file-input")?.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file && cameraScannerEngine) {
+        cameraScannerEngine.scanImageFile(file);
+      }
+    });
+
+    $(".scanner-torch-btn", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        if (cameraScannerEngine) {
+          const state = await cameraScannerEngine.toggleTorch();
+          btn.classList.toggle("btn-warning", state);
+          btn.classList.toggle("btn-outline-light", !state);
+        }
+      });
+    });
+
+
+    // Quick test buttons inside scanner modal
+    $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", () => {
+        let code = btn.dataset.code;
+        if (btn.dataset.random) {
+          code = "890" + Math.floor(1000000000 + Math.random() * 9000000000);
+        }
+        stopCameraScanner();
+        cameraModalInstance?.hide();
+        handleScannedBarcode(code);
+      });
+    });
+
+    // Hardware USB Barcode Gun Listener
     APS.initUSBBarcodeListener((scannedCode) => {
       handleScannedBarcode(scannedCode);
     });
   }
 
   /* =========================================================
-     4. OPTICAL & WEBCAM BARCODE ENGINE
+     5. OPTICAL CAMERA SCANNER ENGINE
   ========================================================== */
 
-  let barcodeScanActive = false;
+  let customScanCallback = null;
 
-  function handleScannedBarcode(code) {
-    if (!code) return;
-    const clean = String(code).trim();
-    $("#medSearchInput").value = clean;
-    currentSearch = clean.toLowerCase();
-    renderMedicineTable();
-    APS.playScanBeep();
-    APS.showToast(`Filtered by barcode: ${clean}`);
-  }
-
-  async function startCameraScanner() {
-    const video = $("#cameraScannerVideo");
-    const statusEl = $("#cameraScannerStatus");
-    if (!video) return;
-
-    barcodeScanActive = true;
-    try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("No getUserMedia");
-      }
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { ideal: "environment" } }
-      });
-      cameraStream = stream;
-      video.srcObject = stream;
-      await video.play();
-
-      if ("BarcodeDetector" in window) {
-        const detector = new BarcodeDetector({ formats: ["ean_13", "ean_8", "code_128", "upc_a", "upc_e", "qr_code"] });
-        const scanLoop = async () => {
-          if (!barcodeScanActive || !cameraStream) return;
-          try {
-            if (video.readyState >= 2) {
-              const barcodes = await detector.detect(video);
-              if (barcodes.length > 0) {
-                handleScannedBarcode(barcodes[0].rawValue);
-                stopCameraScanner();
-                cameraModalInstance?.hide();
-                return;
-              }
-            }
-          } catch (e) {}
-          if (barcodeScanActive) requestAnimationFrame(scanLoop);
-        };
-        requestAnimationFrame(scanLoop);
-      }
-    } catch (err) {
-      if (statusEl) {
-        statusEl.className = "alert alert-warning py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-        statusEl.innerHTML = `<i class="bi bi-info-circle-fill fs-5 text-warning"></i><div>Optical preview simulated. Click quick-test buttons below or use a USB barcode gun.</div>`;
-      }
+  function startCameraScanner(callback = null) {
+    customScanCallback = callback;
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
     }
+
+    cameraScannerEngine = APS.createCameraBarcodeScanner({
+      containerId: "cameraScannerVideoContainer",
+      statusId: "cameraScannerStatus",
+      modalId: "cameraScannerModal",
+      onScan: (decodedText) => {
+        if (typeof customScanCallback === "function") {
+          customScanCallback(decodedText);
+          customScanCallback = null;
+        } else {
+          handleScannedBarcode(decodedText);
+        }
+      }
+    });
+
+    cameraScannerEngine.start();
   }
 
   function stopCameraScanner() {
-    barcodeScanActive = false;
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(t => t.stop());
-      cameraStream = null;
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
+      cameraScannerEngine = null;
     }
-    const video = $("#cameraScannerVideo");
-    if (video) video.srcObject = null;
   }
 
   /* =========================================================
-     4. EDIT & BARCODE MODAL HELPERS
+     6. EDIT & BARCODE MODAL HELPERS
   ========================================================== */
 
   function openEditModal(medId) {
@@ -381,6 +559,7 @@
     if (!med) return;
 
     $("#medId").value = med.id;
+    $("#medModalScanNotice").className = "d-none";
     $("#medName").value = med.name;
     $("#medGeneric").value = med.generic;
     $("#medCategory").value = med.categoryId;
@@ -403,7 +582,7 @@
     if (window.JsBarcode) {
       JsBarcode("#barcodeCanvas", code, {
         format: "CODE128",
-        lineColor: "#123a38",
+        lineColor: "#0f3735",
         width: 2,
         height: 80,
         displayValue: true,

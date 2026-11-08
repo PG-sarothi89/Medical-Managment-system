@@ -1,6 +1,7 @@
 /**
  * APS Medical Management System — Inventory & FEFO Ledger Controller
- * Handles batch stock tracking, FEFO ordering, stock adjustments, and movements ledger.
+ * Barcode Auto-Fill Stock Inward: Scanning medicine package barcode auto-fills
+ * medicine, batch number, dates, supplier and pricing — leaving only the stock quantity to enter manually!
  */
 
 (() => {
@@ -15,10 +16,19 @@
 
   let batchModalInstance = null;
   let adjustModalInstance = null;
+  let cameraModalInstance = null;
+  let unregisteredModalInstance = null;
+  let cameraScannerEngine = null;
 
   document.addEventListener("DOMContentLoaded", () => {
     batchModalInstance = new bootstrap.Modal($("#batchModal"));
     adjustModalInstance = new bootstrap.Modal($("#adjustModal"));
+    if ($("#cameraScannerModal")) {
+      cameraModalInstance = new bootstrap.Modal($("#cameraScannerModal"));
+    }
+    if ($("#unregisteredMedModal")) {
+      unregisteredModalInstance = new bootstrap.Modal($("#unregisteredMedModal"));
+    }
 
     // Check if URL has #ledger hash
     if (window.location.hash === "#ledger") {
@@ -31,6 +41,15 @@
     renderBatches();
     renderLedger();
     initEventListeners();
+
+    // Check URL parameters for direct scan trigger (e.g. from Medicines or POS)
+    const urlParams = new URLSearchParams(window.location.search);
+    const scanCode = urlParams.get("scan");
+    if (scanCode) {
+      setTimeout(() => {
+        handleScannedBarcode(scanCode);
+      }, 350);
+    }
   });
 
   // Re-render when fresh data arrives from PostgreSQL
@@ -76,15 +95,19 @@
     // Batch modal: select medicine
     const medSelect = $("#newBatchMedId");
     if (medSelect) {
+      const currentVal = medSelect.value;
       medSelect.innerHTML = `<option value="" disabled selected>Select medicine...</option>` +
-        meds.map(m => `<option value="${m.id}">${APS.escapeHtml(m.name)} (${m.unit})</option>`).join("");
+        meds.map(m => `<option value="${m.id}" data-barcode="${m.barcode || ''}">${APS.escapeHtml(m.name)} (${m.unit})</option>`).join("");
+      if (currentVal) medSelect.value = currentVal;
     }
 
     // Batch modal: select supplier
     const supSelect = $("#newBatchSupplier");
     if (supSelect) {
+      const currentVal = supSelect.value;
       supSelect.innerHTML = `<option value="">Direct / Self Sourced</option>` +
         sups.map(s => `<option value="${s.id}">${APS.escapeHtml(s.name)}</option>`).join("");
+      if (currentVal) supSelect.value = currentVal;
     }
 
     // Adjust modal: select batch
@@ -139,7 +162,7 @@
       }
 
       return `
-        <tr>
+        <tr id="batch-row-${b.id}">
           <td>
             <strong class="text-teal-900">${APS.escapeHtml(b.medicineName)}</strong>
             <small class="d-block text-muted">ID: ${b.medicineId}</small>
@@ -220,7 +243,119 @@
   }
 
   /* =========================================================
-     5. EVENT LISTENERS
+     5. BARCODE STOCK RECEIVING & AUTO-FILL ENGINE
+     "when it is scanned the whole information will be already filled,
+      just how much stock it will needed to be entered manually."
+  ========================================================== */
+
+  function handleScannedBarcode(code) {
+    if (!code) return;
+    const clean = String(code).trim();
+    if (!clean) return;
+
+    // Check if medicine exists in the catalog
+    const med = APSStore.getMedicineByBarcode(clean);
+
+    if (!med) {
+      // Medicine is not in the database!
+      APS.playAlertSound();
+      showUnregisteredMedicineModal(clean);
+      return;
+    }
+
+    // Medicine found! Auto-fill everything in the batch registration modal
+    autoFillBatchModalForMedicine(med, clean);
+  }
+
+  function autoFillBatchModalForMedicine(med, barcode = "") {
+    APS.playScanSound();
+
+    populateDropdowns();
+    $("#batchForm").reset();
+
+    // 1. Select the medicine
+    $("#newBatchMedId").value = med.id;
+    if (barcode) {
+      $("#batchBarcodeScanInput").value = barcode;
+    }
+
+    // 2. Fetch past pricing and supplier data or catalog defaults
+    const latestBatch = APSStore.getLatestBatchForMedicine(med.id);
+    const catalogData = APSStore.lookupBarcodeDrugCatalog(barcode || med.barcode);
+
+    const cost = latestBatch ? Number(latestBatch.purchasePrice).toFixed(2) : (catalogData.costPrice || 2.50).toFixed(2);
+    const price = latestBatch ? Number(latestBatch.sellingPrice).toFixed(2) : (catalogData.sellingPrice || 3.50).toFixed(2);
+    const mrp = latestBatch ? Number(latestBatch.mrp || latestBatch.sellingPrice).toFixed(2) : (catalogData.mrp || price);
+    const supplierId = latestBatch ? (latestBatch.supplierId || "") : (catalogData.supplierId || "sup-1");
+
+    $("#newBatchCost").value = cost;
+    $("#newBatchPrice").value = price;
+    $("#newBatchMrp").value = mrp;
+    if (supplierId) $("#newBatchSupplier").value = supplierId;
+
+    // 3. Auto-generate sequential Batch Number
+    const medInitials = (med.name || "BN").replace(/[^a-zA-Z]/g, "").slice(0, 3).toUpperCase() || "BCH";
+    const dateCode = new Date().toISOString().slice(2, 7).replace("-", ""); // e.g. 2611
+    const randSeq = Math.floor(100 + Math.random() * 900);
+    const autoBatchNum = `${medInitials}-${dateCode}-${randSeq}`;
+    $("#newBatchNumber").value = autoBatchNum;
+
+    // 4. Auto-generate Dates
+    const today = new Date();
+    const mfgDate = today.toISOString().split("T")[0];
+
+    const expDateObj = new Date();
+    expDateObj.setFullYear(expDateObj.getFullYear() + 2); // Standard 2-year FEFO pharmaceutical shelf life
+    const expDate = expDateObj.toISOString().split("T")[0];
+
+    $("#newBatchMfgDate").value = mfgDate;
+    $("#newBatchExpDate").value = expDate;
+
+    // 5. Visual Notification Notice
+    const noticeEl = $("#batchScanAutoFillNotice");
+    if (noticeEl) {
+      noticeEl.className = "alert alert-success py-2 px-3 small mt-2 mb-0 d-flex align-items-center gap-2 border-0 shadow-sm";
+      noticeEl.innerHTML = `
+        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+        <div>
+          <strong>${APS.escapeHtml(med.name)} details auto-filled!</strong>
+          <div>Batch: <span class="font-monospace fw-bold text-dark">${autoBatchNum}</span> | Exp: ${expDate} | Cost: ৳${cost} | Sell: ৳${price}. <strong>Enter stock quantity below.</strong></div>
+        </div>
+      `;
+    }
+
+    // 6. Open Modal
+    batchModalInstance.show();
+
+    // 7. Focus on Quantity Received field — user ONLY types the number!
+    setTimeout(() => {
+      const qtyInput = $("#newBatchQty");
+      if (qtyInput) {
+        qtyInput.value = "";
+        qtyInput.focus();
+      }
+    }, 400);
+
+    APS.showToast(`Auto-filled details for ${med.name}! Enter stock quantity.`, "success");
+  }
+
+  function showUnregisteredMedicineModal(barcode) {
+    const textEl = $("#unregisteredBarcodeText");
+    if (textEl) textEl.textContent = barcode;
+
+    const addBtn = $("#goToAddMedicineBtn");
+    if (addBtn) {
+      addBtn.onclick = () => {
+        window.location.href = `medicines.html?scan=${encodeURIComponent(barcode)}`;
+      };
+    }
+
+    unregisteredModalInstance?.show();
+    APS.showToast(`Barcode ${barcode} not in medicines catalog. Add it first.`, "warning");
+  }
+
+  /* =========================================================
+     6. EVENT LISTENERS
   ========================================================== */
 
   function initEventListeners() {
@@ -242,11 +377,64 @@
       renderLedger();
     });
 
-    // Add Batch button
+    // "Scan to Add Stock" Top Action Button
+    $("#scanAddStockBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner();
+    });
+
+    // In-modal "Camera Scan" button
+    $("#openBatchCameraScanBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner();
+    });
+
+    // In-modal barcode input (Enter key triggers scan auto-fill)
+    $("#batchBarcodeScanInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const code = e.target.value.trim();
+        if (code) handleScannedBarcode(code);
+      }
+    });
+
+    // Regular Add Batch button (manual)
     $("#addBatchBtn")?.addEventListener("click", () => {
       $("#batchForm").reset();
       populateDropdowns();
+      const noticeEl = $("#batchScanAutoFillNotice");
+      if (noticeEl) {
+        noticeEl.className = "small text-muted mt-1";
+        noticeEl.innerHTML = `<i class="bi bi-info-circle me-1"></i> Scan medicine barcode or select medicine below to auto-fill details.`;
+      }
       batchModalInstance.show();
+    });
+
+    // When a medicine is manually selected from dropdown, auto-fill default prices and batch
+    $("#newBatchMedId")?.addEventListener("change", (e) => {
+      const medId = e.target.value;
+      const med = APSStore.getMedicineById(medId);
+      if (med) {
+        const latestBatch = APSStore.getLatestBatchForMedicine(med.id);
+        if (latestBatch) {
+          if (!$("#newBatchCost").value) $("#newBatchCost").value = Number(latestBatch.purchasePrice).toFixed(2);
+          if (!$("#newBatchPrice").value) $("#newBatchPrice").value = Number(latestBatch.sellingPrice).toFixed(2);
+          if (!$("#newBatchMrp").value) $("#newBatchMrp").value = Number(latestBatch.mrp || latestBatch.sellingPrice).toFixed(2);
+          if (!$("#newBatchSupplier").value && latestBatch.supplierId) $("#newBatchSupplier").value = latestBatch.supplierId;
+        }
+        if (!$("#newBatchNumber").value) {
+          const initials = (med.name || "BN").replace(/[^a-zA-Z]/g, "").slice(0, 3).toUpperCase() || "BCH";
+          const dateCode = new Date().toISOString().slice(2, 7).replace("-", "");
+          const randSeq = Math.floor(100 + Math.random() * 900);
+          $("#newBatchNumber").value = `${initials}-${dateCode}-${randSeq}`;
+        }
+        if (!$("#newBatchMfgDate").value) $("#newBatchMfgDate").value = new Date().toISOString().split("T")[0];
+        if (!$("#newBatchExpDate").value) {
+          const exp = new Date();
+          exp.setFullYear(exp.getFullYear() + 2);
+          $("#newBatchExpDate").value = exp.toISOString().split("T")[0];
+        }
+      }
     });
 
     // Add Batch Form Submit
@@ -264,7 +452,7 @@
 
       if (!medId || !batchNumber || !expDate || !qty) return;
 
-      APSStore.saveBatch({
+      const savedBatch = APSStore.saveBatch({
         medicineId: medId,
         batchNumber,
         manufactureDate: mfgDate,
@@ -282,7 +470,17 @@
       populateDropdowns();
       renderBatches();
       renderLedger();
-      APS.showToast(`Batch ${batchNumber} registered successfully.`);
+
+      // Highlight the registered batch in table
+      setTimeout(() => {
+        const row = document.getElementById(`batch-row-${savedBatch.id}`);
+        if (row) {
+          row.scrollIntoView({ behavior: "smooth", block: "center" });
+          row.classList.add("row-highlight-pulse");
+        }
+      }, 150);
+
+      APS.showToast(`Batch ${batchNumber} (${qty} units) registered successfully!`, "success");
       APS.playSuccessSound();
     });
 
@@ -319,12 +517,84 @@
         refreshKPIs();
         renderBatches();
         renderLedger();
-        APS.showToast(`Inventory adjusted: ${qtyDelta > 0 ? '+' : ''}${qtyDelta} units.`);
+        APS.showToast(`Inventory adjusted: ${qtyDelta > 0 ? "+" : ""}${qtyDelta} units.`);
         APS.playAlertSound();
       } catch (err) {
         alert(err.message);
       }
     });
+
+    // Camera Scanner Modal events
+    $("#cameraScannerModal")?.addEventListener("hidden.bs.modal", () => {
+      stopCameraScanner();
+    });
+    // Mobile Snap Photo & Torch Controls
+    $(".btn-take-photo", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", () => {
+        $("#cameraScannerModal .camera-photo-file-input")?.click();
+      });
+    });
+
+    $("#cameraScannerModal .camera-photo-file-input")?.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file && cameraScannerEngine) {
+        cameraScannerEngine.scanImageFile(file);
+      }
+    });
+
+    $(".scanner-torch-btn", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        if (cameraScannerEngine) {
+          const state = await cameraScannerEngine.toggleTorch();
+          btn.classList.toggle("btn-warning", state);
+          btn.classList.toggle("btn-outline-light", !state);
+        }
+      });
+    });
+
+
+    // Quick test buttons inside scanner modal
+    $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const code = btn.dataset.code;
+        stopCameraScanner();
+        cameraModalInstance?.hide();
+        handleScannedBarcode(code);
+      });
+    });
+
+    // Global Hardware USB Barcode Scanner Listener
+    APS.initUSBBarcodeListener((scannedCode) => {
+      handleScannedBarcode(scannedCode);
+    });
+  }
+
+  /* =========================================================
+     7. OPTICAL CAMERA SCANNER ENGINE
+  ========================================================== */
+
+  function startCameraScanner() {
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
+    }
+
+    cameraScannerEngine = APS.createCameraBarcodeScanner({
+      containerId: "cameraScannerVideoContainer",
+      statusId: "cameraScannerStatus",
+      modalId: "cameraScannerModal",
+      onScan: (decodedText) => {
+        handleScannedBarcode(decodedText);
+      }
+    });
+
+    cameraScannerEngine.start();
+  }
+
+  function stopCameraScanner() {
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
+      cameraScannerEngine = null;
+    }
   }
 
 })();

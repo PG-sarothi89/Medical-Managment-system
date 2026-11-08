@@ -285,111 +285,48 @@
      5. OPTICAL & WEBCAM BARCODE ENGINE
   ========================================================== */
 
-  let barcodeScanActive = false;
+  let cameraScannerEngine = null;
 
   function handleScannedBarcode(code) {
     if (!code) return false;
     const clean = String(code).trim();
     const meds = APSStore.getMedicines();
-    const matched = meds.find(m => (m.barcode && m.barcode === clean) || m.name.toLowerCase() === clean.toLowerCase());
+    const matched = meds.find(m => (m.barcode && String(m.barcode).trim().toLowerCase() === clean.toLowerCase()) || m.name.toLowerCase() === clean.toLowerCase());
 
     if (matched) {
       addToCart(matched.id, 1);
-      APS.playScanBeep();
+      APS.playScanSound();
       APS.showToast(`Scanned & Added: ${matched.name}`, "success");
       return true;
     } else {
       APS.playAlertSound();
-      APS.showToast(`Barcode not found in catalog: ${clean}`, "warning");
+      APS.showToast(`Barcode not found: ${clean} &mdash; <a href="medicines.html?scan=${encodeURIComponent(clean)}" class="text-white text-decoration-underline fw-bold">Add to Medicines</a>`, "warning");
       return false;
     }
   }
 
-  async function startCameraScanner() {
-    const video = $("#cameraScannerVideo");
-    const statusEl = $("#cameraScannerStatus");
-    if (!video) return;
-
-    barcodeScanActive = true;
-    if (statusEl) {
-      statusEl.className = "alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-      statusEl.innerHTML = `<i class="bi bi-camera-video fs-5 text-info"></i><div>Initializing video stream and barcode optics...</div>`;
+  function startCameraScanner() {
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
     }
 
-    try {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        throw new Error("Browser does not support getUserMedia camera access.");
+    cameraScannerEngine = APS.createCameraBarcodeScanner({
+      containerId: "cameraScannerVideoContainer",
+      statusId: "cameraScannerStatus",
+      modalId: "cameraScannerModal",
+      onScan: (decodedText) => {
+        handleScannedBarcode(decodedText);
       }
+    });
 
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          facingMode: { ideal: "environment" },
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        },
-        audio: false
-      });
-
-      cameraStream = stream;
-      video.srcObject = stream;
-      await video.play();
-
-      if (statusEl) {
-        statusEl.className = "alert alert-success py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-        statusEl.innerHTML = `<i class="bi bi-check-circle-fill fs-5 text-success"></i><div>Live camera connected. Align barcode within red laser reticle.</div>`;
-      }
-
-      // BarcodeDetector native decoding (Chromium browsers)
-      if ("BarcodeDetector" in window) {
-        try {
-          const supported = await BarcodeDetector.getSupportedFormats();
-          const formats = ["ean_13", "ean_8", "code_128", "upc_a", "upc_e", "qr_code"].filter(f => supported.includes(f));
-          const detector = new BarcodeDetector({ formats: formats.length ? formats : ["ean_13", "code_128"] });
-
-          const scanLoop = async () => {
-            if (!barcodeScanActive || !cameraStream) return;
-            try {
-              if (video.readyState >= 2) {
-                const barcodes = await detector.detect(video);
-                if (barcodes && barcodes.length > 0) {
-                  const code = barcodes[0].rawValue;
-                  const added = handleScannedBarcode(code);
-                  if (added) {
-                    stopCameraScanner();
-                    cameraModalInstance?.hide();
-                    return;
-                  }
-                }
-              }
-            } catch (err) {
-              // Ignore single-frame detection skip
-            }
-            if (barcodeScanActive) {
-              requestAnimationFrame(scanLoop);
-            }
-          };
-          requestAnimationFrame(scanLoop);
-        } catch (e) {
-          console.log("BarcodeDetector fallback:", e);
-        }
-      }
-    } catch (err) {
-      console.warn("Camera init note:", err.name, err.message);
-      if (statusEl) {
-        statusEl.className = "alert alert-warning py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-        statusEl.innerHTML = `<i class="bi bi-info-circle-fill fs-5 text-warning"></i><div>Optical preview simulated (${err.name || "Standby"}). Use quick-test buttons below or USB barcode gun.</div>`;
-      }
-    }
+    cameraScannerEngine.start();
   }
 
   function stopCameraScanner() {
-    barcodeScanActive = false;
-    if (cameraStream) {
-      cameraStream.getTracks().forEach(t => t.stop());
-      cameraStream = null;
+    if (cameraScannerEngine) {
+      cameraScannerEngine.stop();
+      cameraScannerEngine = null;
     }
-    const video = $("#cameraScannerVideo");
-    if (video) video.srcObject = null;
   }
 
   /* =========================================================
@@ -596,6 +533,30 @@
     $("#cameraScannerModal")?.addEventListener("hidden.bs.modal", () => {
       stopCameraScanner();
     });
+    // Mobile Snap Photo & Torch Controls
+    $(".btn-take-photo", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", () => {
+        $("#cameraScannerModal .camera-photo-file-input")?.click();
+      });
+    });
+
+    $("#cameraScannerModal .camera-photo-file-input")?.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (file && cameraScannerEngine) {
+        cameraScannerEngine.scanImageFile(file);
+      }
+    });
+
+    $(".scanner-torch-btn", $("#cameraScannerModal"))?.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        if (cameraScannerEngine) {
+          const state = await cameraScannerEngine.toggleTorch();
+          btn.classList.toggle("btn-warning", state);
+          btn.classList.toggle("btn-outline-light", !state);
+        }
+      });
+    });
+
 
     // Quick Barcode simulation buttons
     $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
