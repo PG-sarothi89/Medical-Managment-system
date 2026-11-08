@@ -589,21 +589,33 @@ window.APS = (() => {
             verbose: false
           });
 
+          // Detect back/environment camera directly if possible
+          let cameraConfig = { facingMode: { ideal: "environment" } };
+          try {
+            const cameras = await Html5Qrcode.getCameras();
+            if (cameras && cameras.length > 0) {
+              const backCam = cameras.find(c => /back|rear|environment|camera2 0/i.test(c.label));
+              if (backCam) {
+                cameraConfig = backCam.id;
+              }
+            }
+          } catch (e) {}
+
           const qrboxFunction = (viewfinderWidth, viewfinderHeight) => {
-            const w = Math.floor(viewfinderWidth * 0.94);
-            const h = Math.floor(Math.min(viewfinderHeight * 0.75, 260));
+            const w = Math.floor(viewfinderWidth * 0.96);
+            const h = Math.floor(Math.min(viewfinderHeight * 0.85, 280));
             return { width: Math.max(w, 200), height: Math.max(h, 140) };
           };
 
           const config = {
-            fps: 22,
+            fps: 24,
             qrbox: qrboxFunction,
             aspectRatio: 1.333334,
             disableFlip: true
           };
 
           await html5QrCode.start(
-            { facingMode: { ideal: "environment" } },
+            cameraConfig,
             config,
             (decodedText) => {
               handleSuccess(decodedText);
@@ -613,7 +625,7 @@ window.APS = (() => {
 
           if (statusEl) {
             statusEl.className = "alert alert-success py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-            statusEl.innerHTML = `<i class="bi bi-camera-video-fill text-success fs-5"></i><div>Camera active! Point at the barcode, or tap <strong>Take Photo</strong> below.</div>`;
+            statusEl.innerHTML = `<i class="bi bi-camera-video-fill text-success fs-5"></i><div>Camera active! Point at barcode or tap <strong>Snap Photo</strong> below.</div>`;
           }
 
           // Check if torch/flashlight is supported on phone
@@ -656,7 +668,18 @@ window.APS = (() => {
 
           return;
         } catch (err) {
-          console.warn("Html5Qrcode initialization:", err.message || err);
+          console.warn("Live camera start note:", err.name, err.message);
+          if (statusEl) {
+            statusEl.className = "alert alert-warning py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+            statusEl.innerHTML = `
+              <i class="bi bi-camera-fill text-warning fs-5"></i>
+              <div>
+                <strong>Live Video Stream Restricted on HTTP.</strong>
+                <div>Tap <strong>Snap Photo / Upload</strong> below to capture barcode with phone macro autofocus!</div>
+              </div>
+            `;
+          }
+          return;
         }
       }
 
@@ -688,47 +711,91 @@ window.APS = (() => {
 
     async function scanImageFile(file) {
       if (!file) return;
+
       const statusEl = document.getElementById(statusId);
       if (statusEl) {
         statusEl.className = "alert alert-info py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
         statusEl.innerHTML = `<div class="spinner-border spinner-border-sm text-info"></div><div>Analyzing high-resolution photo with macro optics...</div>`;
       }
 
-      // Try native BarcodeDetector on image
-      if ("BarcodeDetector" in window) {
+      // 1. Crucial: Stop live camera feed first so canvas is unlocked for file analysis
+      if (detectorLoopId) {
+        cancelAnimationFrame(detectorLoopId);
+        detectorLoopId = null;
+      }
+      if (html5QrCode) {
         try {
-          const supportedFormats = await BarcodeDetector.getSupportedFormats();
-          const nativeFormats = ["ean_13", "ean_8", "code_128", "code_39", "upc_a", "upc_e", "qr_code"].filter(f => supportedFormats.includes(f));
-          const detector = new BarcodeDetector({ formats: nativeFormats });
-          const bitmap = await createImageBitmap(file);
-          const barcodes = await detector.detect(bitmap);
-          if (barcodes && barcodes.length > 0) {
-            handleSuccess(barcodes[0].rawValue);
-            return;
+          if (html5QrCode.isScanning) {
+            await html5QrCode.stop();
           }
         } catch (e) {}
       }
 
-      // Try Html5Qrcode.scanFile
+      // 2. High-speed native BarcodeDetector on image (handles rotated & macro shots)
+      if ("BarcodeDetector" in window) {
+        try {
+          const supportedFormats = await BarcodeDetector.getSupportedFormats();
+          const nativeFormats = ["ean_13", "ean_8", "code_128", "code_39", "upc_a", "upc_e", "itf", "qr_code"].filter(f => supportedFormats.includes(f));
+          const detector = new BarcodeDetector({ formats: nativeFormats });
+
+          // Pass A: Direct image bitmap
+          const bitmap = await createImageBitmap(file);
+          let barcodes = await detector.detect(bitmap);
+          if (barcodes && barcodes.length > 0) {
+            handleSuccess(barcodes[0].rawValue);
+            return;
+          }
+
+          // Pass B: Canvas with contrast boost & 90-degree orientation check
+          const canvas = document.createElement("canvas");
+          const ctx = canvas.getContext("2d");
+          canvas.width = bitmap.width;
+          canvas.height = bitmap.height;
+          ctx.drawImage(bitmap, 0, 0);
+
+          // Contrast enhancement
+          try {
+            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const d = imgData.data;
+            for (let i = 0; i < d.length; i += 4) {
+              const lum = (d[i] * 0.299 + d[i + 1] * 0.587 + d[i + 2] * 0.114);
+              const contrasted = lum < 125 ? Math.max(0, lum - 35) : Math.min(255, lum + 35);
+              d[i] = contrasted;
+              d[i + 1] = contrasted;
+              d[i + 2] = contrasted;
+            }
+            ctx.putImageData(imgData, 0, 0);
+            barcodes = await detector.detect(canvas);
+            if (barcodes && barcodes.length > 0) {
+              handleSuccess(barcodes[0].rawValue);
+              return;
+            }
+          } catch (e) {}
+        } catch (e) {
+          console.warn("Native BarcodeDetector file scan note:", e);
+        }
+      }
+
+      // 3. Html5Qrcode.scanFile (ZXing multi-format fallback)
       if (window.Html5Qrcode) {
         try {
           let scanner = html5QrCode;
           if (!scanner) {
             scanner = new Html5Qrcode(containerId, { formatsToSupport: formats, verbose: false });
           }
-          const decoded = await scanner.scanFile(file, true);
+          const decoded = await scanner.scanFile(file, false);
           if (decoded) {
             handleSuccess(decoded);
             return;
           }
         } catch (e) {
-          console.warn("scanFile error:", e);
+          console.warn("Html5Qrcode scanFile note:", e);
         }
       }
 
       if (statusEl) {
-        statusEl.className = "alert alert-danger py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
-        statusEl.innerHTML = `<i class="bi bi-x-circle-fill text-danger fs-5"></i><div>No clear barcode detected in photo. Ensure barcode is well-lit, in focus, and try again.</div>`;
+        statusEl.className = "alert alert-warning py-2 px-3 small mt-3 mb-2 d-flex align-items-center justify-content-center gap-2 text-start";
+        statusEl.innerHTML = `<i class="bi bi-exclamation-triangle-fill text-warning fs-5"></i><div>No barcode detected in photo. Ensure package is well-lit, steady, and try snapping again.</div>`;
       }
     }
 

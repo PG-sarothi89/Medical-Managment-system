@@ -108,11 +108,28 @@ const server = http.createServer(async (req, res) => {
   });
 });
 
-server.listen(PORT, async () => {
+const os = require("os");
+
+function getLocalIp() {
+  const nets = os.networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === "IPv4" && !net.internal) {
+        return net.address;
+      }
+    }
+  }
+  return "localhost";
+}
+
+const HOST = "0.0.0.0";
+server.listen(PORT, HOST, async () => {
+  const localIp = getLocalIp();
   console.log("\n=======================================================");
   console.log(" [INFO] CURO Medical Management System Server Running");
-  console.log(` [INFO] Local Web App: http://localhost:${PORT}`);
+  console.log(` [INFO] Desktop:     http://localhost:${PORT}`);
+  console.log(` [INFO] Mobile Phone: http://${localIp}:${PORT}`);
   console.log(` [INFO] PostgreSQL 18: localhost:${process.env.PGPORT || 8000} (DB: ${process.env.PGDATABASE || "curo_db"})`);
-  console.log(` [INFO] REST API:      http://localhost:${PORT}/api/status`);
+  console.log(` [INFO] REST API:     http://localhost:${PORT}/api/status`);
   console.log("=======================================================\n");
 });

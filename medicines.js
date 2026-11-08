@@ -471,7 +471,7 @@
       stopCameraScanner();
     });
     // Mobile Snap Photo & Torch Controls
-    $(".btn-take-photo", $("#cameraScannerModal"))?.forEach(btn => {
+    $$(".btn-take-photo", $("#cameraScannerModal"))?.forEach(btn => {
       btn.addEventListener("click", () => {
         $("#cameraScannerModal .camera-photo-file-input")?.click();
       });
@@ -484,7 +484,7 @@
       }
     });
 
-    $(".scanner-torch-btn", $("#cameraScannerModal"))?.forEach(btn => {
+        $$(".scanner-torch-btn", $("#cameraScannerModal"))?.forEach(btn => {
       btn.addEventListener("click", async (e) => {
         if (cameraScannerEngine) {
           const state = await cameraScannerEngine.toggleTorch();
