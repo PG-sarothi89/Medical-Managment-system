@@ -70,7 +70,7 @@ async function handleApiRequest(req, res) {
 
     // 2. Full System Sync (Synchronizes all master tables in one fast call)
     if (pathname === "/api/sync" && method === "GET") {
-      const [cats, mfrs, supps, meds, batches, custs, docs, rxs, rxItems, sales] = await Promise.all([
+      const [cats, mfrs, supps, meds, batches, custs, docs, rxs, rxItems, sales, usersRes] = await Promise.all([
         db.query("SELECT * FROM categories ORDER BY name ASC"),
         db.query("SELECT * FROM manufacturers ORDER BY name ASC"),
         db.query("SELECT * FROM suppliers ORDER BY name ASC"),
@@ -98,7 +98,15 @@ async function handleApiRequest(req, res) {
         db.query("SELECT * FROM doctors ORDER BY name ASC"),
         db.query("SELECT * FROM prescriptions ORDER BY prescription_date DESC LIMIT 50"),
         db.query("SELECT * FROM prescription_items"),
-        db.query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 50")
+        db.query("SELECT * FROM sales ORDER BY sale_date DESC LIMIT 50"),
+        db.query(`
+          SELECT u.id, u.username, u.email, u.password_hash as password, u.name, u.designation, u.phone, u.is_active,
+                 r.id as role, r.name as role_title
+          FROM users u
+          JOIN roles r ON u.role_id = r.id
+          WHERE u.is_active = TRUE
+          ORDER BY u.name ASC;
+        `)
       ]);
 
       const itemsByRx = {};
@@ -123,7 +131,8 @@ async function handleApiRequest(req, res) {
           customers: custs.rows,
           doctors: docs.rows,
           prescriptions,
-          sales: sales.rows
+          sales: sales.rows,
+          users: usersRes.rows
         }
       });
     }
@@ -503,10 +512,10 @@ async function handleApiRequest(req, res) {
       return sendJson(res, 201, { ok: true, data: result.rows[0] });
     }
 
-    // 9. Users
+    // 9. Users - Read & Write
     if (pathname === "/api/users" && method === "GET") {
       const result = await db.query(`
-        SELECT u.id, u.username, u.email, u.name, u.designation, u.phone, u.is_active, u.created_at,
+        SELECT u.id, u.username, u.email, u.password_hash as password, u.name, u.designation, u.phone, u.is_active, u.created_at,
                r.id as role_id, r.name as role_name
         FROM users u
         JOIN roles r ON u.role_id = r.id
@@ -514,6 +523,49 @@ async function handleApiRequest(req, res) {
         ORDER BY u.name ASC;
       `);
       return sendJson(res, 200, { ok: true, data: result.rows });
+    }
+
+    if (pathname === "/api/users" && method === "POST") {
+      const body = await parseJsonBody(req);
+      const {
+        id,
+        username,
+        email,
+        password = "admin",
+        password_hash,
+        name,
+        designation = "Staff Specialist",
+        role = "admin",
+        role_id,
+        phone = "",
+        is_active = true
+      } = body;
+      const newId = id || `usr-${Date.now().toString(36)}`;
+      const roleId = role_id || role || "admin";
+      const pass = password || password_hash || "admin123";
+
+      const result = await db.query(`
+        INSERT INTO users (id, username, email, password_hash, name, designation, role_id, phone, is_active)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+        ON CONFLICT (id) DO UPDATE SET
+          username = EXCLUDED.username,
+          email = EXCLUDED.email,
+          password_hash = EXCLUDED.password_hash,
+          name = EXCLUDED.name,
+          designation = EXCLUDED.designation,
+          role_id = EXCLUDED.role_id,
+          phone = EXCLUDED.phone,
+          is_active = EXCLUDED.is_active
+        RETURNING *;
+      `, [newId, username, email, pass, name, designation, roleId, phone, is_active]);
+
+      return sendJson(res, 201, { ok: true, data: result.rows[0] });
+    }
+
+    if (pathname.startsWith("/api/users/") && method === "DELETE") {
+      const userId = pathname.split("/")[3];
+      await db.query("DELETE FROM users WHERE id = $1", [userId]);
+      return sendJson(res, 200, { ok: true, message: "User deleted" });
     }
 
     // 10. Prescriptions with Items

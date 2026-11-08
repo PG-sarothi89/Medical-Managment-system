@@ -27,7 +27,7 @@
     const userRoleEl = $("#navUserRole");
     const avatarEl = $("#userAvatarLetter");
 
-    const currentName = sessionStorage.getItem("apsUserName") || "Dr. Alexander Vance";
+    const currentName = sessionStorage.getItem("apsUserName") || "System Administrator";
     const currentRole = sessionStorage.getItem("apsUserRole") || "Administrator";
 
     if (userNameEl) userNameEl.textContent = currentName;

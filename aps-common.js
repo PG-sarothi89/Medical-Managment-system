@@ -40,9 +40,9 @@ window.APS = (() => {
   }
 
   // Populate User Display
-  const userName = sessionStorage.getItem("apsUserName") || "Dr. Alexander Vance";
+  const userName = sessionStorage.getItem("apsUserName") || "System Administrator";
   const userRole = sessionStorage.getItem("apsUserRole") || "Administrator";
-  const userEmail = sessionStorage.getItem("apsUserEmail") || "pg@gmail.com";
+  const userEmail = sessionStorage.getItem("apsUserEmail") || "admin@curo.health";
 
   function applyUserDisplay(name, role) {
     const nameEl = $("#userName") || $("#navUserName");
@@ -65,11 +65,11 @@ window.APS = (() => {
 
   function getCurrentUser() {
     return {
-      id: sessionStorage.getItem("apsUserId") || "usr-1",
-      name: sessionStorage.getItem("apsUserName") || "Dr. Alexander Vance",
+      id: sessionStorage.getItem("apsUserId") || "usr-admin",
+      name: sessionStorage.getItem("apsUserName") || "System Administrator",
       role: sessionStorage.getItem("apsUserRoleKey") || "admin",
       roleTitle: sessionStorage.getItem("apsUserRole") || "Administrator",
-      email: sessionStorage.getItem("apsUserEmail") || "pg@gmail.com"
+      email: sessionStorage.getItem("apsUserEmail") || "admin@curo.health"
     };
   }
 

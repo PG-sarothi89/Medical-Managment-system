@@ -78,13 +78,20 @@ window.APSStore = (() => {
       { id: "doctor", name: "Doctor / Staff", description: "Write prescriptions, view clinical medicine catalog" }
     ];
 
-    // 2. Users (with distinct clinical and operational designations)
+    // 2. Production Staff User (Single Administrator Account)
     const users = [
-      { id: "usr-1", username: "admin", email: "pg@gmail.com", password: "root", name: "Dr. Alexander Vance", designation: "Chief Administrative Officer", role: "admin", roleTitle: "Administrator", phone: "+880 1711-000111", isActive: true },
-      { id: "usr-2", username: "pharmacist", email: "pharmacist@aps.com", password: "root", name: "Sarah Jenkins", designation: "Senior Clinical Pharmacist", role: "pharmacist", roleTitle: "Pharmacist", phone: "+880 1812-222333", isActive: true },
-      { id: "usr-3", username: "cashier", email: "cashier@aps.com", password: "root", name: "Rahim Uddin", designation: "Chief POS Cashier", role: "cashier", roleTitle: "Cashier", phone: "+880 1913-444555", isActive: true },
-      { id: "usr-4", username: "inventory", email: "inventory@aps.com", password: "root", name: "Kamal Hossain", designation: "Lead Inventory & Logistics Manager", role: "inventory_manager", roleTitle: "Inventory Manager", phone: "+880 1614-666777", isActive: true },
-      { id: "usr-5", username: "doctor", email: "doctor@aps.com", password: "root", name: "Dr. Mahfuzur Rahman", designation: "Consultant Physician & Diabetologist", role: "doctor", roleTitle: "Doctor / Staff", phone: "+880 1515-888999", isActive: true }
+      {
+        id: "usr-admin",
+        username: "admin",
+        email: "admin@curo.health",
+        password: "admin",
+        name: "System Administrator",
+        designation: "Chief Administrator",
+        role: "admin",
+        roleTitle: "Administrator",
+        phone: "+880 1700-000000",
+        isActive: true
+      }
     ];
 
     // 3. Categories
@@ -365,11 +372,11 @@ window.APSStore = (() => {
 
     // 14. Audit Logs
     const auditLogs = [
-      { id: "aud-1", userName: "System", action: "SYSTEM_INIT", tableName: "all", recordId: "0", details: "APS Medical Management Database initialized with enterprise seed data", timestamp: todayStr(-15) + " 08:00:00" },
-      { id: "aud-2", userName: "Kamal Hossain", action: "PURCHASE_RECEIPT", tableName: "batches", recordId: "bat-101", details: "Goods received for PO-2026-001 from Square Distribution", timestamp: todayStr(-15) + " 10:15:00" },
-      { id: "aud-3", userName: "Rahim Uddin", action: "POS_SALE", tableName: "sales", recordId: "sale-5001", details: "Processed sale INV-2026-001 for Anisur Rahman (৳462.00)", timestamp: todayStr(-3) + " 11:32:00" },
-      { id: "aud-4", userName: "Rahim Uddin", action: "POS_SALE", tableName: "sales", recordId: "sale-5002", details: "Processed sale INV-2026-002 for Farhana Yasmin (৳525.00)", timestamp: todayStr(-1) + " 15:14:00" },
-      { id: "aud-5", userName: "Rahim Uddin", action: "POS_SALE", tableName: "sales", recordId: "sale-5003", details: "Processed credit sale INV-2026-003 for Md. Rafiqul Islam (৳189.00)", timestamp: todayStr(0) + " 09:45:00" }
+      { id: "aud-1", userName: "System", action: "SYSTEM_INIT", tableName: "all", recordId: "0", details: "CURO Medical Management Database initialized with enterprise seed data", timestamp: todayStr(-15) + " 08:00:00" },
+      { id: "aud-2", userName: "System Administrator", action: "PURCHASE_RECEIPT", tableName: "batches", recordId: "bat-101", details: "Goods received for PO-2026-001 from Square Distribution", timestamp: todayStr(-15) + " 10:15:00" },
+      { id: "aud-3", userName: "System Administrator", action: "POS_SALE", tableName: "sales", recordId: "sale-5001", details: "Processed sale INV-2026-001 for Anisur Rahman (৳462.00)", timestamp: todayStr(-3) + " 11:32:00" },
+      { id: "aud-4", userName: "System Administrator", action: "POS_SALE", tableName: "sales", recordId: "sale-5002", details: "Processed sale INV-2026-002 for Farhana Yasmin (৳525.00)", timestamp: todayStr(-1) + " 15:14:00" },
+      { id: "aud-5", userName: "System Administrator", action: "POS_SALE", tableName: "sales", recordId: "sale-5003", details: "Processed credit sale INV-2026-003 for Md. Rafiqul Islam (৳189.00)", timestamp: todayStr(0) + " 09:45:00" }
     ];
 
     // Persist all
@@ -398,6 +405,34 @@ window.APSStore = (() => {
 
   // Ensure initialization runs
   initDatabase(false);
+
+  // Automatic purge of obsolete sample users from client localStorage
+  try {
+    const existingUsers = load(KEYS.USERS, []);
+    const sampleIds = ["usr-1", "usr-2", "usr-3", "usr-4", "usr-5"];
+    const hasSampleUsers = existingUsers.some(u => sampleIds.includes(u.id) || u.email === "pg@gmail.com" || u.email === "pharmacist@aps.com");
+    if (hasSampleUsers || !existingUsers.some(u => u.username === "admin")) {
+      const cleaned = existingUsers.filter(u => !sampleIds.includes(u.id) && u.email !== "pg@gmail.com" && u.email !== "pharmacist@aps.com" && u.email !== "cashier@aps.com" && u.email !== "inventory@aps.com" && u.email !== "doctor@aps.com");
+      if (!cleaned.some(u => u.username === "admin")) {
+        cleaned.unshift({
+          id: "usr-admin",
+          username: "admin",
+          email: "admin@curo.health",
+          password: "admin",
+          name: "System Administrator",
+          designation: "Chief Administrator",
+          role: "admin",
+          roleTitle: "Administrator",
+          phone: "+880 1700-000000",
+          isActive: true
+        });
+      }
+      save(KEYS.USERS, cleaned);
+      console.log("APSStore: Purged sample demo accounts and set active Administrator.");
+    }
+  } catch (e) {
+    console.warn("User migration note:", e);
+  }
 
   /* =========================================================
      POSTGRESQL 18 BACKEND SYNCHRONIZATION
@@ -539,6 +574,22 @@ window.APSStore = (() => {
           notes: p.notes,
           status: p.status,
           items: p.items || []
+        })));
+      }
+
+      // 9. Users
+      if (json.data.users && json.data.users.length) {
+        save(KEYS.USERS, json.data.users.map(u => ({
+          id: u.id,
+          username: u.username,
+          email: u.email,
+          password: u.password || "admin",
+          name: u.name,
+          designation: u.designation || "Staff Specialist",
+          role: u.role || "admin",
+          roleTitle: u.role_title || u.role || "Administrator",
+          phone: u.phone || "",
+          isActive: Boolean(u.is_active !== false)
         })));
       }
 
@@ -1981,6 +2032,14 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.USERS, list);
+
+    // Sync to PostgreSQL backend
+    fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(saved)
+    }).catch(err => console.warn("Postgres user save note:", err));
+
     return saved;
   }
 
@@ -1994,6 +2053,12 @@ window.APSStore = (() => {
     const remaining = list.filter(u => u.id !== id);
     save(KEYS.USERS, remaining);
     logAudit("DELETE", "users", id, `Removed staff member ${user.name}`);
+
+    // Sync deletion to PostgreSQL backend
+    fetch(`/api/users/${id}`, {
+      method: "DELETE"
+    }).catch(err => console.warn("Postgres user delete note:", err));
+
     return true;
   }
 

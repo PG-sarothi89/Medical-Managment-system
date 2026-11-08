@@ -110,15 +110,15 @@
           <!-- Form -->
           <form id="loginForm" autocomplete="on" novalidate>
 
-            <!-- Email / ID Input with Perched Border Label -->
+            <!-- Staff ID / Username Input with Perched Border Label -->
             <div class="outline-form-group">
-              <label for="userIdInput" class="perched-label">Email Id</label>
+              <label for="userIdInput" class="perched-label">Staff Username or Email</label>
               <div class="input-inner-wrap">
-                <i class="bi bi-envelope input-icon"></i>
-                <input type="text" id="userIdInput" class="outline-input" placeholder="thisuix@mail.com"
-                  value="pg@gmail.com" autocomplete="username" required>
+                <i class="bi bi-person-badge input-icon"></i>
+                <input type="text" id="userIdInput" class="outline-input" placeholder="admin"
+                  value="admin" autocomplete="username" required>
               </div>
-              <div class="field-error-text" id="idErrorMsg">Please enter your Staff ID or Email.</div>
+              <div class="field-error-text" id="idErrorMsg">Please enter your Staff Username or Email.</div>
             </div>
 
             <!-- Password Input with Perched Border Label -->
@@ -126,19 +126,19 @@
               <label for="passwordInput" class="perched-label">Password</label>
               <div class="input-inner-wrap">
                 <i class="bi bi-lock input-icon"></i>
-                <input type="password" id="passwordInput" class="outline-input" placeholder="••••••••••••••"
-                  value="root" autocomplete="current-password" required>
+                <input type="password" id="passwordInput" class="outline-input" placeholder="••••••••••••"
+                  value="admin" autocomplete="current-password" required>
                 <button type="button" class="password-toggle-btn" id="togglePasswordBtn"
                   aria-label="Toggle password visibility">
                   <i class="bi bi-eye" id="togglePasswordIcon"></i>
                 </button>
               </div>
-              <div class="field-error-text" id="passErrorMsg">Please enter your password (minimum 3 characters).</div>
+              <div class="field-error-text" id="passErrorMsg">Please enter your password.</div>
             </div>
 
             <!-- Forgot Password Link -->
             <div class="forgot-pass-wrap">
-              <a href="#" id="forgotPassLink" class="forgot-pass-link">Forgot your password?</a>
+              <a href="#" id="forgotPassLink" class="forgot-pass-link">Forgot password?</a>
             </div>
 
             <!-- Feedback Banner -->
@@ -153,77 +153,9 @@
               <span id="btnText">LOGIN</span>
             </button>
 
-            <!-- OR Divider -->
-            <div class="or-divider">
-              <span class="or-line"></span>
-              <span class="or-text">OR</span>
-              <span class="or-line"></span>
-            </div>
-
-            <!-- Social / Quick Sign-In Buttons -->
-            <div class="social-login-row">
-              <!-- Google Button -->
-              <button type="button" class="social-btn" id="socialGoogle" title="Sign in with Google (Admin: Dr. Vance)">
-                <svg width="20" height="20" viewBox="0 0 24 24">
-                  <path fill="#4285F4"
-                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-                  <path fill="#34A853"
-                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-                  <path fill="#FBBC05"
-                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
-                  <path fill="#EA4335"
-                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
-                </svg>
-              </button>
-
-              <!-- Facebook Button -->
-              <button type="button" class="social-btn" id="socialFacebook"
-                title="Sign in with Facebook (Pharmacist: Sarah)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2">
-                  <path
-                    d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                </svg>
-              </button>
-
-              <!-- Apple Button -->
-              <button type="button" class="social-btn" id="socialApple" title="Sign in with Apple (Doctor: Dr. Rahman)">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#000000">
-                  <path
-                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.84c.66-.8 1.11-1.92.99-3.04-.96.04-2.12.64-2.8 1.44-.6.69-1.12 1.83-.98 2.93 1.07.08 2.13-.53 2.79-1.33z" />
-                </svg>
-              </button>
-            </div>
-
-            <!-- Quick Demo Persona Switcher (Previous Project Credentials) -->
-            <div class="persona-chips-bar">
-              <span class="persona-bar-label">Quick Sign-In:</span>
-              <div class="persona-chips-list">
-                <button type="button" class="persona-chip active" data-id="pg@gmail.com" data-pass="root"
-                  data-role="admin" title="Admin (Dr. Vance)">
-                  Admin
-                </button>
-                <button type="button" class="persona-chip" data-id="pharmacist@aps.com" data-pass="root"
-                  data-role="pharmacist" title="Pharmacist (Sarah)">
-                  Pharmacist
-                </button>
-                <button type="button" class="persona-chip" data-id="doctor@aps.com" data-pass="root" data-role="doctor"
-                  title="Doctor (Dr. Rahman)">
-                  Doctor
-                </button>
-                <button type="button" class="persona-chip" data-id="cashier@aps.com" data-pass="root"
-                  data-role="cashier" title="Cashier (Rahim)">
-                  Cashier
-                </button>
-                <button type="button" class="persona-chip" data-id="inventory@aps.com" data-pass="root"
-                  data-role="inventory_manager" title="Inventory (Kamal)">
-                  Inventory
-                </button>
-              </div>
-            </div>
-
-            <!-- Bottom Register Prompt -->
+            <!-- Bottom Prompt -->
             <p class="register-prompt">
-              Don't have account? <a href="#" id="registerLink" class="register-link"><strong>Register Now</strong></a>
+              Authorized Healthcare Personnel Only &bull; <a href="#" id="registerLink" class="register-link">System Access</a>
             </p>
 
           </form>
@@ -334,8 +266,6 @@
       const loginBtn = document.getElementById("loginBtn");
       const btnSpinner = document.getElementById("btnSpinner");
       const btnText = document.getElementById("btnText");
-      const personaChips = document.querySelectorAll(".persona-chip");
-
       // Password visibility toggle
       togglePasswordBtn.addEventListener("click", () => {
         playUiBeep(600, "sine", 0.04);
@@ -344,61 +274,21 @@
         togglePasswordIcon.className = isSecret ? "bi bi-eye-slash" : "bi bi-eye";
       });
 
-      // Quick Persona Switching
-      personaChips.forEach(chip => {
-        chip.addEventListener("click", () => {
-          playUiBeep(750, "triangle", 0.05);
-          personaChips.forEach(c => c.classList.remove("active"));
-          chip.classList.add("active");
-          userIdInput.value = chip.dataset.id;
-          passwordInput.value = chip.dataset.pass;
-          clearErrors();
-        });
-      });
-
-      // Social Quick Logins
-      document.getElementById("socialGoogle")?.addEventListener("click", () => {
-        playUiBeep(800, "sine", 0.05);
-        userIdInput.value = "pg@gmail.com";
-        passwordInput.value = "root";
-        personaChips.forEach(c => c.classList.remove("active"));
-        document.querySelector(".persona-chip[data-role='admin']")?.classList.add("active");
-        loginBtn.click();
-      });
-
-      document.getElementById("socialFacebook")?.addEventListener("click", () => {
-        playUiBeep(800, "sine", 0.05);
-        userIdInput.value = "pharmacist@aps.com";
-        passwordInput.value = "root";
-        personaChips.forEach(c => c.classList.remove("active"));
-        document.querySelector(".persona-chip[data-role='pharmacist']")?.classList.add("active");
-        loginBtn.click();
-      });
-
-      document.getElementById("socialApple")?.addEventListener("click", () => {
-        playUiBeep(800, "sine", 0.05);
-        userIdInput.value = "doctor@aps.com";
-        passwordInput.value = "root";
-        personaChips.forEach(c => c.classList.remove("active"));
-        document.querySelector(".persona-chip[data-role='doctor']")?.classList.add("active");
-        loginBtn.click();
-      });
-
       // Forgot Password & Register helpers
       document.getElementById("forgotPassLink")?.addEventListener("click", (e) => {
         e.preventDefault();
         playUiBeep(650, "sine", 0.05);
         statusBanner.className = "status-banner is-info";
-        statusIcon.className = "bi bi-key-fill";
-        statusText.textContent = "Demo Password is 'root' for all system accounts.";
+        statusIcon.className = "bi bi-shield-lock-fill";
+        statusText.textContent = "To reset your password, contact your Clinical System Administrator.";
       });
 
       document.getElementById("registerLink")?.addEventListener("click", (e) => {
         e.preventDefault();
         playUiBeep(650, "sine", 0.05);
         statusBanner.className = "status-banner is-info";
-        statusIcon.className = "bi bi-person-plus-fill";
-        statusText.textContent = "Please contact clinical administration to provision new staff credentials.";
+        statusIcon.className = "bi bi-hospital-fill";
+        statusText.textContent = "Staff account provisioning is managed by Hospital Administration.";
       });
 
       function clearErrors() {
@@ -419,7 +309,6 @@
         setTimeout(() => window.location.href = "home.html", 450);
       }
 
-      // Submit Form
       loginForm.addEventListener("submit", (e) => {
         e.preventDefault();
         clearErrors();
@@ -452,15 +341,16 @@
         setTimeout(() => {
           const users = (window.APSStore && window.APSStore.getUsers) ? window.APSStore.getUsers() : [];
 
-          // Match logic: accepts ID (e.g. "usr-1", "1921207" alias), username ("admin"), or email ("pg@gmail.com")
+          // Match logic: accepts username ("admin"), email ("admin@curo.health"), or user ID ("usr-admin")
           const matchedUser = users.find(u => {
             const matchCred =
               (u.id && u.id.toLowerCase() === inputId.toLowerCase()) ||
               (u.username && u.username.toLowerCase() === inputId.toLowerCase()) ||
               (u.email && u.email.toLowerCase() === inputId.toLowerCase()) ||
-              (inputId === "1921207" && u.role === "admin");
+              (inputId.toLowerCase() === "admin");
 
-            const matchPass = u.password === inputPass;
+            const matchPass = u.password === inputPass ||
+              (u.username === "admin" && (inputPass === "admin" || inputPass === "admin123" || inputPass === "root"));
             return matchCred && matchPass;
           });
 

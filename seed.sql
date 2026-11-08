@@ -14,13 +14,9 @@ INSERT INTO roles (id, name, description) VALUES
 ('doctor', 'Doctor / Staff', 'Write prescriptions, view clinical medicine catalog')
 ON CONFLICT (id) DO NOTHING;
 
--- 2. Users
+-- 2. Users (Single Production Administrator)
 INSERT INTO users (id, username, email, password_hash, name, designation, role_id, phone, is_active) VALUES
-('usr-1', 'admin', 'pg@gmail.com', 'root', 'Dr. Alexander Vance', 'Chief Administrative Officer', 'admin', '+880 1711-000111', TRUE),
-('usr-2', 'pharmacist', 'pharmacist@aps.com', 'root', 'Sarah Jenkins', 'Senior Clinical Pharmacist', 'pharmacist', '+880 1812-222333', TRUE),
-('usr-3', 'cashier', 'cashier@aps.com', 'root', 'Rahim Uddin', 'Chief POS Cashier', 'cashier', '+880 1913-444555', TRUE),
-('usr-4', 'inventory', 'inventory@aps.com', 'root', 'Kamal Hossain', 'Lead Inventory & Logistics Manager', 'inventory_manager', '+880 1614-666777', TRUE),
-('usr-5', 'doctor', 'doctor@aps.com', 'root', 'Dr. Mahfuzur Rahman', 'Consultant Physician & Diabetologist', 'doctor', '+880 1515-888999', TRUE)
+('usr-admin', 'admin', 'admin@curo.health', 'admin123', 'System Administrator', 'Chief Administrator', 'admin', '+880 1700-000000', TRUE)
 ON CONFLICT (id) DO NOTHING;
 
 -- 3. Categories

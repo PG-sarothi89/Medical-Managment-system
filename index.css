@@ -493,14 +493,15 @@ html, body {
 /* Register Prompt */
 .register-prompt {
   font-size: 12.5px;
-  color: greenyellow;
+  color: #64748b;
   text-align: center;
-  margin-top: 4px;
+  margin-top: 16px;
   margin-bottom: 24px;
 }
 
 .register-link {
-  color: #0f172a;
+  color: #0098ea;
+  font-weight: 600;
   text-decoration: none;
 }
 
