@@ -96,11 +96,13 @@ window.APS = (() => {
     function closeSidebar() {
       if (appSidebar) appSidebar.classList.remove("is-open");
       if (sidebarOverlay) sidebarOverlay.classList.remove("is-visible");
+      document.body.classList.remove("sidebar-open");
     }
 
     function openSidebar() {
       if (appSidebar) appSidebar.classList.add("is-open");
       if (sidebarOverlay) sidebarOverlay.classList.add("is-visible");
+      document.body.classList.add("sidebar-open");
     }
 
     if (sidebarToggleBtn && appSidebar) {
@@ -130,6 +132,26 @@ window.APS = (() => {
 
     if (sidebarOverlay) {
       sidebarOverlay.addEventListener("click", closeSidebar);
+    }
+
+    // Swipe left on mobile sidebar drawer to close
+    let touchStartX = 0;
+    let touchStartY = 0;
+    if (appSidebar) {
+      appSidebar.addEventListener("touchstart", (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      appSidebar.addEventListener("touchend", (e) => {
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+        const diffX = touchEndX - touchStartX;
+        const diffY = touchEndY - touchStartY;
+        if (diffX < -50 && Math.abs(diffX) > Math.abs(diffY)) {
+          closeSidebar();
+        }
+      }, { passive: true });
     }
 
     // Close sidebar on Escape key

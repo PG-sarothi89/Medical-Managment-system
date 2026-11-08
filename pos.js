@@ -620,32 +620,97 @@
       }
     });
 
-    // Mobile View Switcher (Medicines Catalog vs Cart)
-    $("#mobileShowCatalogBtn")?.addEventListener("click", () => {
+    // Mobile View Switcher (Medicines Catalog vs Cart) & Floating Bottom Bar
+    function updateMobilePosUI() {
+      if (window.innerWidth >= 992) {
+        $("#posMobileBottomBar")?.classList.add("d-none");
+        const grid = $("#posProductGrid");
+        if (grid) grid.style.paddingBottom = "20px";
+        return;
+      }
+
+      const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const isCatalogActive = !$("#posCatalogColumn")?.classList.contains("d-none");
+      const bottomBar = $("#posMobileBottomBar");
+      const bottomBadge = $("#mobileBottomCartBadge");
+      const bottomTotal = $("#mobileBottomCartTotal");
+
+      if (bottomBadge) bottomBadge.textContent = totalCount;
+      if (bottomTotal) {
+        const subtotal = cart.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
+        const discount = Math.max(0, Number($("#cartDiscountInput")?.value || 0));
+        const taxableAmount = Math.max(0, subtotal - discount);
+        const grandTotal = Number((taxableAmount + (taxableAmount * 0.05)).toFixed(2));
+        bottomTotal.textContent = "৳ " + grandTotal.toFixed(2);
+      }
+
+      if (bottomBar) {
+        if (isCatalogActive && totalCount > 0) {
+          bottomBar.classList.remove("d-none");
+          const grid = $("#posProductGrid");
+          if (grid) grid.style.paddingBottom = "80px";
+        } else {
+          bottomBar.classList.add("d-none");
+          const grid = $("#posProductGrid");
+          if (grid) grid.style.paddingBottom = "20px";
+        }
+      }
+    }
+
+    function switchToCatalogView() {
       $("#posCatalogColumn")?.classList.remove("d-none");
       $("#posCartColumn")?.classList.add("d-none");
       $("#mobileShowCatalogBtn")?.classList.add("btn-teal-700", "btn-primary", "active");
       $("#mobileShowCatalogBtn")?.classList.remove("btn-outline-secondary");
       $("#mobileShowCartBtn")?.classList.remove("btn-teal-700", "btn-primary", "active");
       $("#mobileShowCartBtn")?.classList.add("btn-outline-secondary");
-    });
+      updateMobilePosUI();
+    }
 
-    $("#mobileShowCartBtn")?.addEventListener("click", () => {
+    function switchToCartView() {
       $("#posCatalogColumn")?.classList.add("d-none");
       $("#posCartColumn")?.classList.remove("d-none");
       $("#mobileShowCartBtn")?.classList.add("btn-teal-700", "btn-primary", "active");
       $("#mobileShowCartBtn")?.classList.remove("btn-outline-secondary");
       $("#mobileShowCatalogBtn")?.classList.remove("btn-teal-700", "btn-primary", "active");
       $("#mobileShowCatalogBtn")?.classList.add("btn-outline-secondary");
-    });
+      updateMobilePosUI();
+    }
 
-    // Restore 2-column layout when resizing to desktop
+    $("#mobileShowCatalogBtn")?.addEventListener("click", switchToCatalogView);
+    $("#mobileShowCartBtn")?.addEventListener("click", switchToCartView);
+    $("#mobileBottomViewCartBtn")?.addEventListener("click", switchToCartView);
+    $("#backToCatalogBtn")?.addEventListener("click", switchToCatalogView);
+
+    // Initial mobile view setup
+    if (window.innerWidth < 992) {
+      switchToCatalogView();
+    }
+
+    // Responsive window resizing handler
     window.addEventListener("resize", () => {
       if (window.innerWidth >= 992) {
         $("#posCatalogColumn")?.classList.remove("d-none");
         $("#posCartColumn")?.classList.remove("d-none");
+        $("#posMobileBottomBar")?.classList.add("d-none");
+      } else {
+        const isCartHidden = $("#posCartColumn")?.classList.contains("d-none");
+        const isCatalogHidden = $("#posCatalogColumn")?.classList.contains("d-none");
+        if (!isCartHidden && !isCatalogHidden) {
+          switchToCatalogView();
+        } else {
+          updateMobilePosUI();
+        }
       }
     });
+
+    // Support Quick Order pre-selection from Overview
+    const quickMedId = sessionStorage.getItem("apsQuickSelectMed");
+    if (quickMedId) {
+      sessionStorage.removeItem("apsQuickSelectMed");
+      addToCart(quickMedId, 1);
+      APS.showToast("Item added to cart.");
+    }
 
     // Global Hardware USB Barcode Scanner Wedge Listener
     APS.initUSBBarcodeListener((scannedCode) => {

@@ -252,7 +252,12 @@
             <!-- Cart Header & Customer Selection -->
             <div class="p-3 border-bottom bg-light rounded-top-4">
               <div class="d-flex justify-content-between align-items-center mb-2">
-                <h5 class="fw-bold mb-0 text-teal-900"><i class="bi bi-cart3 me-1"></i> Current Cart</h5>
+                <div class="d-flex align-items-center gap-2">
+      <button type="button" class="btn btn-sm btn-outline-primary d-lg-none py-1 px-2" id="backToCatalogBtn" title="Back to Medicines Catalog">
+        <i class="bi bi-arrow-left me-1"></i> Medicines
+      </button>
+      <h5 class="fw-bold mb-0 text-teal-900"><i class="bi bi-cart3 me-1"></i> Cart</h5>
+    </div>
                 <button class="btn btn-sm btn-link text-danger text-decoration-none p-0" id="clearCartBtn">Clear Cart</button>
               </div>
 
@@ -538,6 +543,26 @@
           <button type="button" class="btn btn-sm btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Close Scanner</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  
+  <!-- Floating Mobile Bottom Cart Bar (<992px) -->
+  <div class="pos-mobile-bottom-bar d-lg-none d-none" id="posMobileBottomBar">
+    <div class="d-flex align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <div class="pos-mobile-cart-icon-wrap">
+          <i class="bi bi-cart3"></i>
+          <span class="pos-mobile-cart-badge" id="mobileBottomCartBadge">0</span>
+        </div>
+        <div>
+          <small class="text-white-50 d-block" style="font-size: 10px; line-height: 1;">Total Payable</small>
+          <strong class="text-white fs-6" id="mobileBottomCartTotal">৳ 0.00</strong>
+        </div>
+      </div>
+      <button type="button" class="btn btn-light btn-sm rounded-pill px-3 py-2 fw-bold text-teal-700 shadow-sm" id="mobileBottomViewCartBtn">
+        View Cart & Checkout <i class="bi bi-arrow-right ms-1"></i>
+      </button>
     </div>
   </div>
 
