@@ -124,5 +124,6 @@ INSERT INTO inventory_movements (id, medicine_id, batch_id, movement_type, quant
 ('mov-3', 'med-2', 'bat-103', 'PURCHASE', 200, 200, 'PO', 'PO-2026-001', 'usr-4', 'Opening balance purchase'),
 ('mov-4', 'med-13', 'bat-114', 'EXPIRED', 0, 15, 'MANUAL', 'AUD-001', 'usr-2', 'Batch flagged for safe disposal')
 ON CONFLICT (id) DO NOTHING;
-
+INSERT INTO ori (test,date)
+VALUES("yes",12:23:4);
 COMMIT;
