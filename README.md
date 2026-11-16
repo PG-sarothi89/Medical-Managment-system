@@ -20,6 +20,60 @@ The **APS Medical Management System** is a full-featured, responsive, production
 
 ---
 
+## 📁 Sequenced Project Architecture
+
+The repository is structured in an explicit sequential order from documentation and database definitions to backend logic and frontend modules:
+
+```
+Medical Management system/
+├── 01_docs/               # 1. Architecture, deployment guides & demo media
+│   ├── 01_ARCHITECTURE_AND_WORKFLOW.md
+│   ├── 02_DEPLOYMENT.md
+│   ├── CURO_Database_Building_Guide.pdf
+│   └── CURO_SaaS_Explainer_Demo.mp4
+│
+├── 02_database/           # 2. Database lifecycle scripts in execution sequence
+│   ├── 01_schema.sql      # Database DDL, table structures, constraints & triggers
+│   └── 02_seed.sql        # Demo accounts, default catalogs & initial seed records
+│
+├── 03_backend/            # 3. Node.js server, PostgreSQL connection & REST APIs
+│   ├── server.js          # Core HTTP server with auto-MIME and fallback routing
+│   ├── api.js             # REST API routes and business logic
+│   └── db.js              # PostgreSQL client connection pool
+│
+├── 04_frontend/           # 4. Multi-page web application & user interfaces
+│   ├── index.html         # [Step 01] Authentication & RBAC Login Portal
+│   ├── home.html          # [Step 02] Executive Dashboard & Telemetry
+│   ├── medicines.html     # [Step 03] Master Medicine Catalog & Barcodes
+│   ├── inventory.html     # [Step 04] FEFO Inventory, Batches & Adjustments
+│   ├── purchases.html     # [Step 05] Procurement, Purchase Orders & Suppliers
+│   ├── prescriptions.html # [Step 06] Digital Prescriptions & Doctor Registry
+│   ├── pos.html           # [Step 07] Point of Sale (POS) Cashier Terminal
+│   ├── customers.html     # [Step 08] Customer Profiles & Credit Ledgers
+│   ├── invoices.html      # [Step 09] GST Invoices & Sales Return Audits
+│   ├── alerts.html        # [Step 10] Smart Stock Alerts & Early Warnings
+│   ├── reports.html       # [Step 11] Business Intelligence & Demand Forecasting
+│   ├── users.html         # [Step 12] Staff Administration & System Audit Trail
+│   ├── explainer-video.html # Motion Graphics Explainer Demo Studio
+│   │
+│   ├── assets/            # Official branding logos and iconography
+│   ├── css/               # Modular stylesheets (home.css, index.css)
+│   └── js/                # Client-side platform engines and module controllers
+│       ├── core/          # aps-store.js, aps-common.js, html5-qrcode.min.js
+│       └── modules/       # Page-specific business logic controllers
+│
+├── dist/                  # Production bundle output
+├── src/                   # React + TypeScript Dashboard components
+├── server.js              # Root server entrypoint (delegates to 03_backend/server.js)
+├── index.html             # Root redirect entrypoint
+├── package.json           # Dependencies, scripts and platform metadata
+├── Dockerfile             # Production container definition
+├── docker-compose.yml     # Multi-container orchestration (App + PostgreSQL)
+└── README.md              # Project documentation and quickstart
+```
+
+---
+
 ## 🚀 Key Functional Modules
 
 1. **Authentication & Role-Based Access Control (RBAC):**

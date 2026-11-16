@@ -29,7 +29,7 @@ DeployWise natively supports Docker Compose projects. Using this method, both yo
 6. Under **Domains**, add your domain name (e.g., `curo.yourdomain.com`) and enable **Automatic SSL**.
 7. Click **Deploy**.
 
-The database container will automatically execute `schema.sql` and `seed.sql` on its initial run to create all tables and initial demo catalogs.
+The database container will automatically execute `02_database/01_schema.sql` and `02_database/02_seed.sql` on its initial run to create all tables and initial demo catalogs.
 
 ---
 

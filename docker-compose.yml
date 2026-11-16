@@ -31,8 +31,8 @@ services:
       POSTGRES_PASSWORD: curo_secure_password
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
-      - ./seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
+      - ./02_database/01_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./02_database/02_seed.sql:/docker-entrypoint-initdb.d/02_seed.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d curo_db"]
       interval: 10s

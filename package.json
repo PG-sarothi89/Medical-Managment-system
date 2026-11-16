@@ -2,14 +2,14 @@
   "name": "aps-medical-management-system",
   "version": "2.0.0",
   "description": "APS Enterprise Healthcare & Pharmaceutical Management Platform",
-  "main": "server.js",
+  "main": "03_backend/server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
-    "serve": "node server.js",
+    "start": "node 03_backend/server.js",
+    "dev": "node 03_backend/server.js",
+    "serve": "node 03_backend/server.js",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "test": "node --check server.js && node --check aps-store.js"
+    "test": "node --check 03_backend/server.js && node --check 04_frontend/js/core/aps-store.js"
   },
   "keywords": [
     "medical",

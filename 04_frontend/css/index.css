@@ -92,7 +92,7 @@ html, body {
 -------------------------------------------------------------- */
 .login-left-banner {
   position: relative;
-  background-image: url("login_card_photo.jpg");
+  background-image: url("../assets/login_card_photo.jpg");
   background-size: cover;
   background-position: center center;
   display: flex;

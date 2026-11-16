@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#008be3">
+  <title>Welcome to CURO Health &amp; Wellness — Login Portal</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Typography: Plus Jakarta Sans & Great Vibes / Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Great+Vibes&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+  <!-- New Login Stylesheet matching reference UI -->
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body>
+
+  <!-- Fullscreen Geometric Pattern Backdrop -->
+  <div class="login-page-bg">
+
+    <!-- Top-Left Corner Geometric 4-Petal Patterns -->
+    <svg class="corner-petals corner-petals-tl" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true">
+      <defs>
+        <pattern id="quatrefoilPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+          <circle cx="50" cy="0" r="50" fill="rgba(255,255,255,0.22)" />
+          <circle cx="50" cy="100" r="50" fill="rgba(255,255,255,0.22)" />
+          <circle cx="0" cy="50" r="50" fill="rgba(255,255,255,0.22)" />
+          <circle cx="100" cy="50" r="50" fill="rgba(255,255,255,0.22)" />
+        </pattern>
+      </defs>
+      <!-- Overlapping circular arcs creating the exact geometric flower motif -->
+      <g fill="rgba(255, 255, 255, 0.28)">
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(60, 60)" fill="rgba(255,255,255,0.35)" />
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(180, 60)" fill="rgba(255,255,255,0.3)" />
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(60, 180)" fill="rgba(255,255,255,0.3)" />
+        <circle cx="120" cy="120" r="42" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="8" />
+        <circle cx="0" cy="0" r="90" fill="rgba(255,255,255,0.25)" />
+        <circle cx="120" cy="0" r="90" fill="rgba(255,255,255,0.25)" />
+        <circle cx="0" cy="120" r="90" fill="rgba(255,255,255,0.25)" />
+      </g>
+    </svg>
+
+    <!-- Bottom-Right Corner Geometric 4-Petal Patterns -->
+    <svg class="corner-petals corner-petals-br" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true">
+      <g fill="rgba(255, 255, 255, 0.28)">
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(180, 180)" fill="rgba(255,255,255,0.35)" />
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(60, 180)" fill="rgba(255,255,255,0.3)" />
+        <path d="M 0 0 C 0 45, 45 90, 90 90 C 45 90, 0 135, 0 180 C 0 135, -45 90, -90 90 C -45 90, 0 45, 0 0 Z"
+          transform="translate(180, 60)" fill="rgba(255,255,255,0.3)" />
+        <circle cx="120" cy="120" r="42" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="8" />
+        <circle cx="240" cy="240" r="90" fill="rgba(255,255,255,0.25)" />
+        <circle cx="120" cy="240" r="90" fill="rgba(255,255,255,0.25)" />
+        <circle cx="240" cy="120" r="90" fill="rgba(255,255,255,0.25)" />
+      </g>
+    </svg>
+
+    <!-- Main Centered Floating Card -->
+    <main class="login-card-container">
+      <div class="login-card">
+
+        <!-- Left Column: Nature & Mountain Hero with Health Motto -->
+        <section class="login-left-banner" aria-label="Brand Inspiration">
+          <div class="banner-overlay"></div>
+          <div class="banner-content">
+            <h1 class="brand-cursive-title">Curo Health &amp; Wellness</h1>
+            <p class="brand-health-motto">
+              Good health is the only wealth that enriches your life in ways beyond material bounds
+            </p>
+          </div>
+        </section>
+
+        <!-- Right Column: Login Form & Credentials -->
+        <section class="login-right-panel" aria-label="Sign In">
+
+          <!-- Top-Right Accent Vector Trail -->
+          <div class="top-accent-trail" aria-hidden="true">
+            <svg viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M 10 35 Q 60 5, 95 15" stroke="#0098ea" stroke-width="2" stroke-dasharray="3 3" />
+              <!-- Heartbeat / Health glider motif -->
+              <path d="M 95 15 L 100 12 L 105 18 L 110 14" stroke="#0098ea" stroke-width="2.5" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+
+          <!-- Perfectly Placed CURO Logo -->
+          <div class="login-logo-container">
+            <img src="assets/curo-logo.png" alt="CURO Health & Wellness Logo" class="login-brand-logo">
+          </div>
+
+          <!-- Headings -->
+          <h2 class="welcome-heading">Welcome</h2>
+          <p class="welcome-subheading">Login with Email</p>
+
+          <!-- Form -->
+          <form id="loginForm" autocomplete="on" novalidate>
+
+            <!-- Staff ID / Username Input with Perched Border Label -->
+            <div class="outline-form-group">
+              <label for="userIdInput" class="perched-label">Staff Username or Email</label>
+              <div class="input-inner-wrap">
+                <i class="bi bi-person-badge input-icon"></i>
+                <input type="text" id="userIdInput" class="outline-input" placeholder="admin"
+                  value="admin" autocomplete="username" required>
+              </div>
+              <div class="field-error-text" id="idErrorMsg">Please enter your Staff Username or Email.</div>
+            </div>
+
+            <!-- Password Input with Perched Border Label -->
+            <div class="outline-form-group">
+              <label for="passwordInput" class="perched-label">Password</label>
+              <div class="input-inner-wrap">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password" id="passwordInput" class="outline-input" placeholder="••••••••••••"
+                  value="admin" autocomplete="current-password" required>
+                <button type="button" class="password-toggle-btn" id="togglePasswordBtn"
+                  aria-label="Toggle password visibility">
+                  <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+              <div class="field-error-text" id="passErrorMsg">Please enter your password.</div>
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="forgot-pass-wrap">
+              <a href="#" id="forgotPassLink" class="forgot-pass-link">Forgot password?</a>
+            </div>
+
+            <!-- Feedback Banner -->
+            <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
+              <i class="bi bi-info-circle" id="statusIcon"></i>
+              <span id="statusText"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-login" id="loginBtn">
+              <span class="btn-spinner" id="btnSpinner" aria-hidden="true"></span>
+              <span id="btnText">LOGIN</span>
+            </button>
+
+            <!-- Bottom Prompt -->
+            <p class="register-prompt">
+              Authorized Healthcare Personnel Only &bull; <a href="#" id="registerLink" class="register-link">System Access</a>
+            </p>
+
+          </form>
+
+          <!-- Bottom Skyline / Healthcare Vector Silhouette -->
+          <div class="bottom-skyline-wrap" aria-hidden="true">
+            <svg class="bottom-skyline-svg" viewBox="0 0 500 80" preserveAspectRatio="none" fill="#0098ea"
+              xmlns="http://www.w3.org/2000/svg">
+              <!-- Left medical clinic silhouette -->
+              <path
+                d="M 0 80 L 0 50 L 15 50 L 15 40 L 30 40 L 30 30 L 45 30 L 45 20 Q 55 10 65 20 L 65 30 L 80 30 L 80 40 L 95 40 L 95 50 L 110 50 L 110 80 Z" />
+              <rect x="52" y="35" width="6" height="20" rx="1" fill="#ffffff" opacity="0.4" />
+              <rect x="45" y="42" width="20" height="6" rx="1" fill="#ffffff" opacity="0.4" />
+              <!-- Center subtle pulse curve -->
+              <path d="M 110 80 L 110 75 Q 160 70 200 75 L 200 80 Z" fill="#0098ea" />
+              <!-- Right healthcare campus and modern tower silhouette -->
+              <path
+                d="M 360 80 L 360 45 L 375 45 L 375 25 L 395 25 L 395 10 L 410 10 L 410 25 L 430 25 L 430 35 L 445 35 L 445 18 L 460 18 L 460 35 L 485 35 L 485 55 L 500 55 L 500 80 Z" />
+              <!-- Hospital cross on tower -->
+              <rect x="400" y="32" width="5" height="15" rx="1" fill="#ffffff" opacity="0.4" />
+              <rect x="395" y="37" width="15" height="5" rx="1" fill="#ffffff" opacity="0.4" />
+              <!-- Windows grid -->
+              <rect x="378" y="52" width="6" height="6" fill="#ffffff" opacity="0.4" />
+              <rect x="388" y="52" width="6" height="6" fill="#ffffff" opacity="0.4" />
+              <rect x="415" y="52" width="6" height="6" fill="#ffffff" opacity="0.4" />
+              <rect x="425" y="52" width="6" height="6" fill="#ffffff" opacity="0.4" />
+              <rect x="465" y="45" width="6" height="8" fill="#ffffff" opacity="0.4" />
+              <rect x="474" y="45" width="6" height="8" fill="#ffffff" opacity="0.4" />
+            </svg>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Load APS Data Store -->
+  <script src="js/core/aps-store.js"></script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      // -------------------------------------------------------------
+      // 1. Audio Synthesizer (Web Audio API for UI sounds)
+      // -------------------------------------------------------------
+      let audioCtx = null;
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      function playUiBeep(freq = 880, type = "sine", duration = 0.08, gainVal = 0.1) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+          gain.gain.setValueAtTime(gainVal, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start();
+          osc.stop(ctx.currentTime + duration);
+        } catch (e) { }
+      }
+
+      function playSuccessTone() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          playUiBeep(523.25, "triangle", 0.1, 0.12);
+          setTimeout(() => playUiBeep(659.25, "triangle", 0.12, 0.12), 80);
+          setTimeout(() => playUiBeep(783.99, "sine", 0.22, 0.15), 160);
+        } catch (e) { }
+      }
+
+      function playErrorTone() {
+        try {
+          playUiBeep(260, "sawtooth", 0.15, 0.12);
+          setTimeout(() => playUiBeep(220, "sawtooth", 0.2, 0.12), 120);
+        } catch (e) { }
+      }
+
+      // -------------------------------------------------------------
+      // 2. Elements & Controls
+      // -------------------------------------------------------------
+      const loginForm = document.getElementById("loginForm");
+      const userIdInput = document.getElementById("userIdInput");
+      const passwordInput = document.getElementById("passwordInput");
+      const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+      const togglePasswordIcon = document.getElementById("togglePasswordIcon");
+      const idErrorMsg = document.getElementById("idErrorMsg");
+      const passErrorMsg = document.getElementById("passErrorMsg");
+      const statusBanner = document.getElementById("statusBanner");
+      const statusIcon = document.getElementById("statusIcon");
+      const statusText = document.getElementById("statusText");
+      const loginBtn = document.getElementById("loginBtn");
+      const btnSpinner = document.getElementById("btnSpinner");
+      const btnText = document.getElementById("btnText");
+      // Password visibility toggle
+      togglePasswordBtn.addEventListener("click", () => {
+        playUiBeep(600, "sine", 0.04);
+        const isSecret = passwordInput.type === "password";
+        passwordInput.type = isSecret ? "text" : "password";
+        togglePasswordIcon.className = isSecret ? "bi bi-eye-slash" : "bi bi-eye";
+      });
+
+      // Forgot Password & Register helpers
+      document.getElementById("forgotPassLink")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        playUiBeep(650, "sine", 0.05);
+        statusBanner.className = "status-banner is-info";
+        statusIcon.className = "bi bi-shield-lock-fill";
+        statusText.textContent = "To reset your password, contact your Clinical System Administrator.";
+      });
+
+      document.getElementById("registerLink")?.addEventListener("click", (e) => {
+        e.preventDefault();
+        playUiBeep(650, "sine", 0.05);
+        statusBanner.className = "status-banner is-info";
+        statusIcon.className = "bi bi-hospital-fill";
+        statusText.textContent = "Staff account provisioning is managed by Hospital Administration.";
+      });
+
+      function clearErrors() {
+        idErrorMsg.classList.remove("is-visible");
+        passErrorMsg.classList.remove("is-visible");
+        statusBanner.className = "status-banner";
+        statusText.textContent = "";
+      }
+
+      userIdInput.addEventListener("input", () => idErrorMsg.classList.remove("is-visible"));
+      passwordInput.addEventListener("input", () => passErrorMsg.classList.remove("is-visible"));
+
+      // Check if already authenticated
+      if (sessionStorage.getItem("apsAuthenticated") === "true") {
+        statusBanner.className = "status-banner is-success";
+        statusIcon.className = "bi bi-check-circle";
+        statusText.textContent = "Session active. Redirecting to dashboard...";
+        setTimeout(() => window.location.href = "home.html", 450);
+      }
+
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const inputId = userIdInput.value.trim();
+        const inputPass = passwordInput.value;
+
+        let hasError = false;
+
+        if (!inputId) {
+          idErrorMsg.classList.add("is-visible");
+          hasError = true;
+        }
+
+        if (!inputPass || inputPass.length < 3) {
+          passErrorMsg.classList.add("is-visible");
+          hasError = true;
+        }
+
+        if (hasError) {
+          playErrorTone();
+          return;
+        }
+
+        // Show loading state
+        loginBtn.disabled = true;
+        btnSpinner.classList.add("is-active");
+        btnText.textContent = "AUTHENTICATING...";
+
+        setTimeout(() => {
+          const users = (window.APSStore && window.APSStore.getUsers) ? window.APSStore.getUsers() : [];
+
+          // Match logic: accepts username ("admin"), email ("admin@curo.health"), or user ID ("usr-admin")
+          const matchedUser = users.find(u => {
+            const matchCred =
+              (u.id && u.id.toLowerCase() === inputId.toLowerCase()) ||
+              (u.username && u.username.toLowerCase() === inputId.toLowerCase()) ||
+              (u.email && u.email.toLowerCase() === inputId.toLowerCase()) ||
+              (inputId.toLowerCase() === "admin");
+
+            const matchPass = u.password === inputPass ||
+              (u.username === "admin" && (inputPass === "admin" || inputPass === "admin123" || inputPass === "root"));
+            return matchCred && matchPass;
+          });
+
+          if (matchedUser) {
+            playSuccessTone();
+            statusBanner.className = "status-banner is-success";
+            statusIcon.className = "bi bi-check-circle-fill";
+            statusText.textContent = `Access granted. Welcome, ${matchedUser.name}!`;
+
+            // Persist session
+            sessionStorage.setItem("apsAuthenticated", "true");
+            sessionStorage.setItem("apsUserId", matchedUser.id);
+            sessionStorage.setItem("apsUserName", matchedUser.name);
+            sessionStorage.setItem("apsUserRole", matchedUser.roleTitle || matchedUser.role);
+            sessionStorage.setItem("apsUserRoleKey", matchedUser.role);
+            sessionStorage.setItem("apsUserEmail", matchedUser.email);
+
+            if (window.APSStore && window.APSStore.logAudit) {
+              window.APSStore.logAudit(
+                "LOGIN",
+                "users",
+                matchedUser.id,
+                `User authenticated successfully with role ${matchedUser.roleTitle || matchedUser.role}`
+              );
+            }
+
+            setTimeout(() => {
+              window.location.href = "home.html";
+            }, 550);
+
+          } else {
+            playErrorTone();
+            loginBtn.disabled = false;
+            btnSpinner.classList.remove("is-active");
+            btnText.textContent = "LOGIN";
+
+            statusBanner.className = "status-banner is-error";
+            statusIcon.className = "bi bi-exclamation-triangle-fill";
+            statusText.textContent = "Invalid ID or password. Use quick demo accounts below.";
+          }
+        }, 350);
+      });
+
+    })();
+  </script>
+
+</body>
+
+</html>
