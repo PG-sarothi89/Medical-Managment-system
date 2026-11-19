@@ -738,11 +738,11 @@ window.APSStore = (() => {
           phone: c.phone,
           email: c.email || "",
           address: c.address || "",
-          dateOfBirth: c.date_of_birth ? String(c.date_of_birth).split("T")[0] : "",
-          creditLimit: Number(c.credit_limit || 5000),
-          outstandingBalance: Number(c.outstanding_balance || 0),
-          loyaltyPoints: Number(c.loyalty_points || 0),
-          createdAt: c.created_at || todayStr(0)
+          dateOfBirth: c.date_of_birth ? String(c.date_of_birth).split("T")[0] : (c.dateOfBirth || ""),
+          creditLimit: Number(c.credit_limit ?? c.creditLimit ?? 5000),
+          outstandingBalance: Number(c.outstanding_balance ?? c.outstandingBalance ?? 0),
+          loyaltyPoints: Number(c.loyalty_points ?? c.loyaltyPoints ?? 0),
+          createdAt: c.created_at || c.createdAt || todayStr(0)
         })));
       }
 
@@ -751,22 +751,25 @@ window.APSStore = (() => {
         save(KEYS.MEDICINES, medicines.map(m => ({
           id: m.id,
           name: m.name,
-          genericName: m.generic_name,
-          categoryId: m.category_id,
-          categoryName: m.category_name,
-          manufacturerId: m.manufacturer_id,
-          manufacturerName: m.manufacturer_name,
+          generic: m.generic || m.generic_name || m.genericName || m.name,
+          genericName: m.generic_name || m.genericName || m.generic || m.name,
+          categoryId: m.category_id || m.categoryId || "cat-1",
+          categoryName: m.category_name || m.categoryName || "General",
+          manufacturerId: m.manufacturer_id || m.manufacturerId || "mfr-1",
+          manufacturerName: m.manufacturer_name || m.manufacturerName || "Generic",
           composition: m.composition || "",
-          dosageForm: m.dosage_form,
+          unit: m.dosage_form || m.dosageForm || m.unit || "Tablet",
+          dosageForm: m.dosage_form || m.dosageForm || m.unit || "Tablet",
           strength: m.strength || "",
           barcode: m.barcode || "",
-          hsnCode: m.hsn_code || "",
-          requiresPrescription: Boolean(m.requires_prescription),
-          reorderLevel: Number(m.reorder_level || 50),
-          reorderQuantity: Number(m.reorder_quantity || 100),
-          rackLocation: m.rack_location || "",
-          totalStock: Number(m.total_stock || 0),
-          isActive: Boolean(m.is_active !== false)
+          hsn: m.hsn_code || m.hsnCode || m.hsn || "3004.90",
+          hsnCode: m.hsn_code || m.hsnCode || m.hsn || "3004.90",
+          requiresPrescription: Boolean(m.requires_prescription || m.requiresPrescription),
+          reorderLevel: Number(m.reorder_level || m.reorderLevel || 50),
+          reorderQuantity: Number(m.reorder_quantity || m.reorderQuantity || 100),
+          rackLocation: m.rack_location || m.rackLocation || "Rack A-1",
+          totalStock: Number(m.total_stock ?? m.totalStock ?? 0),
+          isActive: Boolean(m.is_active !== false && m.isActive !== false)
         })));
       }
 
@@ -774,19 +777,21 @@ window.APSStore = (() => {
       if (batches && batches.length) {
         save(KEYS.BATCHES, batches.map(b => ({
           id: b.id,
-          medicineId: b.medicine_id,
-          medicineName: b.medicine_name,
-          genericName: b.generic_name,
-          supplierId: b.supplier_id,
-          batchNumber: b.batch_number,
-          manufactureDate: b.manufacture_date ? String(b.manufacture_date).split("T")[0] : "",
-          expiryDate: b.expiry_date ? String(b.expiry_date).split("T")[0] : "",
-          purchasePrice: Number(b.cost_price || 0),
-          sellingPrice: Number(b.selling_price || 0),
-          mrp: Number(b.mrp || b.selling_price || 0),
-          quantityReceived: Number(b.quantity_received || 0),
-          quantityAvailable: Number(b.quantity_available || 0),
-          rackLocation: b.rack_location || ""
+          medicineId: b.medicine_id || b.medicineId,
+          medicineName: b.medicine_name || b.medicineName || "",
+          genericName: b.generic_name || b.genericName || "",
+          supplierId: b.supplier_id || b.supplierId || "sup-1",
+          supplierName: b.supplier_name || b.supplierName || "Supplier",
+          batchNumber: b.batch_number || b.batchNumber,
+          manufactureDate: b.manufacture_date ? String(b.manufacture_date).split("T")[0] : (b.manufactureDate || ""),
+          expiryDate: b.expiry_date ? String(b.expiry_date).split("T")[0] : (b.expiryDate || ""),
+          purchasePrice: Number(b.cost_price ?? b.purchasePrice ?? 0),
+          costPrice: Number(b.cost_price ?? b.purchasePrice ?? 0),
+          sellingPrice: Number(b.selling_price ?? b.sellingPrice ?? 0),
+          mrp: Number(b.mrp ?? b.selling_price ?? b.sellingPrice ?? 0),
+          quantityReceived: Number(b.quantity_received ?? b.quantityReceived ?? 0),
+          quantityAvailable: Number(b.quantity_available ?? b.quantityAvailable ?? 0),
+          rackLocation: b.rack_location || b.rackLocation || "Rack A-1"
         })));
       }
 
@@ -796,7 +801,7 @@ window.APSStore = (() => {
           id: d.id,
           name: d.name,
           specialization: d.specialization,
-          licenseNumber: d.license_number,
+          licenseNumber: d.license_number || d.licenseNumber,
           phone: d.phone,
           chamber: d.chamber
         })));
@@ -806,11 +811,11 @@ window.APSStore = (() => {
       if (prescriptions && prescriptions.length) {
         save(KEYS.PRESCRIPTIONS, prescriptions.map(p => ({
           id: p.id,
-          customerId: p.customer_id,
-          customerName: p.customer_name,
-          doctorId: p.doctor_id,
-          doctorName: p.doctor_name,
-          prescriptionDate: p.prescription_date ? String(p.prescription_date).split("T")[0] : todayStr(0),
+          customerId: p.customer_id || p.customerId,
+          customerName: p.customer_name || p.customerName,
+          doctorId: p.doctor_id || p.doctorId,
+          doctorName: p.doctor_name || p.doctorName,
+          prescriptionDate: p.prescription_date ? String(p.prescription_date).split("T")[0] : (p.prescriptionDate || todayStr(0)),
           notes: p.notes,
           status: p.status,
           items: p.items || []
@@ -834,23 +839,46 @@ window.APSStore = (() => {
       }
 
       localStorage.setItem(KEYS.INITIALIZED, "true");
-      console.log("APSStore: Live synchronization from PostgreSQL completed.");
+      console.log("APSStore: Live synchronization from server completed.");
       window.dispatchEvent(new CustomEvent("aps:sync", { detail: json.data }));
     } catch (e) {
-      console.warn("APSStore: Could not sync from PostgreSQL, using local store:", e);
+      console.warn("APSStore: Could not sync from server:", e);
     }
   }
 
   // Trigger sync on startup
   syncFromBackend();
 
-  // Re-sync whenever user returns to the tab/app
-  if (typeof document !== "undefined") {
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
+  // Multi-User Live Sync: Poll backend periodically so any change made by other users
+  // (e.g. adding medicine, customer, or stock) is automatically reflected on screen!
+  if (typeof window !== "undefined" && typeof setInterval === "function" && typeof window.addEventListener === "function") {
+    // Only set background poll in browser environment
+    if (typeof document !== "undefined") {
+      setInterval(syncFromBackend, 4000);
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          syncFromBackend();
+        }
+      });
+
+      window.addEventListener("focus", () => {
         syncFromBackend();
-      }
-    });
+      });
+    }
+
+    // Cross-tab broadcast channel for instantaneous 0ms local sync
+    if (typeof BroadcastChannel !== "undefined") {
+      try {
+        const liveSyncChannel = new BroadcastChannel("curo_live_channel");
+        liveSyncChannel.onmessage = () => {
+          syncFromBackend();
+        };
+        window.curoBroadcastChange = () => {
+          try { liveSyncChannel.postMessage({ timestamp: Date.now() }); } catch (e) {}
+        };
+      } catch (e) {}
+    }
   }
 
   /* =========================================================
@@ -1895,12 +1923,17 @@ window.APSStore = (() => {
       });
     }
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/medicines", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(medicineData)
-    }).catch(err => console.error("Postgres medicine save error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Medicine server save error:", err));
 
     return savedRecord;
   }
@@ -1995,12 +2028,17 @@ window.APSStore = (() => {
     }
     save(KEYS.BATCHES, batches);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/batches", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(batchData)
-    }).catch(err => console.error("Postgres batch save error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Batch server save error:", err));
 
     return saved;
   }
@@ -2030,6 +2068,19 @@ window.APSStore = (() => {
     });
 
     logAudit("STOCK_ADJUST", "batches", batchId, `Adjusted stock by ${adjustQty} (Reason: ${reason})`);
+
+    // Sync to backend database
+    fetch("/api/batches/adjust", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ batchId, adjustQty, reason, notes })
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Stock adjust server save error:", err));
+
     return batch;
   }
 
@@ -2217,7 +2268,7 @@ window.APSStore = (() => {
 
     logAudit("POS_CHECKOUT", "sales", saleId, `Generated ${invNumber} for ৳${totalAmount} (${paymentMode})`);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/pos/checkout", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -2237,7 +2288,12 @@ window.APSStore = (() => {
           unitPrice: it.price || it.unitPrice || 0
         }))
       })
-    }).catch(err => console.error("Postgres POS checkout error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("POS server save error:", err));
 
     return { sale: saleRecord, invoice: invoiceRecord };
   }
@@ -2402,12 +2458,17 @@ window.APSStore = (() => {
     }
     save(KEYS.SUPPLIERS, list);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/suppliers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
-    }).catch(err => console.error("Postgres supplier save error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Supplier server save error:", err));
 
     return data;
   }
@@ -2466,7 +2527,7 @@ window.APSStore = (() => {
     }
     save(KEYS.CUSTOMERS, list);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/customers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -2480,7 +2541,11 @@ window.APSStore = (() => {
           save(KEYS.CUSTOMERS, cur);
         }
       }
-    }).catch(err => console.error("Postgres customer save error:", err));
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Customer server save error:", err));
 
     return data;
   }
@@ -2494,12 +2559,17 @@ window.APSStore = (() => {
     cust.outstandingBalance = Math.max(0, Number((cust.outstandingBalance - payAmount).toFixed(2)));
     save(KEYS.CUSTOMERS, custs);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/customers/settle", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ customerId, amount: payAmount, paymentMode, referenceNumber })
-    }).catch(err => console.error("Postgres settle error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Customer settle error:", err));
 
     logAudit("CREDIT_SETTLEMENT", "customers", customerId, `Collected ৳${payAmount} credit from ${cust.name}`);
     return cust;
@@ -2525,12 +2595,17 @@ window.APSStore = (() => {
     }
     save(KEYS.DOCTORS, list);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/doctors", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
-    }).catch(err => console.error("Postgres doctor save error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Doctor server save error:", err));
 
     return data;
   }
@@ -2553,12 +2628,17 @@ window.APSStore = (() => {
     }
     save(KEYS.PRESCRIPTIONS, list);
 
-    // Sync to PostgreSQL backend
+    // Sync to backend database
     fetch("/api/prescriptions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
-    }).catch(err => console.error("Postgres prescription save error:", err));
+    }).then(r => r.json()).then(res => {
+      if (typeof window !== "undefined" && window.curoBroadcastChange) {
+        window.curoBroadcastChange();
+      }
+      syncFromBackend();
+    }).catch(err => console.error("Prescription server save error:", err));
 
     return data;
   }
