@@ -78,7 +78,7 @@ async function runTests() {
 
   // Test 6: Adding Medicine by Scanning Barcode with Initial Stock
   // User Requirement: "when he scans the barcode all the informations from the barcode will automatically filled expect quatity"
-  const newDrugBarcode = "8901234500202"; // Ace Plus
+  const newDrugBarcode = "8909999888822"; // Unseeded/new scanned drug barcode
   const drugDetails = store.lookupBarcodeDrugCatalog(newDrugBarcode);
 
   // User enters quantity 150 (all other fields auto-filled)

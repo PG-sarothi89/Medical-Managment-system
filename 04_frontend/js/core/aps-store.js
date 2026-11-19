@@ -10,7 +10,7 @@ window.APSStore = (() => {
   const STORAGE_PREFIX = "aps_db_";
 
   const KEYS = {
-    INITIALIZED: STORAGE_PREFIX + "initialized_v2",
+    INITIALIZED: STORAGE_PREFIX + "initialized_v3",
     USERS: STORAGE_PREFIX + "users",
     ROLES: STORAGE_PREFIX + "roles",
     CATEGORIES: STORAGE_PREFIX + "categories",
@@ -139,7 +139,23 @@ window.APSStore = (() => {
       { id: "med-11", name: "Entacyd Plus Suspension 200ml", generic: "Aluminium Hydroxide + Magnesium", categoryId: "cat-3", manufacturerId: "mfr-1", composition: "Al(OH)3 200mg + Mg(OH)2 200mg/5ml", unit: "Bottle", hsn: "3004.90", barcode: "8901234500110", requiresPrescription: false, reorderLevel: 25, reorderQuantity: 60, isActive: true },
       { id: "med-12", name: "Mixtard 30 HM 100 IU/ml", generic: "Biphasic Isophane Insulin", categoryId: "cat-6", manufacturerId: "mfr-6", composition: "Soluble Insulin 30% + Isophane 70%", unit: "Vial", hsn: "3004.31", barcode: "8901234500127", requiresPrescription: true, reorderLevel: 20, reorderQuantity: 50, isActive: true },
       { id: "med-13", name: "Rivotril 0.5mg Tablet", generic: "Clonazepam", categoryId: "cat-7", manufacturerId: "mfr-4", composition: "Clonazepam 0.5mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500134", requiresPrescription: true, reorderLevel: 35, reorderQuantity: 100, isActive: true },
-      { id: "med-14", name: "Tofen 100ml Syrup", generic: "Ketotifen Fumarate", categoryId: "cat-8", manufacturerId: "mfr-2", composition: "Ketotifen 1mg/5ml", unit: "Bottle", hsn: "3004.90", barcode: "8901234500141", requiresPrescription: false, reorderLevel: 20, reorderQuantity: 50, isActive: true }
+      { id: "med-14", name: "Tofen 100ml Syrup", generic: "Ketotifen Fumarate", categoryId: "cat-8", manufacturerId: "mfr-2", composition: "Ketotifen 1mg/5ml", unit: "Bottle", hsn: "3004.90", barcode: "8901234500141", requiresPrescription: false, reorderLevel: 20, reorderQuantity: 50, isActive: true },
+      { id: "med-15", name: "Ace Plus 500mg/65mg", generic: "Paracetamol + Caffeine", categoryId: "cat-1", manufacturerId: "mfr-1", composition: "Paracetamol 500mg, Caffeine 65mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500202", requiresPrescription: false, reorderLevel: 100, reorderQuantity: 300, isActive: true },
+      { id: "med-16", name: "Ciprocin 500mg Tablet", generic: "Ciprofloxacin Hydrochloride", categoryId: "cat-2", manufacturerId: "mfr-1", composition: "Ciprofloxacin 500mg", unit: "Tablet", hsn: "3004.20", barcode: "8901234500219", requiresPrescription: true, reorderLevel: 50, reorderQuantity: 150, isActive: true },
+      { id: "med-17", name: "Sergel 20mg Capsule", generic: "Esomeprazole Magnesium", categoryId: "cat-3", manufacturerId: "mfr-3", composition: "Esomeprazole 20mg pellets", unit: "Capsule", hsn: "3004.90", barcode: "8901234500226", requiresPrescription: false, reorderLevel: 80, reorderQuantity: 200, isActive: true },
+      { id: "med-18", name: "Pantonix 20mg Tablet", generic: "Pantoprazole Sodium", categoryId: "cat-3", manufacturerId: "mfr-3", composition: "Pantoprazole 20mg enteric coated", unit: "Tablet", hsn: "3004.90", barcode: "8901234500233", requiresPrescription: false, reorderLevel: 70, reorderQuantity: 180, isActive: true },
+      { id: "med-19", name: "Ceevit 250mg Chewable", generic: "Ascorbic Acid (Vitamin C)", categoryId: "cat-4", manufacturerId: "mfr-1", composition: "Ascorbic Acid 250mg", unit: "Tablet", hsn: "2936.27", barcode: "8901234500240", requiresPrescription: false, reorderLevel: 50, reorderQuantity: 150, isActive: true },
+      { id: "med-20", name: "Bextram Gold Multivitamin", generic: "32 Essential Vitamins & Minerals", categoryId: "cat-4", manufacturerId: "mfr-2", composition: "Complete A-Zinc Formula", unit: "Tablet", hsn: "2106.90", barcode: "8901234500257", requiresPrescription: false, reorderLevel: 40, reorderQuantity: 100, isActive: true },
+      { id: "med-21", name: "Renova 500mg Tablet", generic: "Paracetamol BP", categoryId: "cat-1", manufacturerId: "mfr-5", composition: "Paracetamol 500mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500264", requiresPrescription: false, reorderLevel: 80, reorderQuantity: 250, isActive: true },
+      { id: "med-22", name: "Fenofex 120mg Tablet", generic: "Fexofenadine Hydrochloride", categoryId: "cat-5", manufacturerId: "mfr-1", composition: "Fexofenadine HCl 120mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500271", requiresPrescription: false, reorderLevel: 30, reorderQuantity: 100, isActive: true },
+      { id: "med-23", name: "Montene 10mg Tablet", generic: "Montelukast Sodium", categoryId: "cat-8", manufacturerId: "mfr-3", composition: "Montelukast 10mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500288", requiresPrescription: true, reorderLevel: 30, reorderQuantity: 80, isActive: true },
+      { id: "med-24", name: "Amodis 400mg Tablet", generic: "Metronidazole BP", categoryId: "cat-2", manufacturerId: "mfr-1", composition: "Metronidazole 400mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500295", requiresPrescription: true, reorderLevel: 40, reorderQuantity: 120, isActive: true },
+      { id: "med-25", name: "Finix 20mg Tablet", generic: "Rabeprazole Sodium", categoryId: "cat-3", manufacturerId: "mfr-4", composition: "Rabeprazole Sodium 20mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500301", requiresPrescription: false, reorderLevel: 50, reorderQuantity: 150, isActive: true },
+      { id: "med-26", name: "Cef-3 200mg Capsule", generic: "Cefixime Trihydrate", categoryId: "cat-2", manufacturerId: "mfr-1", composition: "Cefixime 200mg", unit: "Capsule", hsn: "3004.20", barcode: "8901234500318", requiresPrescription: true, reorderLevel: 30, reorderQuantity: 80, isActive: true },
+      { id: "med-27", name: "Camlodin 5mg Tablet", generic: "Amlodipine Besylate", categoryId: "cat-7", manufacturerId: "mfr-1", composition: "Amlodipine 5mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500325", requiresPrescription: true, reorderLevel: 60, reorderQuantity: 180, isActive: true },
+      { id: "med-28", name: "Angilock 50mg Tablet", generic: "Losartan Potassium", categoryId: "cat-7", manufacturerId: "mfr-1", composition: "Losartan Potassium 50mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500332", requiresPrescription: true, reorderLevel: 50, reorderQuantity: 150, isActive: true },
+      { id: "med-29", name: "Secrin 2mg Tablet", generic: "Glimepiride", categoryId: "cat-6", manufacturerId: "mfr-1", composition: "Glimepiride 2mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500349", requiresPrescription: true, reorderLevel: 40, reorderQuantity: 120, isActive: true },
+      { id: "med-30", name: "Galvus 50mg Tablet", generic: "Vildagliptin", categoryId: "cat-6", manufacturerId: "mfr-6", composition: "Vildagliptin 50mg", unit: "Tablet", hsn: "3004.90", barcode: "8901234500356", requiresPrescription: true, reorderLevel: 25, reorderQuantity: 60, isActive: true }
     ];
 
     // 7. Batches (FEFO Tracked!)
@@ -187,7 +203,25 @@ window.APSStore = (() => {
       { id: "bat-115", medicineId: "med-13", batchNumber: "RV-2024", manufactureDate: "2024-05-01", expiryDate: todayStr(380), purchasePrice: 5.00, sellingPrice: 7.00, mrp: 7.00, quantityReceived: 200, quantityAvailable: 190, supplierId: "sup-4" },
 
       // med-14 Tofen Syrup (Dead stock simulation: no sales for 120 days)
-      { id: "bat-116", medicineId: "med-14", batchNumber: "TF-8811", manufactureDate: "2023-10-01", expiryDate: todayStr(150), purchasePrice: 48.00, sellingPrice: 65.00, mrp: 70.00, quantityReceived: 50, quantityAvailable: 48, supplierId: "sup-2" }
+      { id: "bat-116", medicineId: "med-14", batchNumber: "TF-8811", manufactureDate: "2023-10-01", expiryDate: todayStr(150), purchasePrice: 48.00, sellingPrice: 65.00, mrp: 70.00, quantityReceived: 50, quantityAvailable: 48, supplierId: "sup-2" },
+
+      // Demo Batches for med-15 through med-30
+      { id: "bat-117", medicineId: "med-15", batchNumber: "ACE-2401", manufactureDate: "2024-04-10", expiryDate: todayStr(320), purchasePrice: 2.15, sellingPrice: 3.00, mrp: 3.00, quantityReceived: 400, quantityAvailable: 320, supplierId: "sup-1" },
+      { id: "bat-118", medicineId: "med-16", batchNumber: "CP-2411", manufactureDate: "2024-02-15", expiryDate: todayStr(210), purchasePrice: 12.00, sellingPrice: 16.00, mrp: 16.00, quantityReceived: 200, quantityAvailable: 145, supplierId: "sup-1" },
+      { id: "bat-119", medicineId: "med-17", batchNumber: "SG-2408", manufactureDate: "2024-05-20", expiryDate: todayStr(450), purchasePrice: 5.40, sellingPrice: 7.00, mrp: 7.00, quantityReceived: 500, quantityAvailable: 410, supplierId: "sup-3" },
+      { id: "bat-120", medicineId: "med-18", batchNumber: "PX-2403", manufactureDate: "2024-03-01", expiryDate: todayStr(380), purchasePrice: 5.20, sellingPrice: 7.00, mrp: 7.00, quantityReceived: 350, quantityAvailable: 280, supplierId: "sup-3" },
+      { id: "bat-121", medicineId: "med-19", batchNumber: "CV-2405", manufactureDate: "2024-06-01", expiryDate: todayStr(260), purchasePrice: 1.80, sellingPrice: 2.50, mrp: 2.50, quantityReceived: 300, quantityAvailable: 190, supplierId: "sup-1" },
+      { id: "bat-122", medicineId: "med-20", batchNumber: "BG-2412", manufactureDate: "2024-01-15", expiryDate: todayStr(510), purchasePrice: 8.50, sellingPrice: 12.00, mrp: 12.00, quantityReceived: 200, quantityAvailable: 135, supplierId: "sup-2" },
+      { id: "bat-123", medicineId: "med-21", batchNumber: "RN-2402", manufactureDate: "2024-04-18", expiryDate: todayStr(290), purchasePrice: 0.90, sellingPrice: 1.20, mrp: 1.20, quantityReceived: 500, quantityAvailable: 380, supplierId: "sup-4" },
+      { id: "bat-124", medicineId: "med-22", batchNumber: "FX-2409", manufactureDate: "2024-05-10", expiryDate: todayStr(340), purchasePrice: 6.80, sellingPrice: 9.00, mrp: 9.00, quantityReceived: 250, quantityAvailable: 180, supplierId: "sup-1" },
+      { id: "bat-125", medicineId: "med-23", batchNumber: "MN-2404", manufactureDate: "2024-03-22", expiryDate: todayStr(280), purchasePrice: 12.50, sellingPrice: 16.00, mrp: 16.00, quantityReceived: 150, quantityAvailable: 95, supplierId: "sup-3" },
+      { id: "bat-126", medicineId: "med-24", batchNumber: "AM-2406", manufactureDate: "2024-02-28", expiryDate: todayStr(190), purchasePrice: 1.50, sellingPrice: 2.20, mrp: 2.20, quantityReceived: 300, quantityAvailable: 210, supplierId: "sup-1" },
+      { id: "bat-127", medicineId: "med-25", batchNumber: "FN-2407", manufactureDate: "2024-04-05", expiryDate: todayStr(330), purchasePrice: 4.80, sellingPrice: 6.50, mrp: 6.50, quantityReceived: 200, quantityAvailable: 160, supplierId: "sup-4" },
+      { id: "bat-128", medicineId: "med-26", batchNumber: "CF-2410", manufactureDate: "2023-11-20", expiryDate: todayStr(24), purchasePrice: 28.00, sellingPrice: 38.00, mrp: 38.00, quantityReceived: 100, quantityAvailable: 18, supplierId: "sup-1" },
+      { id: "bat-129", medicineId: "med-27", batchNumber: "CD-2401", manufactureDate: "2024-06-12", expiryDate: todayStr(420), purchasePrice: 3.20, sellingPrice: 4.50, mrp: 4.50, quantityReceived: 400, quantityAvailable: 310, supplierId: "sup-1" },
+      { id: "bat-130", medicineId: "med-28", batchNumber: "AG-2402", manufactureDate: "2024-05-08", expiryDate: todayStr(390), purchasePrice: 6.50, sellingPrice: 8.50, mrp: 8.50, quantityReceived: 300, quantityAvailable: 240, supplierId: "sup-1" },
+      { id: "bat-131", medicineId: "med-29", batchNumber: "SC-2411", manufactureDate: "2024-03-14", expiryDate: todayStr(310), purchasePrice: 6.00, sellingPrice: 8.00, mrp: 8.00, quantityReceived: 250, quantityAvailable: 175, supplierId: "sup-1" },
+      { id: "bat-132", medicineId: "med-30", batchNumber: "GV-2409", manufactureDate: "2024-04-25", expiryDate: todayStr(270), purchasePrice: 22.00, sellingPrice: 28.00, mrp: 28.00, quantityReceived: 100, quantityAvailable: 65, supplierId: "sup-2" }
     ];
 
     // 8. Customers
@@ -195,7 +229,13 @@ window.APSStore = (() => {
       { id: "cust-1", name: "Anisur Rahman", phone: "+880 1712-345678", email: "anis@gmail.com", address: "Dhanmondi, Dhaka", dateOfBirth: "1982-05-14", creditLimit: 10000, outstandingBalance: 2450, loyaltyPoints: 340, createdAt: todayStr(-180) },
       { id: "cust-2", name: "Farhana Yasmin", phone: "+880 1819-456789", email: "farhana@yahoo.com", address: "Uttara Sector 7, Dhaka", dateOfBirth: "1991-09-22", creditLimit: 15000, outstandingBalance: 0, loyaltyPoints: 620, createdAt: todayStr(-120) },
       { id: "cust-3", name: "Md. Rafiqul Islam", phone: "+880 1911-567890", email: "rafiq.islam@hotmail.com", address: "Mirpur 10, Dhaka", dateOfBirth: "1975-11-03", creditLimit: 8000, outstandingBalance: 4120, loyaltyPoints: 190, createdAt: todayStr(-90) },
-      { id: "cust-4", name: "Dr. Shahida Parveen", phone: "+880 1617-678901", email: "shahida@med.org", address: "Gulshan 2, Dhaka", dateOfBirth: "1986-03-30", creditLimit: 25000, outstandingBalance: 0, loyaltyPoints: 1150, createdAt: todayStr(-250) }
+      { id: "cust-4", name: "Dr. Shahida Parveen", phone: "+880 1617-678901", email: "shahida@med.org", address: "Gulshan 2, Dhaka", dateOfBirth: "1986-03-30", creditLimit: 25000, outstandingBalance: 0, loyaltyPoints: 1150, createdAt: todayStr(-250) },
+      { id: "cust-5", name: "Tanvir Hasan", phone: "+880 1722-112233", email: "tanvir.hasan@gmail.com", address: "Mirpur DOHS, Dhaka", dateOfBirth: "1985-07-19", creditLimit: 12000, outstandingBalance: 1850, loyaltyPoints: 410, createdAt: todayStr(-160) },
+      { id: "cust-6", name: "Nusrat Jahan", phone: "+880 1833-223344", email: "nusrat.jahan@yahoo.com", address: "Bashundhara R/A, Dhaka", dateOfBirth: "1993-12-05", creditLimit: 20000, outstandingBalance: 0, loyaltyPoints: 890, createdAt: todayStr(-110) },
+      { id: "cust-7", name: "Engr. Mahbubur Rahman", phone: "+880 1944-334455", email: "mahbub.engr@outlook.com", address: "Banani, Dhaka", dateOfBirth: "1978-04-12", creditLimit: 15000, outstandingBalance: 3200, loyaltyPoints: 530, createdAt: todayStr(-210) },
+      { id: "cust-8", name: "Sabrina Mostafa", phone: "+880 1655-445566", email: "sabrina.m@gmail.com", address: "Mohakhali Wireless, Dhaka", dateOfBirth: "1990-08-25", creditLimit: 10000, outstandingBalance: 750, loyaltyPoints: 310, createdAt: todayStr(-85) },
+      { id: "cust-9", name: "S. M. Golam Kibria", phone: "+880 1766-556677", email: "kibria.sm@hotmail.com", address: "Shantinagar, Dhaka", dateOfBirth: "1968-02-18", creditLimit: 18000, outstandingBalance: 0, loyaltyPoints: 720, createdAt: todayStr(-300) },
+      { id: "cust-10", name: "Taslima Nasrin Eva", phone: "+880 1877-667788", email: "eva.taslima@gmail.com", address: "GEC Circle, Chittagong", dateOfBirth: "1995-10-30", creditLimit: 10000, outstandingBalance: 1200, loyaltyPoints: 260, createdAt: todayStr(-45) }
     ];
 
     // 9. Doctors
@@ -203,7 +243,11 @@ window.APSStore = (() => {
       { id: "doc-1", name: "Prof. Dr. M. A. Hasan", specialization: "Internal Medicine & Cardiology", licenseNumber: "BMDC-A28910", phone: "+880 1711-998877", chamber: "Square Hospital, Dhaka" },
       { id: "doc-2", name: "Dr. Nazneen Akhter", specialization: "Endocrinology & Diabetology", licenseNumber: "BMDC-A34120", phone: "+880 1812-887766", chamber: "BIRDEM General Hospital" },
       { id: "doc-3", name: "Dr. Tariqul Islam", specialization: "Pulmonology & Chest Diseases", licenseNumber: "BMDC-A41509", phone: "+880 1913-776655", chamber: "National Institute of Diseases of Chest" },
-      { id: "doc-4", name: "Dr. Rezwana Chowdhury", specialization: "General Physician", licenseNumber: "BMDC-A52881", phone: "+880 1614-665544", chamber: "APS Health Clinic" }
+      { id: "doc-4", name: "Dr. Rezwana Chowdhury", specialization: "General Physician", licenseNumber: "BMDC-A52881", phone: "+880 1614-665544", chamber: "APS Health Clinic" },
+      { id: "doc-5", name: "Dr. Kazi Shafiul Alam", specialization: "Pediatrics & Child Health", licenseNumber: "BMDC-A61290", phone: "+880 1715-112233", chamber: "Dhaka Medical College & Hospital" },
+      { id: "doc-6", name: "Dr. Mehnaz Tabassum", specialization: "Gynecology & Obstetrics", licenseNumber: "BMDC-A58902", phone: "+880 1816-223344", chamber: "Evercare Hospital Dhaka" },
+      { id: "doc-7", name: "Prof. Dr. Sirajul Islam", specialization: "Orthopedics & Trauma Surgery", licenseNumber: "BMDC-A31045", phone: "+880 1917-334455", chamber: "NITOR (Pongu Hospital), Dhaka" },
+      { id: "doc-8", name: "Dr. Ashraful Hoque", specialization: "Dermatology & Venereology", licenseNumber: "BMDC-A48712", phone: "+880 1618-445566", chamber: "BSMMU (PG Hospital), Dhaka" }
     ];
 
     // 10. Prescriptions
@@ -234,6 +278,62 @@ window.APSStore = (() => {
         items: [
           { medicineId: "med-10", medicineName: "Ventolin Evohaler 100mcg", dosage: "2 puffs SOS / prn", durationDays: 14, quantityPrescribed: 1 },
           { medicineId: "med-4", medicineName: "Alatrol 10mg Tablet", dosage: "0-0-1 at bedtime", durationDays: 10, quantityPrescribed: 10 }
+        ]
+      },
+      {
+        id: "rx-1003",
+        customerId: "cust-2",
+        customerName: "Farhana Yasmin",
+        doctorId: "doc-1",
+        doctorName: "Prof. Dr. M. A. Hasan",
+        prescriptionDate: todayStr(-2),
+        notes: "Hypertension & Dyslipidemia management. Low salt diet advised.",
+        status: "Dispensed",
+        items: [
+          { medicineId: "med-6", medicineName: "Atova 10mg Tablet", dosage: "0-0-1 at night", durationDays: 30, quantityPrescribed: 30 },
+          { medicineId: "med-27", medicineName: "Camlodin 5mg Tablet", dosage: "1-0-0 in morning", durationDays: 30, quantityPrescribed: 30 }
+        ]
+      },
+      {
+        id: "rx-1004",
+        customerId: "cust-5",
+        customerName: "Tanvir Hasan",
+        doctorId: "doc-5",
+        doctorName: "Dr. Kazi Shafiul Alam",
+        prescriptionDate: todayStr(-1),
+        notes: "Upper respiratory tract bacterial infection with mild fever.",
+        status: "Pending",
+        items: [
+          { medicineId: "med-26", medicineName: "Cef-3 200mg Capsule", dosage: "1-0-1 after meals", durationDays: 7, quantityPrescribed: 14 },
+          { medicineId: "med-1", medicineName: "Napa Extra 500mg/65mg", dosage: "1-1-1 SOS for pain/fever", durationDays: 5, quantityPrescribed: 15 }
+        ]
+      },
+      {
+        id: "rx-1005",
+        customerId: "cust-6",
+        customerName: "Nusrat Jahan",
+        doctorId: "doc-2",
+        doctorName: "Dr. Nazneen Akhter",
+        prescriptionDate: todayStr(0),
+        notes: "Glycemic control review. Dual oral antidiabetic therapy prescribed.",
+        status: "Pending",
+        items: [
+          { medicineId: "med-30", medicineName: "Galvus 50mg Tablet", dosage: "1-0-1 before meals", durationDays: 30, quantityPrescribed: 60 },
+          { medicineId: "med-29", medicineName: "Secrin 2mg Tablet", dosage: "1-0-0 with breakfast", durationDays: 30, quantityPrescribed: 30 }
+        ]
+      },
+      {
+        id: "rx-1006",
+        customerId: "cust-7",
+        customerName: "Engr. Mahbubur Rahman",
+        doctorId: "doc-3",
+        doctorName: "Dr. Tariqul Islam",
+        prescriptionDate: todayStr(-4),
+        notes: "Seasonal allergic asthma & chronic cough prophylaxis.",
+        status: "Dispensed",
+        items: [
+          { medicineId: "med-23", medicineName: "Montene 10mg Tablet", dosage: "0-0-1 at bedtime", durationDays: 30, quantityPrescribed: 30 },
+          { medicineId: "med-10", medicineName: "Ventolin Evohaler 100mcg", dosage: "2 puffs SOS", durationDays: 30, quantityPrescribed: 1 }
         ]
       }
     ];
@@ -268,6 +368,51 @@ window.APSStore = (() => {
         items: [
           { medicineId: "med-6", medicineName: "Atova 10mg Tablet", orderedQty: 200, unitPrice: 8.50, subtotal: 1700 },
           { medicineId: "med-10", medicineName: "Ventolin Evohaler 100mcg", orderedQty: 50, unitPrice: 195.00, subtotal: 9750 }
+        ]
+      },
+      {
+        id: "po-103",
+        poNumber: "PO-2026-003",
+        supplierId: "sup-3",
+        supplierName: "Incepta Med Supply Ltd",
+        orderDate: todayStr(-8),
+        expectedDate: todayStr(-4),
+        status: "Received",
+        totalAmount: 14750,
+        createdBy: "Kamal Hossain",
+        items: [
+          { medicineId: "med-17", medicineName: "Sergel 20mg Capsule", orderedQty: 500, unitPrice: 5.40, subtotal: 2700 },
+          { medicineId: "med-18", medicineName: "Pantonix 20mg Tablet", orderedQty: 350, unitPrice: 5.20, subtotal: 1820 }
+        ]
+      },
+      {
+        id: "po-104",
+        poNumber: "PO-2026-004",
+        supplierId: "sup-1",
+        supplierName: "Square Distribution Logistics",
+        orderDate: todayStr(-3),
+        expectedDate: todayStr(2),
+        status: "Ordered",
+        totalAmount: 22600,
+        createdBy: "Kamal Hossain",
+        items: [
+          { medicineId: "med-16", medicineName: "Ciprocin 500mg Tablet", orderedQty: 300, unitPrice: 12.00, subtotal: 3600 },
+          { medicineId: "med-26", medicineName: "Cef-3 200mg Capsule", orderedQty: 200, unitPrice: 28.00, subtotal: 5600 }
+        ]
+      },
+      {
+        id: "po-105",
+        poNumber: "PO-2026-005",
+        supplierId: "sup-4",
+        supplierName: "Renata Direct Healthcare",
+        orderDate: todayStr(-1),
+        expectedDate: todayStr(5),
+        status: "Ordered",
+        totalAmount: 9800,
+        createdBy: "Kamal Hossain",
+        items: [
+          { medicineId: "med-25", medicineName: "Finix 20mg Tablet", orderedQty: 250, unitPrice: 4.80, subtotal: 1200 },
+          { medicineId: "med-21", medicineName: "Renova 500mg Tablet", orderedQty: 600, unitPrice: 0.90, subtotal: 540 }
         ]
       }
     ];
@@ -341,6 +486,101 @@ window.APSStore = (() => {
         servedBy: "Rahim Uddin",
         items: [
           { medicineId: "med-1", medicineName: "Napa Extra 500mg/65mg", batchId: "bat-101", batchNumber: "NE-2024A", quantity: 60, unitPrice: 3.00, subtotal: 180.00 }
+        ]
+      },
+      {
+        id: "sale-5004",
+        invoiceNumber: "INV-2026-004",
+        customerId: "cust-4",
+        customerName: "Dr. Shahida Parveen",
+        prescriptionId: null,
+        saleDate: todayStr(-5) + " 16:20:00",
+        subtotal: 630.00,
+        discount: 30.00,
+        taxAmount: 30.00,
+        totalAmount: 630.00,
+        paymentMode: "Card",
+        paymentStatus: "Paid",
+        servedBy: "Rahim Uddin",
+        items: [
+          { medicineId: "med-8", medicineName: "Zimax 500mg Tablet", batchId: "bat-109", batchNumber: "ZX-8820", quantity: 10, unitPrice: 35.00, subtotal: 350.00 },
+          { medicineId: "med-17", medicineName: "Sergel 20mg Capsule", batchId: "bat-119", batchNumber: "SG-2408", quantity: 40, unitPrice: 7.00, subtotal: 280.00 }
+        ]
+      },
+      {
+        id: "sale-5005",
+        invoiceNumber: "INV-2026-005",
+        customerId: "cust-7",
+        customerName: "Engr. Mahbubur Rahman",
+        prescriptionId: "rx-1006",
+        saleDate: todayStr(-4) + " 10:15:00",
+        subtotal: 730.00,
+        discount: 30.00,
+        taxAmount: 35.00,
+        totalAmount: 735.00,
+        paymentMode: "Cash",
+        paymentStatus: "Paid",
+        servedBy: "Rahim Uddin",
+        items: [
+          { medicineId: "med-23", medicineName: "Montene 10mg Tablet", batchId: "bat-125", batchNumber: "MN-2404", quantity: 30, unitPrice: 16.00, subtotal: 480.00 },
+          { medicineId: "med-10", medicineName: "Ventolin Evohaler 100mcg", batchId: "bat-111", batchNumber: "VT-9021", quantity: 1, unitPrice: 250.00, subtotal: 250.00 }
+        ]
+      },
+      {
+        id: "sale-5006",
+        invoiceNumber: "INV-2026-006",
+        customerId: "cust-2",
+        customerName: "Farhana Yasmin",
+        prescriptionId: "rx-1003",
+        saleDate: todayStr(-2) + " 14:40:00",
+        subtotal: 495.00,
+        discount: 20.00,
+        taxAmount: 23.75,
+        totalAmount: 498.75,
+        paymentMode: "Card",
+        paymentStatus: "Paid",
+        servedBy: "Rahim Uddin",
+        items: [
+          { medicineId: "med-6", medicineName: "Atova 10mg Tablet", batchId: "bat-107", batchNumber: "AT-7741", quantity: 30, unitPrice: 12.00, subtotal: 360.00 },
+          { medicineId: "med-27", medicineName: "Camlodin 5mg Tablet", batchId: "bat-129", batchNumber: "CD-2401", quantity: 30, unitPrice: 4.50, subtotal: 135.00 }
+        ]
+      },
+      {
+        id: "sale-5007",
+        invoiceNumber: "INV-2026-007",
+        customerId: "cust-5",
+        customerName: "Tanvir Hasan",
+        prescriptionId: null,
+        saleDate: todayStr(-1) + " 18:05:00",
+        subtotal: 500.00,
+        discount: 25.00,
+        taxAmount: 23.75,
+        totalAmount: 498.75,
+        paymentMode: "Credit",
+        paymentStatus: "Unpaid",
+        servedBy: "Rahim Uddin",
+        items: [
+          { medicineId: "med-16", medicineName: "Ciprocin 500mg Tablet", batchId: "bat-118", batchNumber: "CP-2411", quantity: 20, unitPrice: 16.00, subtotal: 320.00 },
+          { medicineId: "med-15", medicineName: "Ace Plus 500mg/65mg", batchId: "bat-117", batchNumber: "ACE-2401", quantity: 60, unitPrice: 3.00, subtotal: 180.00 }
+        ]
+      },
+      {
+        id: "sale-5008",
+        invoiceNumber: "INV-2026-008",
+        customerId: "cust-6",
+        customerName: "Nusrat Jahan",
+        prescriptionId: "rx-1005",
+        saleDate: todayStr(0) + " 11:10:00",
+        subtotal: 1080.00,
+        discount: 50.00,
+        taxAmount: 51.50,
+        totalAmount: 1081.50,
+        paymentMode: "Cash",
+        paymentStatus: "Paid",
+        servedBy: "Rahim Uddin",
+        items: [
+          { medicineId: "med-30", medicineName: "Galvus 50mg Tablet", batchId: "bat-132", batchNumber: "GV-2409", quantity: 30, unitPrice: 28.00, subtotal: 840.00 },
+          { medicineId: "med-29", medicineName: "Secrin 2mg Tablet", batchId: "bat-131", batchNumber: "SC-2411", quantity: 30, unitPrice: 8.00, subtotal: 240.00 }
         ]
       }
     ];
