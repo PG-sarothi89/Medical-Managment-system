@@ -561,7 +561,10 @@
     // Quick Barcode simulation buttons
     $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
       btn.addEventListener("click", () => {
-        const code = btn.dataset.code;
+        let code = btn.dataset.code;
+        if (btn.dataset.random) {
+          code = "890" + Math.floor(1000000000 + Math.random() * 9000000000);
+        }
         handleScannedBarcode(code);
         stopCameraScanner();
         cameraModalInstance?.hide();

@@ -254,16 +254,31 @@
     if (!clean) return;
 
     // Check if medicine exists in the catalog
-    const med = APSStore.getMedicineByBarcode(clean);
+    let med = APSStore.getMedicineByBarcode(clean);
 
     if (!med) {
-      // Medicine is not in the database!
-      APS.playAlertSound();
-      showUnregisteredMedicineModal(clean);
-      return;
+      // Medicine is not in the database yet:
+      // Auto-register medicine using master pharmaceutical catalog reference!
+      const catalogInfo = APSStore.lookupBarcodeDrugCatalog(clean);
+      const newMed = APSStore.saveMedicine({
+        name: catalogInfo.name || `Medicine ${clean.slice(-4)}`,
+        generic: catalogInfo.generic || "General Pharmaceutical",
+        categoryId: catalogInfo.categoryId || "cat-1",
+        manufacturerId: catalogInfo.manufacturerId || "mfr-1",
+        composition: catalogInfo.composition || "",
+        unit: catalogInfo.unit || "Tablet",
+        hsn: catalogInfo.hsn || "3004.90",
+        barcode: clean,
+        reorderLevel: catalogInfo.reorderLevel || 50,
+        reorderQuantity: catalogInfo.reorderQuantity || 100,
+        requiresPrescription: Boolean(catalogInfo.requiresPrescription)
+      });
+      med = APSStore.getMedicineById(newMed.id);
+      populateDropdowns();
+      APS.showToast(`New medicine ${med.name} registered to catalog from barcode!`, "success");
     }
 
-    // Medicine found! Auto-fill everything in the batch registration modal
+    // Medicine found or auto-registered! Auto-fill everything in the batch registration modal EXCEPT quantity!
     autoFillBatchModalForMedicine(med, clean);
   }
 
@@ -556,7 +571,10 @@
     // Quick test buttons inside scanner modal
     $$(".test-barcode-btn", $("#cameraScannerModal"))?.forEach(btn => {
       btn.addEventListener("click", () => {
-        const code = btn.dataset.code;
+        let code = btn.dataset.code;
+        if (btn.dataset.random) {
+          code = "890" + Math.floor(1000000000 + Math.random() * 9000000000);
+        }
         stopCameraScanner();
         cameraModalInstance?.hide();
         handleScannedBarcode(code);

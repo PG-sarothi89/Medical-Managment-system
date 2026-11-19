@@ -18,6 +18,11 @@ yarn-error.log*
 Thumbs.db
 ehthumbs.db
 
+# Python & Temporary
+__pycache__/
+*.pyc
+Frontend - Copy/
+
 # IDE and Editor
 .vscode/
 .idea/

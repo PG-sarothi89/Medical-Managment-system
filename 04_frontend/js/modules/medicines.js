@@ -81,6 +81,12 @@
     if (medMfrSelect) {
       medMfrSelect.innerHTML = mfrs.map(m => `<option value="${m.id}">${APS.escapeHtml(m.name)}</option>`).join("");
     }
+
+    const sups = APSStore.getSuppliers();
+    const medSupSelect = $("#medSupplier");
+    if (medSupSelect) {
+      medSupSelect.innerHTML = sups.map(s => `<option value="${s.id}">${APS.escapeHtml(s.name)}</option>`).join("");
+    }
   }
 
   /* =========================================================
@@ -215,84 +221,111 @@
     const clean = String(code).trim();
     if (!clean) return;
 
+    // If medicine modal is already open, auto-fill it directly
+    const modalEl = $("#medicineModal");
+    if (modalEl && modalEl.classList.contains("show")) {
+      autoFillModalFromBarcode(clean);
+      return;
+    }
+
     // Check if the medicine already exists in the active database
     const existing = APSStore.getMedicineByBarcode(clean);
 
     if (existing) {
-      // 1. Medicine IS in database
+      // 1. Medicine IS in database: Highlight it in table & show quick action
       $("#medSearchInput").value = existing.name;
       currentSearch = existing.name.toLowerCase();
       renderMedicineTable();
       highlightMedicineRow(existing.id);
 
       APS.playSuccessSound();
-      APS.showToast(`Found: ${existing.name} (Barcode: ${clean}) | Current Stock: ${existing.totalStock} ${existing.unit}s`, "success");
+      APS.showToast(`Found: ${existing.name} (Barcode: ${clean}) | Current Stock: ${existing.totalStock} ${existing.unit}s &mdash; <button class="btn btn-sm btn-light border py-0 px-2 ms-2 text-primary" onclick="window.location.href='inventory.html?scan=${clean}'">Add Stock (+)</button>`, "success");
     } else {
-      // 2. Medicine is NOT in database
-      // User requirement: "when it is scaned , if The medicine is not in the database then it will be added to the medicine list"
+      // 2. Medicine is NOT in database: Open Add Medicine modal with all details auto-filled EXCEPT quantity!
       openAddMedicineModalWithBarcode(clean);
     }
   }
 
-  function openAddMedicineModalWithBarcode(barcode) {
+  function autoFillModalFromBarcode(barcode) {
+    if (!barcode) return;
+    const clean = String(barcode).trim();
+    if (!clean) return;
+
     APS.playScanSound();
+    populateDropdowns();
 
-    // Look up in comprehensive master pharmaceutical database
-    const lookup = APSStore.lookupBarcodeDrugCatalog(barcode);
+    const lookup = APSStore.lookupBarcodeDrugCatalog(clean);
 
-    // Reset and prepare form
-    $("#medicineForm").reset();
-    $("#medId").value = "";
-    $("#medicineModalTitle").textContent = "Add Scanned Medicine to Catalog";
-
-    // Pre-populate fields automatically
-    $("#medBarcode").value = barcode;
-    if (lookup.name) $("#medName").value = lookup.name;
-    if (lookup.generic) $("#medGeneric").value = lookup.generic;
-    if (lookup.categoryId) $("#medCategory").value = lookup.categoryId;
-    if (lookup.manufacturerId) $("#medManufacturer").value = lookup.manufacturerId;
-    if (lookup.composition) $("#medComposition").value = lookup.composition;
-    if (lookup.unit) $("#medUnit").value = lookup.unit;
-    if (lookup.hsn) $("#medHsn").value = lookup.hsn;
-    if (lookup.reorderLevel) $("#medReorderLevel").value = lookup.reorderLevel;
-    if (lookup.reorderQuantity) $("#medReorderQty").value = lookup.reorderQuantity;
+    // Auto-fill all pharmaceutical master fields
+    $("#medBarcode").value = clean;
+    if ($("#modalBarcodeScanInput")) $("#modalBarcodeScanInput").value = clean;
+    $("#medName").value = lookup.name || "";
+    $("#medGeneric").value = lookup.generic || "";
+    $("#medCategory").value = lookup.categoryId || "cat-1";
+    $("#medManufacturer").value = lookup.manufacturerId || "mfr-1";
+    $("#medComposition").value = lookup.composition || "";
+    $("#medUnit").value = lookup.unit || "Tablet";
+    $("#medHsn").value = lookup.hsn || "3004.90";
+    $("#medReorderLevel").value = lookup.reorderLevel || 50;
+    $("#medReorderQty").value = lookup.reorderQuantity || 100;
     $("#medRequiresRx").checked = Boolean(lookup.requiresPrescription);
 
-    // Show informational notice inside modal
+    // Auto-fill batch details and pricing from master reference
+    const medInitials = (lookup.name || "MED").replace(/[^a-zA-Z]/g, "").slice(0, 3).toUpperCase() || "MED";
+    const dateCode = new Date().toISOString().slice(2, 7).replace("-", "");
+    const randSeq = Math.floor(100 + Math.random() * 900);
+    if ($("#medInitialBatch")) $("#medInitialBatch").value = `${medInitials}-${dateCode}-${randSeq}`;
+
+    const expDateObj = new Date();
+    expDateObj.setFullYear(expDateObj.getFullYear() + 2);
+    if ($("#medInitialExp")) $("#medInitialExp").value = expDateObj.toISOString().split("T")[0];
+
+    if ($("#medCostPrice")) $("#medCostPrice").value = Number(lookup.costPrice || 2.50).toFixed(2);
+    if ($("#medSellingPrice")) $("#medSellingPrice").value = Number(lookup.sellingPrice || 3.50).toFixed(2);
+    if ($("#medMrp")) $("#medMrp").value = Number(lookup.mrp || lookup.sellingPrice || 3.50).toFixed(2);
+    if ($("#medSupplier") && lookup.supplierId) $("#medSupplier").value = lookup.supplierId;
+
+    // CRITICAL USER REQUIREMENT:
+    // "when he scans the barcode all the informations from the barcode will automatically filled expect quatity"
+    if ($("#medInitialQty")) {
+      $("#medInitialQty").value = "";
+    }
+
+    // Informational notification banner
     const noticeEl = $("#medModalScanNotice");
     if (noticeEl) {
       noticeEl.className = "alert alert-success d-flex align-items-center gap-2 py-2 px-3 small border-0 shadow-sm";
-      if (lookup.isCatalogMatch) {
-        noticeEl.innerHTML = `
-          <i class="bi bi-magic fs-4 text-success"></i>
-          <div>
-            <strong>Barcode ${APS.escapeHtml(barcode)} recognized!</strong>
-            <div>Details auto-filled from master pharmaceutical database. Review and click <strong>Save Medicine Record</strong> to add to catalog.</div>
-          </div>
-        `;
-      } else {
-        noticeEl.innerHTML = `
-          <i class="bi bi-upc-scan fs-4 text-primary"></i>
-          <div>
-            <strong>New Barcode Scanned: ${APS.escapeHtml(barcode)}</strong>
-            <div>Barcode not found in catalog. Enter medicine name and click <strong>Save Medicine Record</strong> to add to database.</div>
-          </div>
-        `;
-      }
+      noticeEl.innerHTML = `
+        <i class="bi bi-check-circle-fill fs-4 text-success"></i>
+        <div>
+          <strong>Barcode ${APS.escapeHtml(clean)} Recognized!</strong>
+          <div>All medicine &amp; batch details auto-filled. <span class="badge bg-success ms-1">Enter stock quantity below</span> to register.</div>
+        </div>
+      `;
     }
 
-    medModalInstance.show();
-
-    // Focus input for fastest possible interaction
+    // Auto-focus directly on Quantity Received field
     setTimeout(() => {
-      if (!lookup.name) {
-        $("#medName")?.focus();
-      } else {
-        $("#medName")?.select();
+      const qtyInput = $("#medInitialQty");
+      if (qtyInput) {
+        qtyInput.focus();
+        qtyInput.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-    }, 400);
+    }, 350);
 
-    APS.showToast(`New barcode ${barcode} scanned! Auto-filled details ready to add.`, "info");
+    APS.showToast(`Auto-filled details for ${lookup.name || clean}! Please enter stock quantity.`, "success");
+  }
+
+  function openAddMedicineModalWithBarcode(barcode) {
+    populateDropdowns();
+    $("#medicineForm").reset();
+    $("#medId").value = "";
+    $("#medicineModalTitle").textContent = "Add Scanned Medicine to Catalog";
+    $("#medStockSection")?.classList.remove("d-none");
+    $("#modalScanBarcodeCard")?.classList.remove("d-none");
+
+    autoFillModalFromBarcode(barcode);
+    medModalInstance.show();
   }
 
   /* =========================================================
@@ -338,54 +371,80 @@
       startCameraScanner();
     });
 
-    // Scan Barcode into Add/Edit Modal button
+    // Scan Barcode into Add/Edit Modal button (inside modal)
     $("#scanBarcodeIntoModalBtn")?.addEventListener("click", () => {
       cameraModalInstance?.show();
       startCameraScanner((scannedCode) => {
-        const lookup = APSStore.lookupBarcodeDrugCatalog(scannedCode);
-        $("#medBarcode").value = scannedCode;
-        if (lookup.name && !$("#medName").value) $("#medName").value = lookup.name;
-        if (lookup.generic && !$("#medGeneric").value) $("#medGeneric").value = lookup.generic;
-        if (lookup.categoryId) $("#medCategory").value = lookup.categoryId;
-        if (lookup.manufacturerId) $("#medManufacturer").value = lookup.manufacturerId;
-        if (lookup.composition && !$("#medComposition").value) $("#medComposition").value = lookup.composition;
-        APS.showToast(`Scanned and auto-filled details for ${scannedCode}`);
+        autoFillModalFromBarcode(scannedCode);
       });
+    });
+
+    // Scan Barcode next to Barcode input field
+    $("#scanBarcodeFieldBtn")?.addEventListener("click", () => {
+      cameraModalInstance?.show();
+      startCameraScanner((scannedCode) => {
+        autoFillModalFromBarcode(scannedCode);
+      });
+    });
+
+    // Modal barcode scan input Enter key & blur
+    $("#modalBarcodeScanInput")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const code = e.target.value.trim();
+        if (code) autoFillModalFromBarcode(code);
+      }
+    });
+    $("#modalBarcodeScanInput")?.addEventListener("blur", (e) => {
+      const code = e.target.value.trim();
+      if (code && !$("#medId").value) autoFillModalFromBarcode(code);
     });
 
     // Add Medicine button
     $("#addMedicineBtn")?.addEventListener("click", () => {
+      populateDropdowns();
       $("#medicineForm").reset();
       $("#medId").value = "";
       $("#medModalScanNotice").className = "d-none";
+      $("#medStockSection")?.classList.remove("d-none");
+      $("#modalScanBarcodeCard")?.classList.remove("d-none");
       $("#medicineModalTitle").textContent = "Add New Medicine";
       $("#generateBarcodeBtn").click(); // auto assign scannable barcode
+
+      // Auto-generate batch defaults
+      const randSeq = Math.floor(100 + Math.random() * 900);
+      const dateCode = new Date().toISOString().slice(2, 7).replace("-", "");
+      if ($("#medInitialBatch")) $("#medInitialBatch").value = `MED-${dateCode}-${randSeq}`;
+      const expDateObj = new Date();
+      expDateObj.setFullYear(expDateObj.getFullYear() + 2);
+      if ($("#medInitialExp")) $("#medInitialExp").value = expDateObj.toISOString().split("T")[0];
+      if ($("#medCostPrice")) $("#medCostPrice").value = "5.00";
+      if ($("#medSellingPrice")) $("#medSellingPrice").value = "7.00";
+      if ($("#medMrp")) $("#medMrp").value = "7.00";
+      if ($("#medInitialQty")) $("#medInitialQty").value = "";
+
       medModalInstance.show();
+      setTimeout(() => $("#modalBarcodeScanInput")?.focus(), 400);
     });
 
     // Auto-generate Barcode
     $("#generateBarcodeBtn")?.addEventListener("click", () => {
       const randomCode = "890" + Math.floor(1000000000 + Math.random() * 9000000000);
       $("#medBarcode").value = randomCode;
+      if ($("#modalBarcodeScanInput")) $("#modalBarcodeScanInput").value = randomCode;
     });
 
     // When barcode is manually entered into the modal, check catalog for auto-fill
     $("#medBarcode")?.addEventListener("blur", (e) => {
       const code = e.target.value.trim();
       if (!code || $("#medId").value) return; // only for new additions
-      const lookup = APSStore.lookupBarcodeDrugCatalog(code);
-      if (lookup && lookup.isCatalogMatch && !$("#medName").value) {
-        $("#medName").value = lookup.name;
-        $("#medGeneric").value = lookup.generic;
-        $("#medCategory").value = lookup.categoryId;
-        $("#medManufacturer").value = lookup.manufacturerId;
-        $("#medComposition").value = lookup.composition;
-        $("#medUnit").value = lookup.unit;
-        $("#medHsn").value = lookup.hsn;
-        $("#medReorderLevel").value = lookup.reorderLevel;
-        $("#medReorderQty").value = lookup.reorderQuantity;
-        $("#medRequiresRx").checked = Boolean(lookup.requiresPrescription);
-        APS.showToast(`Auto-filled details for ${lookup.name}`);
+      autoFillModalFromBarcode(code);
+    });
+    $("#medBarcode")?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const code = e.target.value.trim();
+        if (code && !$("#medId").value) autoFillModalFromBarcode(code);
       }
     });
 
@@ -404,7 +463,15 @@
         barcode: $("#medBarcode").value.trim() || ("890" + Math.floor(1000000000 + Math.random() * 9000000000)),
         reorderLevel: Number($("#medReorderLevel").value || 50),
         reorderQuantity: Number($("#medReorderQty").value || 100),
-        requiresPrescription: $("#medRequiresRx").checked
+        requiresPrescription: $("#medRequiresRx").checked,
+        // Stock fields (registered on initial add if entered)
+        initialQuantity: Number($("#medInitialQty") ? $("#medInitialQty").value : 0),
+        initialBatch: $("#medInitialBatch") ? $("#medInitialBatch").value.trim() : "",
+        initialExp: $("#medInitialExp") ? $("#medInitialExp").value : "",
+        costPrice: Number($("#medCostPrice") ? $("#medCostPrice").value : 0),
+        sellingPrice: Number($("#medSellingPrice") ? $("#medSellingPrice").value : 0),
+        mrp: Number($("#medMrp") ? $("#medMrp").value : 0),
+        supplierId: $("#medSupplier") ? $("#medSupplier").value : "sup-1"
       };
 
       const saved = APSStore.saveMedicine(medData);
@@ -414,7 +481,12 @@
       renderMedicineTable();
       highlightMedicineRow(saved.id);
 
-      APS.showToast(`Saved medicine ${saved.name} to catalog successfully!`, "success");
+      const qtyAdded = medData.initialQuantity;
+      if (qtyAdded > 0) {
+        APS.showToast(`Saved medicine ${saved.name} with ${qtyAdded} ${saved.unit}s in stock!`, "success");
+      } else {
+        APS.showToast(`Saved medicine ${saved.name} to catalog successfully!`, "success");
+      }
       APS.playSuccessSound();
     });
 
@@ -558,8 +630,11 @@
     const med = APSStore.getMedicineById(medId);
     if (!med) return;
 
+    populateDropdowns();
     $("#medId").value = med.id;
     $("#medModalScanNotice").className = "d-none";
+    $("#medStockSection")?.classList.add("d-none");
+    $("#modalScanBarcodeCard")?.classList.add("d-none");
     $("#medName").value = med.name;
     $("#medGeneric").value = med.generic;
     $("#medCategory").value = med.categoryId;

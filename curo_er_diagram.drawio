@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026 11 18T20:00:00.000Z" agent="CURO Enterprise Modeler" version="24.0.0" type="device">
+  <diagram id="curo er diagram" name="CURO Medical DBMS ER Diagram">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1600" background="#F8FAFC">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="ROLES (RBAC)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#1E40AF;strokeColor=#1E40AF;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="PK id VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="2">
+          <mxGeometry y="28" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="4" value="    name VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="2">
+          <mxGeometry y="48" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="5" value="    description TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="2">
+          <mxGeometry y="68" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="6" value="    createdAt TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="2">
+          <mxGeometry y="88" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="7" value="USERS (Staff)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#1E40AF;strokeColor=#1E40AF;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="40" width="260" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="FK roleId VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="10" value="    username VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="11" value="    email VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="12" value="    passwordHash VARCHAR(255)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="13" value="    name VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="    designation VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="15" value="    phone VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="    isActive BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="7">
+          <mxGeometry y="188" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="17" value="CATEGORIES" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#065F46;strokeColor=#065F46;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="40" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="18" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="17">
+          <mxGeometry y="28" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="19" value="FK parentId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="17">
+          <mxGeometry y="48" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="20" value="    name VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="17">
+          <mxGeometry y="68" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="21" value="    description TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="17">
+          <mxGeometry y="88" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="22" value="MANUFACTURERS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#065F46;strokeColor=#065F46;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="960" y="40" width="240" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="23" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry y="28" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="24" value="    name VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry y="48" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="25" value="    contactInfo TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry y="68" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="26" value="    createdAt TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry y="88" width="240" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="27" value="SUPPLIERS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#9A3412;strokeColor=#9A3412;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="40" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="28" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="29" value="    name VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="30" value="    contactPerson VARCHAR(100)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="31" value="    phone VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="32" value="    email VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="33" value="    address TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="34" value="    taxNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="35" value="    creditPeriodDays INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="36" value="    outstandingBalance DEC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="27">
+          <mxGeometry y="188" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="37" value="MEDICINES (Drug Master)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#065F46;strokeColor=#065F46;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="240" width="280" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="38" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="28" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="39" value="FK categoryId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="48" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="40" value="FK manufacturerId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="68" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="41" value="    name VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="88" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="42" value="    genericName VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="108" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="43" value="    composition VARCHAR(255)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="128" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="44" value="    dosageForm VARCHAR(50)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="148" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="45" value="    strength VARCHAR(50)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="168" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="46" value="    barcode VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="188" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="47" value="    hsnCode VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="208" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="48" value="    requiresPrescription BOOL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="228" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="49" value="    reorderLevel INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="248" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="50" value="    reorderQuantity INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="37">
+          <mxGeometry y="268" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="51" value="BATCHES (FEFO Tracking)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#6B21A8;strokeColor=#6B21A8;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="240" width="260" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="52" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="53" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="54" value="FK supplierId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="55" value="    batchNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="56" value="    manufactureDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="57" value="    expiryDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="58" value="    costPrice DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="59" value="    sellingPrice DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="60" value="    mrp DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="188" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="61" value="    quantityReceived INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="208" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="62" value="    quantityAvailable INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="51">
+          <mxGeometry y="228" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="63" value="INVENTORY MOVEMENTS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#6B21A8;strokeColor=#6B21A8;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="580" width="280" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="64" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="28" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="65" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="48" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="66" value="FK batchId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="68" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="67" value="FK userId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="88" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="68" value="    movementType VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="108" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="69" value="    quantity INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="128" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="70" value="    balanceAfter INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="148" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="71" value="    referenceType VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="168" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="72" value="    referenceId VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="188" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="73" value="    notes VARCHAR(255)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="63">
+          <mxGeometry y="208" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="74" value="CUSTOMERS (Patients)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#0E7490;strokeColor=#0E7490;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="260" height="260" as="geometry" />
+        </mxCell>
+        <mxCell id="75" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="76" value="    name VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="77" value="    phone VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="78" value="    email VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="79" value="    address TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="80" value="    dateOfBirth DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="81" value="    creditLimit DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="82" value="    outstandingBalance DEC" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="83" value="    loyaltyPoints INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="74">
+          <mxGeometry y="188" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="84" value="DOCTORS (Physicians)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#0E7490;strokeColor=#0E7490;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="340" y="340" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="85" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="86" value="    name VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="87" value="    specialization VARCHAR(100)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="88" value="    licenseNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="89" value="    hospitalChamber VARCHAR(150)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="90" value="    phone VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="91" value="    email VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="92" value="    isActive BOOLEAN" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="84">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="93" value="PRESCRIPTIONS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#0E7490;strokeColor=#0E7490;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="640" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="94" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="95" value="FK customerId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="96" value="FK doctorId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="97" value="    prescriptionNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="98" value="    prescriptionDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="99" value="    notes TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="100" value="    status VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="93">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="101" value="PRESCRIPTION ITEMS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#0E7490;strokeColor=#0E7490;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="480" y="640" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="102" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="103" value="FK prescriptionId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="104" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="105" value="    dosage VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="106" value="    durationDays INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="107" value="    quantityPrescribed INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="101">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="108" value="PURCHASE ORDERS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#9A3412;strokeColor=#9A3412;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="320" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="109" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="110" value="FK supplierId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="111" value="FK createdBy VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="112" value="    poNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="113" value="    orderDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="114" value="    expectedDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="115" value="    totalAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="116" value="    status VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="108">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="117" value="PURCHASE ORDER ITEMS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#9A3412;strokeColor=#9A3412;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="320" width="260" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="118" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="119" value="FK poId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="120" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="121" value="    orderedQty INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="122" value="    receivedQty INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="123" value="    unitPrice DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="124" value="    subtotal DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="117">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="125" value="PURCHASES" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#9A3412;strokeColor=#9A3412;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="600" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="126" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="127" value="FK poId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="128" value="FK supplierId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="129" value="FK createdBy VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="130" value="    invoiceNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="131" value="    purchaseDate DATE" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="132" value="    totalAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="133" value="    paymentStatus VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="125">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="134" value="SALES (Invoices)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#047857;strokeColor=#047857;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="920" width="280" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="135" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="28" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="136" value="FK customerId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="48" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="137" value="FK prescriptionId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="68" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="138" value="FK servedBy VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="88" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="139" value="    invoiceNumber VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="108" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="140" value="    subtotal DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="128" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="141" value="    discountAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="148" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="142" value="    taxAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="168" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="143" value="    totalAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="188" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="144" value="    paymentMode VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="208" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="145" value="    paymentStatus VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="134">
+          <mxGeometry y="228" width="280" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="146" value="SALE ITEMS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#047857;strokeColor=#047857;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="920" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="147" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="148" value="FK saleId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="149" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="150" value="FK batchId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="151" value="    quantity INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="152" value="    unitPrice DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="153" value="    subtotal DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="146">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="154" value="PAYMENTS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#047857;strokeColor=#047857;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="1260" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="155" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="156" value="FK saleId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="157" value="FK customerId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="158" value="FK receivedBy VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="159" value="    amount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="160" value="    method VARCHAR(32)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="161" value="    transactionRef VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="154">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="162" value="RETURNS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#047857;strokeColor=#047857;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="1180" width="260" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="163" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="164" value="FK saleId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="165" value="FK medicineId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="166" value="FK batchId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="167" value="FK processedBy VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="168" value="    quantity INT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="169" value="    refundAmount DECIMAL" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="170" value="    reason VARCHAR(255)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="162">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="171" value="AUDIT LOGS" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=28;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;fillColor=#475569;strokeColor=#475569;fontColor=#FFFFFF;fontFamily=Helvetica;fontSize=12;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="840" y="920" width="260" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="172" value="PK id VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="28" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="173" value="FK userId VARCHAR(36)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="48" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="174" value="    userName VARCHAR(128)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="68" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="175" value="    action VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="88" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="176" value="    tableName VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="108" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="177" value="    recordId VARCHAR(64)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="128" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="178" value="    details TEXT" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="148" width="260" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="179" value="    createdAt TIMESTAMP" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=4;overflow=hidden;rotatable=0;fontFamily=Courier New;fontSize=11;" vertex="1" parent="171">
+          <mxGeometry y="168" width="260" height="20" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

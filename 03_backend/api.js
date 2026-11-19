@@ -244,6 +244,34 @@ async function handleApiRequest(req, res) {
       }
     }
 
+    // Barcode Lookup Endpoint
+    if (pathname === "/api/barcode/lookup" && method === "GET") {
+      const code = url.searchParams.get("code") || url.searchParams.get("barcode");
+      if (!code) {
+        return sendJson(res, 400, { ok: false, error: "Barcode query parameter is required." });
+      }
+
+      try {
+        const q = `
+          SELECT m.*, c.name as category_name, mf.name as manufacturer_name,
+                 COALESCE(SUM(b.quantity_available), 0) as total_stock
+          FROM medicines m
+          LEFT JOIN categories c ON m.category_id = c.id
+          LEFT JOIN manufacturers mf ON m.manufacturer_id = mf.id
+          LEFT JOIN batches b ON m.id = b.medicine_id
+          WHERE m.barcode = $1
+          GROUP BY m.id, c.name, mf.name
+          LIMIT 1;
+        `;
+        const resDb = await db.query(q, [code]);
+        if (resDb.rows.length > 0) {
+          return sendJson(res, 200, { ok: true, source: "database", data: resDb.rows[0] });
+        }
+      } catch (e) {}
+
+      return sendJson(res, 200, { ok: true, source: "catalog", data: { barcode: code } });
+    }
+
     // 5. Medicines Catalog - Read & Write
     if (pathname === "/api/medicines" && method === "GET") {
       const q = `

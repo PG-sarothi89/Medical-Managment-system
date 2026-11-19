@@ -617,9 +617,18 @@ window.APSStore = (() => {
      AUDIT LOG HELPER
   ========================================================== */
 
+  function getCurrentUser(fallback = "Staff") {
+    try {
+      if (typeof sessionStorage !== "undefined") {
+        return sessionStorage.getItem("apsUserName") || fallback;
+      }
+    } catch (e) {}
+    return fallback;
+  }
+
   function logAudit(action, tableName, recordId, details) {
     const logs = load(KEYS.AUDIT_LOGS, []);
-    const currentUser = sessionStorage.getItem("apsUserName") || "Current User";
+    const currentUser = getCurrentUser("Current User");
     const newLog = {
       id: uid("aud"),
       userName: currentUser,
@@ -1072,27 +1081,444 @@ window.APSStore = (() => {
       sellingPrice: 2.20,
       mrp: 2.20,
       supplierId: "sup-1"
+    },
+    "8901234500301": {
+      name: "Finix 20mg Tablet",
+      generic: "Rabeprazole Sodium",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-4",
+      composition: "Rabeprazole Sodium 20mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 4.80,
+      sellingPrice: 6.50,
+      mrp: 6.50,
+      supplierId: "sup-4"
+    },
+    "8901234500318": {
+      name: "Cef-3 200mg Capsule",
+      generic: "Cefixime Trihydrate",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-1",
+      composition: "Cefixime 200mg",
+      unit: "Capsule",
+      hsn: "3004.20",
+      requiresPrescription: true,
+      reorderLevel: 30,
+      reorderQuantity: 80,
+      costPrice: 28.00,
+      sellingPrice: 38.00,
+      mrp: 38.00,
+      supplierId: "sup-1"
+    },
+    "8901234500325": {
+      name: "Camlodin 5mg Tablet",
+      generic: "Amlodipine Besylate",
+      categoryId: "cat-7",
+      manufacturerId: "mfr-1",
+      composition: "Amlodipine 5mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 60,
+      reorderQuantity: 180,
+      costPrice: 3.20,
+      sellingPrice: 4.50,
+      mrp: 4.50,
+      supplierId: "sup-1"
+    },
+    "8901234500332": {
+      name: "Angilock 50mg Tablet",
+      generic: "Losartan Potassium",
+      categoryId: "cat-7",
+      manufacturerId: "mfr-1",
+      composition: "Losartan Potassium 50mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 6.50,
+      sellingPrice: 8.50,
+      mrp: 8.50,
+      supplierId: "sup-1"
+    },
+    "8901234500349": {
+      name: "Secrin 2mg Tablet",
+      generic: "Glimepiride",
+      categoryId: "cat-6",
+      manufacturerId: "mfr-1",
+      composition: "Glimepiride 2mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 6.00,
+      sellingPrice: 8.00,
+      mrp: 8.00,
+      supplierId: "sup-1"
+    },
+    "8901234500356": {
+      name: "Galvus 50mg Tablet",
+      generic: "Vildagliptin",
+      categoryId: "cat-6",
+      manufacturerId: "mfr-6",
+      composition: "Vildagliptin 50mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 25,
+      reorderQuantity: 60,
+      costPrice: 22.00,
+      sellingPrice: 28.00,
+      mrp: 28.00,
+      supplierId: "sup-2"
+    },
+    "8901234500363": {
+      name: "Rostab 10mg Tablet",
+      generic: "Rosuvastatin Calcium",
+      categoryId: "cat-7",
+      manufacturerId: "mfr-5",
+      composition: "Rosuvastatin 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 35,
+      reorderQuantity: 100,
+      costPrice: 14.00,
+      sellingPrice: 18.00,
+      mrp: 18.00,
+      supplierId: "sup-1"
+    },
+    "8901234500370": {
+      name: "Burnsil 1% Cream 25g",
+      generic: "Silver Sulfadiazine",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-1",
+      composition: "Silver Sulfadiazine 1% w/w",
+      unit: "Ointment",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 20,
+      reorderQuantity: 50,
+      costPrice: 42.00,
+      sellingPrice: 55.00,
+      mrp: 55.00,
+      supplierId: "sup-1"
+    },
+    "8901234500387": {
+      name: "Bactroban 2% Ointment 5g",
+      generic: "Mupirocin",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-2",
+      composition: "Mupirocin 2% w/w",
+      unit: "Ointment",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 15,
+      reorderQuantity: 40,
+      costPrice: 95.00,
+      sellingPrice: 120.00,
+      mrp: 125.00,
+      supplierId: "sup-2"
+    },
+    "8901234500394": {
+      name: "Eyevit Lubricant Eye Drops 10ml",
+      generic: "Carboxymethylcellulose Sodium",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-3",
+      composition: "CMC Sodium 0.5% w/v sterile eye drops",
+      unit: "Drops",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 20,
+      reorderQuantity: 50,
+      costPrice: 65.00,
+      sellingPrice: 85.00,
+      mrp: 85.00,
+      supplierId: "sup-3"
+    },
+    "8901234500400": {
+      name: "Moxiflox 0.5% Eye Drops 5ml",
+      generic: "Moxifloxacin Hydrochloride",
+      categoryId: "cat-2",
+      manufacturerId: "mfr-1",
+      composition: "Moxifloxacin HCl 0.5% sterile ophthalmic solution",
+      unit: "Drops",
+      hsn: "3004.20",
+      requiresPrescription: true,
+      reorderLevel: 25,
+      reorderQuantity: 60,
+      costPrice: 110.00,
+      sellingPrice: 145.00,
+      mrp: 150.00,
+      supplierId: "sup-1"
+    },
+    "8901234500417": {
+      name: "Calbo-D 500mg/200IU",
+      generic: "Calcium Carbonate + Vitamin D3",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-1",
+      composition: "Calcium 500mg + Cholecalciferol 200 IU",
+      unit: "Tablet",
+      hsn: "2936.29",
+      requiresPrescription: false,
+      reorderLevel: 60,
+      reorderQuantity: 180,
+      costPrice: 4.80,
+      sellingPrice: 6.50,
+      mrp: 6.50,
+      supplierId: "sup-1"
+    },
+    "8901234500424": {
+      name: "Fexo 180mg Tablet",
+      generic: "Fexofenadine Hydrochloride",
+      categoryId: "cat-5",
+      manufacturerId: "mfr-1",
+      composition: "Fexofenadine HCl 180mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 30,
+      reorderQuantity: 90,
+      costPrice: 8.50,
+      sellingPrice: 12.00,
+      mrp: 12.00,
+      supplierId: "sup-1"
+    },
+    "8901234500431": {
+      name: "Napa Rapid 500mg Tablet",
+      generic: "Paracetamol ActiQuick",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-2",
+      composition: "Fast absorbing Paracetamol 500mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 80,
+      reorderQuantity: 240,
+      costPrice: 1.20,
+      sellingPrice: 1.80,
+      mrp: 1.80,
+      supplierId: "sup-2"
+    },
+    "8901234500448": {
+      name: "Losectil 20mg Capsule",
+      generic: "Omeprazole",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-5",
+      composition: "Omeprazole 20mg enteric coated pellets",
+      unit: "Capsule",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 70,
+      reorderQuantity: 200,
+      costPrice: 3.80,
+      sellingPrice: 5.00,
+      mrp: 5.00,
+      supplierId: "sup-1"
+    },
+    "8901234500455": {
+      name: "Nexum 40mg Capsule",
+      generic: "Esomeprazole Magnesium",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-4",
+      composition: "Esomeprazole 40mg",
+      unit: "Capsule",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 7.80,
+      sellingPrice: 10.00,
+      mrp: 10.00,
+      supplierId: "sup-4"
+    },
+    "8901234500462": {
+      name: "Azmasol HFA Inhaler 100mcg",
+      generic: "Salbutamol Sulfate",
+      categoryId: "cat-8",
+      manufacturerId: "mfr-2",
+      composition: "Salbutamol 100mcg 200 puffs",
+      unit: "Inhaler",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 15,
+      reorderQuantity: 40,
+      costPrice: 165.00,
+      sellingPrice: 210.00,
+      mrp: 215.00,
+      supplierId: "sup-2"
+    },
+    "8901234500479": {
+      name: "Bicozin Syrup 100ml",
+      generic: "Vitamin B Complex + Zinc",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-1",
+      composition: "Thiamine, Riboflavin, Pyridoxine, Nicotinamide + Zinc",
+      unit: "Syrup",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 25,
+      reorderQuantity: 60,
+      costPrice: 52.00,
+      sellingPrice: 70.00,
+      mrp: 70.00,
+      supplierId: "sup-1"
+    },
+    "8901234500486": {
+      name: "Filwel Gold Tablet",
+      generic: "32 Multivitamins & Minerals",
+      categoryId: "cat-4",
+      manufacturerId: "mfr-1",
+      composition: "Daily Complete Multivitamin & Mineral Formulation",
+      unit: "Tablet",
+      hsn: "2106.90",
+      requiresPrescription: false,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 9.00,
+      sellingPrice: 12.50,
+      mrp: 12.50,
+      supplierId: "sup-1"
+    },
+    "8901234500493": {
+      name: "Torax 10mg Tablet",
+      generic: "Ketorolac Tromethamine",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-1",
+      composition: "Ketorolac Tromethamine 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 30,
+      reorderQuantity: 90,
+      costPrice: 10.50,
+      sellingPrice: 14.00,
+      mrp: 14.00,
+      supplierId: "sup-1"
+    },
+    "8901234500509": {
+      name: "Clofenac 50mg Tablet",
+      generic: "Diclofenac Sodium",
+      categoryId: "cat-1",
+      manufacturerId: "mfr-1",
+      composition: "Diclofenac Sodium 50mg enteric coated",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 2.20,
+      sellingPrice: 3.20,
+      mrp: 3.20,
+      supplierId: "sup-1"
+    },
+    "8901234500516": {
+      name: "Neotack 150mg Tablet",
+      generic: "Ranitidine Hydrochloride",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-1",
+      composition: "Ranitidine 150mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 40,
+      reorderQuantity: 120,
+      costPrice: 1.80,
+      sellingPrice: 2.60,
+      mrp: 2.60,
+      supplierId: "sup-1"
+    },
+    "8901234500523": {
+      name: "Progut 20mg Capsule",
+      generic: "Omeprazole USP",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-2",
+      composition: "Omeprazole 20mg delayed-release",
+      unit: "Capsule",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 60,
+      reorderQuantity: 180,
+      costPrice: 4.00,
+      sellingPrice: 5.50,
+      mrp: 5.50,
+      supplierId: "sup-2"
+    },
+    "8901234500530": {
+      name: "Maxpro 20mg Tablet",
+      generic: "Esomeprazole Trihydrate",
+      categoryId: "cat-3",
+      manufacturerId: "mfr-4",
+      composition: "Esomeprazole 20mg MUPS tablet",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 50,
+      reorderQuantity: 150,
+      costPrice: 5.50,
+      sellingPrice: 7.50,
+      mrp: 7.50,
+      supplierId: "sup-4"
+    },
+    "8901234500547": {
+      name: "Monas 10mg Tablet",
+      generic: "Montelukast Sodium",
+      categoryId: "cat-8",
+      manufacturerId: "mfr-5",
+      composition: "Montelukast 10mg",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: true,
+      reorderLevel: 35,
+      reorderQuantity: 100,
+      costPrice: 12.00,
+      sellingPrice: 16.00,
+      mrp: 16.00,
+      supplierId: "sup-1"
+    },
+    "8901234500554": {
+      name: "Bilasten 20mg Tablet",
+      generic: "Bilastine",
+      categoryId: "cat-5",
+      manufacturerId: "mfr-3",
+      composition: "Bilastine 20mg non-sedating antihistamine",
+      unit: "Tablet",
+      hsn: "3004.90",
+      requiresPrescription: false,
+      reorderLevel: 30,
+      reorderQuantity: 90,
+      costPrice: 12.00,
+      sellingPrice: 16.00,
+      mrp: 16.00,
+      supplierId: "sup-3"
     }
   };
 
   /**
    * Looks up complete pharmaceutical master information for any scanned barcode.
    * If recognized, returns exact pre-configured brand data.
-   * If unknown, returns sensible pharmaceutical defaults ready for one-click cataloging.
+   * If unknown, generates sensible, realistic pharmaceutical defaults ready for instant addition.
    */
   function lookupBarcodeDrugCatalog(barcode) {
     if (!barcode) return null;
     const clean = String(barcode).trim();
     if (!clean) return null;
 
-    // Check exact catalog match
+    // 1. Check exact catalog match
     if (PHARMA_BARCODE_CATALOG[clean]) {
       return { barcode: clean, ...PHARMA_BARCODE_CATALOG[clean], isCatalogMatch: true };
     }
 
-    // Check existing medicine in database
+    // 2. Check existing medicine in database
     const existing = getMedicineByBarcode(clean);
     if (existing) {
+      const latestBatch = getLatestBatchForMedicine(existing.id);
       return {
         barcode: clean,
         name: existing.name,
@@ -1105,30 +1531,58 @@ window.APSStore = (() => {
         requiresPrescription: existing.requiresPrescription,
         reorderLevel: existing.reorderLevel,
         reorderQuantity: existing.reorderQuantity,
+        costPrice: latestBatch ? Number(latestBatch.purchasePrice) : 10.00,
+        sellingPrice: latestBatch ? Number(latestBatch.sellingPrice) : 13.50,
+        mrp: latestBatch ? Number(latestBatch.mrp || latestBatch.sellingPrice) : 13.50,
+        supplierId: latestBatch ? latestBatch.supplierId : "sup-1",
         isExisting: true,
         existingId: existing.id
       };
     }
 
-    // Smart default generation for arbitrary barcodes
+    // 3. Smart deterministic default generation for arbitrary barcodes
     const cats = getCategories();
     const mfrs = getManufacturers();
+    const sups = getSuppliers();
+
+    let hash = 0;
+    for (let i = 0; i < clean.length; i++) {
+      hash = ((hash << 5) - hash) + clean.charCodeAt(i);
+      hash |= 0;
+    }
+    const absHash = Math.abs(hash);
+
+    const catIndex = absHash % (cats.length || 1);
+    const mfrIndex = (absHash >> 2) % (mfrs.length || 1);
+    const supIndex = (absHash >> 3) % (sups.length || 1);
+
+    const cat = cats[catIndex] || { id: "cat-1", name: "Analgesics & Pain Relief" };
+    const mfr = mfrs[mfrIndex] || { id: "mfr-1", name: "Square Pharmaceuticals PLC" };
+    const sup = sups[supIndex] || { id: "sup-1", name: "Square Distribution Logistics" };
+
+    const suffix = clean.slice(-4) || "101";
+    const baseCost = 4.50 + ((absHash % 30) * 0.5);
+    const baseSell = Number((baseCost * 1.35).toFixed(2));
+
+    const units = ["Tablet", "Capsule", "Syrup", "Injection", "Ointment", "Drops"];
+    const chosenUnit = units[(absHash >> 4) % units.length];
+
     return {
       barcode: clean,
-      name: "",
-      generic: "",
-      categoryId: cats[0]?.id || "cat-1",
-      manufacturerId: mfrs[0]?.id || "mfr-1",
-      composition: "",
-      unit: "Tablet",
+      name: `Pharma-${suffix} 500mg`,
+      generic: `Standard Compound ${suffix}`,
+      categoryId: cat.id,
+      manufacturerId: mfr.id,
+      supplierId: sup.id,
+      composition: `Active Molecule ${suffix} 500mg`,
+      unit: chosenUnit,
       hsn: "3004.90",
-      requiresPrescription: false,
+      requiresPrescription: (absHash % 2 === 0),
       reorderLevel: 50,
       reorderQuantity: 100,
-      costPrice: 10.00,
-      sellingPrice: 12.50,
-      mrp: 12.50,
-      supplierId: "sup-1",
+      costPrice: baseCost,
+      sellingPrice: baseSell,
+      mrp: baseSell,
       isUnknown: true
     };
   }
@@ -1166,6 +1620,40 @@ window.APSStore = (() => {
       }
     }
     save(KEYS.MEDICINES, meds);
+
+    // Auto-create initial batch if initialQuantity is provided and > 0
+    if (isNew && Number(medicineData.initialQuantity) > 0) {
+      const initQty = Number(medicineData.initialQuantity);
+      const medInitials = (medicineData.name || "BCH").replace(/[^a-zA-Z]/g, "").slice(0, 3).toUpperCase() || "MED";
+      const dateCode = new Date().toISOString().slice(2, 7).replace("-", "");
+      const randSeq = Math.floor(100 + Math.random() * 900);
+      const batchNum = medicineData.initialBatch || `${medInitials}-${dateCode}-${randSeq}`;
+
+      let expDate = medicineData.initialExp;
+      if (!expDate) {
+        const d = new Date();
+        d.setFullYear(d.getFullYear() + 2);
+        expDate = d.toISOString().split("T")[0];
+      }
+
+      const cost = Number(medicineData.costPrice || 0);
+      const sell = Number(medicineData.sellingPrice || (cost > 0 ? (cost * 1.3).toFixed(2) : 10.00));
+      const mrpVal = Number(medicineData.mrp || sell);
+
+      saveBatch({
+        medicineId: savedRecord.id,
+        batchNumber: batchNum,
+        manufactureDate: todayStr(),
+        expiryDate: expDate,
+        purchasePrice: cost,
+        sellingPrice: sell,
+        mrp: mrpVal,
+        quantityReceived: initQty,
+        quantityAvailable: initQty,
+        supplierId: medicineData.supplierId || "sup-1",
+        rackLocation: medicineData.rackLocation || "Rack A-1"
+      });
+    }
 
     // Sync to PostgreSQL backend
     fetch("/api/medicines", {
@@ -1335,7 +1823,7 @@ window.APSStore = (() => {
       referenceType: referenceType || "MANUAL",
       referenceId: referenceId || "N/A",
       balanceAfter: currentTotal,
-      createdBy: sessionStorage.getItem("apsUserName") || "Staff",
+      createdBy: getCurrentUser("Staff"),
       createdAt: new Date().toLocaleString(),
       notes: notes || ""
     };
@@ -1362,7 +1850,7 @@ window.APSStore = (() => {
     const batches = load(KEYS.BATCHES, []);
     const meds = load(KEYS.MEDICINES, []);
     const customers = load(KEYS.CUSTOMERS, []);
-    const currentUser = sessionStorage.getItem("apsUserName") || "Cashier";
+    const currentUser = getCurrentUser("Cashier");
 
     const saleId = uid("sale");
     const invNumber = "INV-" + new Date().getFullYear() + "-" + Math.floor(1000 + Math.random() * 9000);
@@ -1526,7 +2014,7 @@ window.APSStore = (() => {
 
     let totalRefund = 0;
     const returnId = uid("ret");
-    const processedBy = sessionStorage.getItem("apsUserName") || "Staff";
+    const processedBy = getCurrentUser("Staff");
 
     itemsToReturn.forEach(item => {
       const returnQty = Number(item.quantity);
@@ -1601,7 +2089,7 @@ window.APSStore = (() => {
       expectedDate: expectedDate || todayStr(7),
       status: "Ordered",
       totalAmount: Number(totalAmount.toFixed(2)),
-      createdBy: sessionStorage.getItem("apsUserName") || "Inventory Manager",
+      createdBy: getCurrentUser("Inventory Manager"),
       items
     };
 
@@ -1703,7 +2191,7 @@ window.APSStore = (() => {
       referenceNumber: referenceNumber || "N/A",
       paymentDate: new Date().toLocaleString(),
       notes: notes || "",
-      processedBy: sessionStorage.getItem("apsUserName") || "Staff"
+      processedBy: getCurrentUser("Staff")
     });
     save(KEYS.PAYMENTS, payments);
 

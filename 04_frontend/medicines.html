@@ -233,6 +233,24 @@
         <form id="medicineForm">
           <div class="modal-body">
             <input type="hidden" id="medId">
+                        <!-- Quick Barcode Scan & Auto-Fill Header -->
+            <div class="card p-3 mb-3 bg-light border-teal-light rounded-3" id="modalScanBarcodeCard">
+              <div class="d-flex align-items-center justify-content-between mb-1">
+                <label class="form-label small fw-bold text-teal-900 mb-0">
+                  <i class="bi bi-upc-scan text-primary me-1"></i> Scan Medicine Barcode (Instant Auto-Fill)
+                </label>
+                <span class="badge bg-teal-800 text-teal-100"><i class="bi bi-lightning-fill me-1"></i>Auto-Fill Active</span>
+              </div>
+              <div class="input-group">
+                <input type="text" id="modalBarcodeScanInput" class="form-control font-monospace" placeholder="Scan or enter barcode to auto-fill all medicine details..." data-barcode-input="true">
+                <button type="button" class="btn btn-outline-secondary" id="scanBarcodeIntoModalBtn" title="Scan Barcode with Camera">
+                  <i class="bi bi-camera-video me-1"></i> Camera Scan
+                </button>
+              </div>
+              <div class="small text-muted mt-1">
+                <i class="bi bi-info-circle me-1"></i> Scanning barcode auto-fills all pharmaceutical master details &mdash; <strong class="text-success">only enter quantity!</strong>
+              </div>
+            </div>
             <div id="medModalScanNotice" class="d-none mb-3"></div>
             <div class="row g-3">
               <div class="col-md-6">
@@ -274,8 +292,9 @@
               <div class="col-md-4">
                 <label class="form-label small fw-bold">Barcode (EAN-13)</label>
                 <div class="input-group">
-                  <input type="text" id="medBarcode" class="form-control" placeholder="8901234500000">
+                  <input type="text" id="medBarcode" class="form-control font-monospace" placeholder="8901234500000" data-barcode-input="true">
                   <button type="button" class="btn btn-outline-secondary" id="generateBarcodeBtn" title="Auto-generate barcode"><i class="bi bi-magic"></i></button>
+                  <button type="button" class="btn btn-outline-primary" id="scanBarcodeFieldBtn" title="Scan Barcode with Camera"><i class="bi bi-camera-video"></i></button>
                 </div>
               </div>
               <div class="col-md-4">
@@ -290,6 +309,51 @@
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="medRequiresRx">
                   <label class="form-check-label small fw-semibold" for="medRequiresRx">Requires Prescription (Rx)</label>
+                </div>
+              </div>
+
+              <!-- Initial Stock & Batch Setup -->
+              <div class="col-12 mt-3 pt-2 border-top" id="medStockSection">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                  <h6 class="fw-bold text-teal-900 mb-0">
+                    <i class="bi bi-boxes text-teal-600 me-1"></i> Stock Batch Registration
+                  </h6>
+                  <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                    <i class="bi bi-pencil-fill me-1"></i>Enter Quantity Only
+                  </span>
+                </div>
+                <div class="row g-2">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold text-success">
+                      <i class="bi bi-box-seam me-1"></i>Stock Quantity to Add *
+                    </label>
+                    <input type="number" id="medInitialQty" class="form-control border-success fw-bold" placeholder="Enter stock quantity (e.g. 100)" min="0">
+                    <div class="form-text small text-muted">Left empty on barcode scan &mdash; enter quantity received!</div>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Initial Batch No.</label>
+                    <input type="text" id="medInitialBatch" class="form-control font-monospace" placeholder="Auto-generated">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Expiry Date (FEFO)</label>
+                    <input type="date" id="medInitialExp" class="form-control">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Purchase / Cost Price (৳)</label>
+                    <input type="number" step="0.01" id="medCostPrice" class="form-control" placeholder="0.00">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Selling Price (৳)</label>
+                    <input type="number" step="0.01" id="medSellingPrice" class="form-control" placeholder="0.00">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-bold">Maximum Retail Price (MRP ৳)</label>
+                    <input type="number" step="0.01" id="medMrp" class="form-control" placeholder="0.00">
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label small fw-bold">Primary Supplier</label>
+                    <select id="medSupplier" class="form-select"></select>
+                  </div>
                 </div>
               </div>
             </div>
@@ -402,6 +466,10 @@
             <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500219" title="Test Ciprocin auto-add">+ Ciprocin 500</button>
             <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500226" title="Test Sergel auto-add">+ Sergel 20</button>
             <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500233" title="Test Pantonix auto-add">+ Pantonix 20</button>
+            <button type="button" class="btn btn-sm btn-info text-white py-1 px-2 test-barcode-btn" data-code="8901234500301" title="Test Finix auto-add">+ Finix 20</button>
+            <button type="button" class="btn btn-sm btn-info text-white py-1 px-2 test-barcode-btn" data-code="8901234500318" title="Test Cef-3 auto-add">+ Cef-3 200</button>
+            <button type="button" class="btn btn-sm btn-info text-white py-1 px-2 test-barcode-btn" data-code="8901234500325" title="Test Camlodin auto-add">+ Camlodin 5</button>
+            <button type="button" class="btn btn-sm btn-info text-white py-1 px-2 test-barcode-btn" data-code="8901234500387" title="Test Bactroban auto-add">+ Bactroban</button>
             <button type="button" class="btn btn-sm btn-warning py-1 px-2 test-barcode-btn" data-random="true" title="Test random new barcode"><i class="bi bi-shuffle me-1"></i>Random Barcode</button>
           </div>
         </div>

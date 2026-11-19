@@ -469,13 +469,23 @@
             <span class="badge bg-teal-800 text-teal-200">Simulation</span>
           </div>
 
-          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestBarcodes">
+          <div class="mb-2"><span class="badge bg-secondary text-light small"><i class="bi bi-check-circle me-1"></i>In Database:</span></div>
+          <div class="d-flex flex-wrap gap-1 justify-content-center mb-3" id="quickTestBarcodes">
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500011">Napa Extra</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500028">Moxacil</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500035">Seclo</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500042">Alatrol</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500059">Comet</button>
             <button type="button" class="btn btn-sm btn-outline-light py-1 px-2 test-barcode-btn" data-code="8901234500066">Atova</button>
+          </div>
+          <div class="mb-2"><span class="badge bg-success text-white small"><i class="bi bi-plus-circle me-1"></i>Not in Database (Auto-Registers!):</span></div>
+          <div class="d-flex flex-wrap gap-1 justify-content-center" id="quickTestNewBarcodes">
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500202" title="Test Ace Plus auto-add">+ Ace Plus</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500219" title="Test Ciprocin auto-add">+ Ciprocin 500</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500226" title="Test Sergel auto-add">+ Sergel 20</button>
+            <button type="button" class="btn btn-sm btn-success py-1 px-2 test-barcode-btn" data-code="8901234500233" title="Test Pantonix auto-add">+ Pantonix 20</button>
+            <button type="button" class="btn btn-sm btn-info text-white py-1 px-2 test-barcode-btn" data-code="8901234500301" title="Test Finix auto-add">+ Finix 20</button>
+            <button type="button" class="btn btn-sm btn-warning py-1 px-2 test-barcode-btn" data-random="true" title="Test random new barcode"><i class="bi bi-shuffle me-1"></i>Random Barcode</button>
           </div>
         </div>
         <div class="modal-footer bg-dark border-top border-secondary py-2 justify-content-between">
